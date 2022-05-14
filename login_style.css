@@ -2,6 +2,7 @@
     font-family: 'Raleway', sans-serif;
     color: #FFF;
 }
+
 body {
     background-color: #F2C078;
     margin: 3% 20%;
@@ -94,8 +95,8 @@ input::placeholder {
     background-color: #7EBC89;
     font-size: 18px;
     font-weight: 400;
-    padding: 13px 0;
-    width: 340px;
+    padding: 13px 20px;
+    width: 344px;
     border: 2px solid #7EBC89;
     border-radius: 100px;
     cursor: pointer;
@@ -140,6 +141,12 @@ input::placeholder {
     margin-left: 10px;
 }
 
-.form_footer {
-    color: #000;
+.form_footer p a {
+    color: #7EBC89;
+    text-decoration: none;
+    transition: all 0.3s ease 0s;
+}
+
+.form_footer p a:hover {
+    font-weight: bold;
 }
