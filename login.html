@@ -13,40 +13,41 @@
     <header>
         <img src="logo.png" width="199" height="44" class="logo" alt="logo">
         <nav>
-            <ul class="nav_links">
-                <li><a href="#" class='disabled'>Вход</a></li>
-                <li><a href="tutorial.html">Туториал</a></li>
-                <li><a href="donation.html">Донат</a></li>
-                <li><a href="registration.html"><button class="orange_button">Регистрация</button></a></li>
-            </ul>
+            <a href="#" class='disabled'>Вход</a>
+            <a href="tutorial.html">Туториал</a>
+            <a href="donation.html">Донат</a>
+            <a href="registration.html"><button class="orange_button">Регистрация</button></a>
         </nav>
     </header>
     <div class="content">
-        <div style="padding-right: 100px">
+        <div style="flex-basis: 420px"> <!--style="padding-right: 100px"-->
             <h1 style="font-weight: 700; font-size: 58px;">Все дела <br>в одном месте</h1>
-            <p style="font-weight: 500; font-size: 22px; padding-right: 100px">Записывайте все ваши дела, чтобы точно ничего не забыть
-                и все выполнить. <br>Вы преподаватель? Отлично,
-                вы сможете записывать домашнее задание для ваших студентов, и теперь никто
+            <p style="font-weight: 500; font-size: 22px;">Записывайте все ваши дела,<br>чтобы точно ничего не забыть<br> <!-- padding-right: 100px-->
+                и все выполнить.<br>Вы преподаватель? Отлично,<br>
+                вы сможете записывать<br>домашнее задание для ваших<br>студентов, и теперь никто
                 <br>не скажет “а я не знал” :)
             </p>
-            <button class="orange_button" style="margin-top: 28px">Узнать больше</button>
+            <button class="orange_button">Узнать больше</button> <!-- style="margin-top: 28px"-->
         </div>
-        <form style="margin: 0 auto; padding: 0 60px;">
-            <h1 style="color: #1E0E62; text-align: center; padding-top: 58px; font-size: 42px; font-weight: 700;">Вход</h1>
-            <div>
+        <form> <!-- style="margin: 0 auto; padding: 0 60px;"-->
+            <div class="log-header">
+                <h1 style="color: #1E0E62;font-size: 42px; font-weight: 700;">Вход</h1>
+            </div>
+            <div class="inputs">
                 <label>
                     <input type="text" placeholder="Электронная почта или никнейм">
                 </label>
-            </div>
-            <div>
                 <label>
                     <input type="password" placeholder="Пароль">
                 </label>
+                <button class="form_button">Войти</button>
             </div>
-            <button class="form_button">Войти</button>
-            <p class="lined">или</p>
-            <button class="form_button second">Войти с помощью Google</button>
-            <div class="form_footer" style="display: flex; flex-direction: row; justify-content: space-between; padding-top: 80px; padding-bottom: 35px; font-size: 18px">
+            <div style="width: 344px; align-self: center;">
+                <p class="lined">или</p></div>
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: space-around; flex:0.5">
+                <button class="form_button second">Войти с помощью Google</button>
+            </div>
+            <div class="form-footer" style="font-size: 18px; display: flex; flex-direction: row; justify-content: space-around; flex: 1; align-items: center; margin-top: 30px">
                 <p style="color: rgba(21, 20, 57, 0.4);">Еще не с нами?</p>
                 <p><a href="registration.html">Зарегистрироваться</a></p>
             </div>

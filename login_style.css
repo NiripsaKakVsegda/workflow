@@ -4,8 +4,19 @@
 }
 
 body {
+    margin-top: 60px;
     background-color: #F2C078;
-    margin: 3% 20%;
+    display: flex;
+    gap: 80px;
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    gap: 640px;
+    align-items: center;
 }
 
 .disabled {
@@ -16,7 +27,13 @@ body {
 nav a {
     font-size: 20px;
     font-weight: 400;
+    padding-right: 30px;
     text-decoration: none;
+    transition: all 0.3s ease 0s;
+}
+
+nav a:hover {
+    color: #FE5D26;
 }
 
 .orange_button {
@@ -36,43 +53,38 @@ nav a {
     color: #FE5D26;
 }
 
-.logo {
-    margin-right: auto;
-    position: relative;
-    top: 6px;
-}
-
-header {
-    display: flex;
-    justify-content: flex-end;
-}
-
-.nav_links {
-    list-style: none;
-}
-
-.nav_links li {
-    display: inline-block;
-    padding: 0 20px;
-}
-
-.nav_links li a {
-    transition: all 0.3s ease 0s;
-}
-
-.nav_links li a:hover {
-    color: #FE5D26;
-}
-
 .content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    margin: 80px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 120px;
 }
 
 form {
-    background-color: #FFF;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    background: #fff;
     border-radius: 12px;
+    width: 500px;
+    height: 640px;
+}
+
+form .log-header {
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    align-items: flex-end;
+    margin-bottom: 28px;
+    flex: 1;
+}
+
+form .inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    flex: 1.6;
 }
 
 input {
@@ -84,7 +96,6 @@ input {
     border: 2px solid #EBEAED;
     outline: none;
     border-radius: 100px;
-    margin-bottom: 20px;
 }
 
 input::placeholder {
@@ -122,15 +133,15 @@ input::placeholder {
 .lined {
     display: flex;
     flex-direction: row;
-    color: rgba(21, 20, 57, 0.4);;
+    color: rgba(21, 20, 57, 0.4);
 }
 
 .lined:before, .lined:after{
     content: "";
     flex: 1 1;
     border-bottom: 1px solid;
-    margin: auto;
     color: #EBEAED;
+    margin: auto;
 }
 
 .lined:before {
@@ -141,12 +152,13 @@ input::placeholder {
     margin-left: 10px;
 }
 
-.form_footer p a {
+.form-footer p a {
     color: #7EBC89;
     text-decoration: none;
+    font-weight: bold;
     transition: all 0.3s ease 0s;
 }
 
-.form_footer p a:hover {
-    font-weight: bold;
+.form-footer p a:hover {
+    color: #5f8f68;
 }
