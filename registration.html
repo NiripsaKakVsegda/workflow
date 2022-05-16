@@ -10,24 +10,25 @@
         <img src="logo.png" width="199" height="44" class="logo" alt="logo">
     </header>
     <div>
-        <form>
+        <form name="registerForm" onsubmit="register()">
             <div class="reg-header">
                 <h1 style="color: #1E0E62; font-size: 42px; font-weight: 700;">Регистрация</h1>
             </div>
             <div class="inputs">
                 <label>
-                    <input type="text" placeholder="Никнейм" required="required" data-validate-length-range="6">
+                    <input type="text" name="nickname" placeholder="Никнейм" required="required" data-validate-length-range="6">
                 </label>
                 <label>
-                    <input type="email" placeholder="Электронная почта" required="required">
+                    <input type="email" name="email" placeholder="Электронная почта" required="required">
                 </label>
                 <label>
-                    <input type="password" placeholder="Пароль" required="required">
+                    <input type="password" name="password" placeholder="Пароль" required="required">
                 </label>
                 <label>
-                    <input type="password" placeholder="Повторите пароль" required="required">
+                    <input type="password" name="repeatedPassword" placeholder="Повторите пароль" required="required">
                 </label>
-                <button class="orange_button">Зарегистрироваться</button>
+                <input class="orange_button" type="submit" name="submit" value="Зарегистрироваться">
+<!--                <button class="orange_button" id="orange_button" onclick="register()">Зарегистрироваться</button>-->
             </div>
             <div class="form-footer" style="display: flex; flex-direction: row; justify-content: space-around; font-size: 18px; flex: 0.8; align-items: center">
                 <p style="color: rgba(21, 20, 57, 0.4);">Уже с нами?</p>
@@ -35,5 +36,6 @@
             </div>
         </form>
     </div>
+    <script type="text/javascript" src="simple_bd.js"></script>
 </body>
 </html>

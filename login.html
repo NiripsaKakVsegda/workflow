@@ -29,16 +29,16 @@
             </p>
             <button class="orange_button">Узнать больше</button> <!-- style="margin-top: 28px"-->
         </div>
-        <form> <!-- style="margin: 0 auto; padding: 0 60px;"-->
+        <form name="loginForm" onsubmit="login()"> <!-- style="margin: 0 auto; padding: 0 60px;"-->
             <div class="log-header">
                 <h1 style="color: #1E0E62;font-size: 42px; font-weight: 700;">Вход</h1>
             </div>
             <div class="inputs">
                 <label>
-                    <input type="text" placeholder="Электронная почта или никнейм">
+                    <input type="text" name="loginField" placeholder="Электронная почта или никнейм" required="required">
                 </label>
                 <label>
-                    <input type="password" placeholder="Пароль">
+                    <input type="password" name="password" placeholder="Пароль" required="required">
                 </label>
                 <button class="form_button">Войти</button>
             </div>
@@ -53,5 +53,6 @@
             </div>
         </form>
     </div>
+    <script type="text/javascript" src="simple_bd.js"></script>
 </body>
 </html>
