@@ -11,25 +11,27 @@
 </head>
 <body>
     <header>
-        <img src="logo.png" width="199" height="44" class="logo" alt="logo">
         <nav>
-            <a href="#" class='disabled'>Вход</a>
-            <a href="tutorial.html">Туториал</a>
-            <a href="donation.html">Донат</a>
-            <a href="registration.html"><button class="orange_button">Регистрация</button></a>
+            <a href="#" class="logo"><img src="logo.png" width="199" height="44" alt="logo"></a>
+            <ul>
+                <li><a href="#" class='disabled'>Вход</a></li>
+                <li><a href="tutorial.html">Туториал</a></li>
+                <li><a href="donation.html">Донат</a></li>
+                <li><a href="registration.html"><button class="orange_button">Регистрация</button></a></li>
+            </ul>
         </nav>
     </header>
     <div class="content">
-        <div style="flex-basis: 420px"> <!--style="padding-right: 100px"-->
+        <div style="flex-basis: 420px; display: flex; flex-direction: column; gap: 40px">
             <h1 style="font-weight: 700; font-size: 58px;">Все дела <br>в одном месте</h1>
-            <p style="font-weight: 500; font-size: 22px;">Записывайте все ваши дела,<br>чтобы точно ничего не забыть<br> <!-- padding-right: 100px-->
+            <p style="font-weight: 500; font-size: 22px;">Записывайте все ваши дела,<br>чтобы точно ничего не забыть<br>
                 и все выполнить.<br>Вы преподаватель? Отлично,<br>
                 вы сможете записывать<br>домашнее задание для ваших<br>студентов, и теперь никто
                 <br>не скажет “а я не знал” :)
             </p>
-            <button class="orange_button">Узнать больше</button> <!-- style="margin-top: 28px"-->
+            <button class="orange_button">Узнать больше</button>
         </div>
-        <form name="loginForm" onsubmit="login()"> <!-- style="margin: 0 auto; padding: 0 60px;"-->
+        <form name="loginForm" onsubmit="login()">
             <div class="log-header">
                 <h1 style="color: #1E0E62;font-size: 42px; font-weight: 700;">Вход</h1>
             </div>
