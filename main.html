@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+    <link rel="stylesheet" href="main_style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <script src="https://kit.fontawesome.com/0d348efd9b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header style="background: #f2c078">
+        <div class="header-part">
+            <i class="fa-solid fa-bars fa-3x" style="color: #fff; cursor: pointer" onclick="moveNav()"></i>
+            <h1>Workflow</h1>
+        </div>
+        <div  class="header-part">
+            <img src="avatar.png" class="avatar">
+            <h2 style="font-weight: 400; font-size: 28px">Алёна<br>Полуяненко</h2>
+        </div>
+    </header>
+    <div id="sidenav" class="sidenav">
+        <nav style="padding-top: 30px;">
+            <a href="#"><i class="fa-solid fa-house"></i>Главная</a>
+            <a href="#"><i class="fa-solid fa-bars-progress"></i>Задачи</a>
+            <a href="#"><i class="fa-solid fa-graduation-cap"></i>Группы</a>
+            <a href="#"><i class="fa-solid fa-user-group"></i>Друзья</a>
+            <a href="#"><i class="fa-solid fa-comment"></i>Сообщения</a>
+        </nav>
+        <nav>
+            <a href="#" class="settings"><i class="fa-solid fa-screwdriver-wrench"></i>Настройки</a>
+        </nav>
+    </div>
+
+    <script>
+        function moveNav() {
+            if (document.getElementById("sidenav").style.width === "280px") {
+                document.getElementById("sidenav").style.width = "0";
+            }
+            else {
+                document.getElementById("sidenav").style.width = "280px";
+            }
+        }
+    </script>
+</body>
+</html>

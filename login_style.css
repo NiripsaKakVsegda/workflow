@@ -71,7 +71,7 @@ nav a:hover {
     color: #FE5D26;
 }
 
-.orange_button {
+.orange-button {
     background-color: #FE5D26;
     font-size: 18px;
     font-weight: 400;
@@ -83,7 +83,7 @@ nav a:hover {
     transition: all 0.3s ease 0s;
 }
 
-.orange_button:hover {
+.orange-button:hover {
     background-color: rgba(255,255,255,0.8);
     color: #FE5D26;
 }
@@ -137,7 +137,7 @@ input::placeholder {
     color: rgba(21, 20, 57, 0.4);
 }
 
-.form_button {
+.form-button {
     background-color: #7EBC89;
     font-size: 18px;
     font-weight: 400;
@@ -149,18 +149,18 @@ input::placeholder {
     transition: all 0.3s ease 0s;
 }
 
-.form_button:hover {
+.form-button:hover {
     background-color: rgba(126,188,137,0.2);
     color: #6fa97a;
     font-weight: bold;
 }
 
-.form_button.second {
+.form-button.second {
     background-color: #C1DBB3;
     border-color: #C1DBB3;
 }
 
-.form_button.second:hover {
+.form-button.second:hover {
     background-color: rgba(193,219,179,0.2);
     color: #95b882;
 }
