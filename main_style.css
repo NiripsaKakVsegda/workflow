@@ -4,7 +4,7 @@
     list-style: none;
     text-decoration: none;
     font-family: 'Raleway', sans-serif;
-    color: #FFF;
+
 }
 
 .avatar {
@@ -48,7 +48,8 @@ header {
     font-size: 32px;
     color: #1E0E62;
     transition: 0.3s;
-    display: block;
+    display: flex;
+    align-items: baseline;
 }
 
 .sidenav a:hover {
@@ -62,6 +63,49 @@ a i {
     padding: 20px 10px;
 }
 
+.content {
+    margin-top: 40px;
+    margin-left: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    transition: 0.5s;
+}
+
+.orange-button {
+    background-color: #FE5D26;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 400;
+    height: 51px;
+    border: 2px solid #FE5D26;
+    border-radius: 100px;
+    padding: 9px 24px;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+}
+
+.orange-button:hover {
+    background-color: rgba(254,93,38,0.1);
+    color: #FE5D26;
+}
+
+progress {
+    border-radius: 20px;
+    height: 44px;
+    /*box-shadow: 1px 1px 4px rgba( 0, 0, 0, 0.2 );*/
+}
+
+progress::-webkit-progress-bar {
+    border: 2px solid #1E0E62;
+    background-color: #fff;
+    border-radius: 24px;
+}
+progress::-webkit-progress-value {
+    background-color: #7EBC89;
+    border-radius: 20px;
+    transition: 0.3s;
+}
 
 
 
