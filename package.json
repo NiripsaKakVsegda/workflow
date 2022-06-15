@@ -1,0 +1,25 @@
+{
+  "name": "workflow",
+  "version": "1.0.0",
+  "description": "Проект по веб-разработке, 4 семестр ФИИТ (Полуяненко, Хадыев, Лифанов, Колесников)",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NiripsaKakVsegda/workflow.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NiripsaKakVsegda/workflow/issues"
+  },
+  "homepage": "https://github.com/NiripsaKakVsegda/workflow#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "mongoose": "^6.3.8",
+    "nodemon": "^2.0.16"
+  }
+}
