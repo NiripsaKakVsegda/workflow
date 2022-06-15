@@ -117,6 +117,33 @@
     </footer>
 
     <script>
+        const curr = new Date;
+        const first = curr.getDate() - curr.getDay();
+
+        let monday = new Date(curr.setDate(first)).toLocaleString();
+        let tuesday = new Date(curr.setDate(first + 1)).toLocaleString();
+        let wednesday = new Date(curr.setDate(first + 2)).toLocaleString();
+        let thursday = new Date(curr.setDate(first + 3)).toLocaleString();
+        let friday = new Date(curr.setDate(first + 4)).toLocaleString();
+        let saturday = new Date(curr.setDate(first + 5)).toLocaleString();
+        let sunday = new Date(curr.setDate(first + 6)).toLocaleString();
+
+        const mon = document.getElementsByClassName('date date-1')[0];
+        mon.innerText = monday.substring(0, 5)
+        const tue = document.getElementsByClassName('date date-2')[0];
+        tue.innerText = tuesday.substring(0, 5)
+        const wed = document.getElementsByClassName('date date-3')[0];
+        wed.innerText = wednesday.substring(0, 5)
+        const thu = document.getElementsByClassName('date date-4')[0];
+        thu.innerText = thursday.substring(0, 5)
+        const fri = document.getElementsByClassName('date date-5')[0];
+        fri.innerText = friday.substring(0, 5)
+        const sat = document.getElementsByClassName('date date-6')[0];
+        sat.innerText = saturday.substring(0, 5)
+        const sun = document.getElementsByClassName('date date-7')[0];
+        sun.innerText = sunday.substring(0, 5)
+
+
         let a = screen.width * 0.5;
         document.getElementById("progress").style.width = `${a}px`;
         function moveNav() {
