@@ -1,5 +1,7 @@
 const User = require('./models/User')
 const Role = require('./models/Role')
+const Task = require('./models/Task')
+const bcrypt = require('bcryptjs')
 
 class authController {
     async registration(req, res) {
@@ -13,7 +15,11 @@ class authController {
             if (emailCandidate) {
                 return res.statusCode(400).json({message: 'Пользователь с такой электронной почтой уже существует'})
             }
-            const
+            const hashPassword = bcrypt.hashSync(password, 7)
+            const userRole = await Role.findOne({value: 'USER'})
+            const user = new User({username, email, password: hashPassword, roles: [userRole.value]})
+            await user.save()
+            return res.json({message: 'Пользователь успешно зарегистрирован'})
         } catch (e) {
             console.log(e)
             res.status(400).json({message: 'ошибка регистрации'})
