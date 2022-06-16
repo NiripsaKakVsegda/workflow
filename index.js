@@ -11,7 +11,7 @@ app.use('/js', express.static(__dirname + 'public/js'));
 app.use('/img', express.static(__dirname + 'public/img'));
 
 app.set('views', './views');
-app.set('view engine', 'html');
+app.set('view engine', 'hbs');
 
 app.use(express.json());
 
@@ -25,12 +25,12 @@ const start = async () => {
     }
 };
 
-app.get('/', (req, res) => {
-    res.render('login');
-});
-
-app.get('/main', (req, res) => {
-    res.render('main');
-});
+// app.get('/', (req, res) => {
+//     res.render('login');
+// });
+//
+// app.get('/main', (req, res) => {
+//     res.render('main');
+// });
 
 start();
