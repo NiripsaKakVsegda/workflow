@@ -19,3 +19,9 @@ console.log(sunday.substring(0, 5))
 
 const p = document.getElementsByClassName('date date-1')
 console.log(p.innerText)
+
+
+
+
+
+

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/account_style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <script src="https://kit.fontawesome.com/0d348efd9b.js" crossorigin="anonymous"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <title>Workflow</title>
+</head>
+<body>
+    <header style="background: #f2c078; color: #FFF; display: flex; align-items: center; justify-content: center">
+        <img src="images/logo.png">
+    </header>
+    <div style="display: flex; flex-direction: column; gap: 40px; margin-top: 40px; align-items: center; justify-content: center;">
+        <div style="display: flex; gap: 40px; align-items: center">
+            <div class="avatar-header">
+                    <div class="avatar-wrapper">
+                        <img class="profile-pic" src="images/avatar.png"/>
+                        <div class="upload-button">
+                            <i class="fa fa-camera" aria-hidden="true"></i>
+                        </div>
+                        <input class="file-upload" type="file" accept="image/*"/>
+                    </div>
+                </div>
+            <h1 style="font-weight: 600; font-size: 64px">niripsaaa</h1>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 20px">
+            <div style="display: flex; justify-content: space-between;">
+                <p style="font-weight: 500; font-size: 64px; padding-right: 40px">Имя:</p>
+                <input type="text" maxlength="13" style="font-weight: 400; font-size: 64px; outline: none; border: none; border-bottom: 2px solid #1E0E62; opacity: 0.5">
+            </div>
+            <div style="display: flex; justify-content: space-between">
+                <p style="font-weight: 500; font-size: 64px; padding-right: 40px">Фамилия:</p>
+                <input type="text" maxlength="15" style="font-weight: 400; font-size: 64px; outline: none; border: none; border-bottom: 2px solid #1E0E62; opacity: 0.5">
+            </div>
+            <div style="display: flex; justify-content: space-between">
+                <p style="font-weight: 500; font-size: 64px; padding-right: 40px">Роль:</p>
+                <form>
+                    <select onclick="checkRole()" name="dropdown" style="font-weight: 400; font-size: 64px; outline: none; border: none; border-bottom: 2px solid #1E0E62; opacity: 0.5">
+                        <option value = "student">Студент</option>
+                        <option value = "teacher">Преподаватель</option>
+                        <option value = "user" selected>Не выбрано</option>
+                    </select>
+                </form>
+            </div>
+            <div style="display: none; justify-content: space-between" id="group">
+                <p style="font-weight: 500; font-size: 64px; padding-right: 40px">Группа:</p>
+                <input type="text" maxlength="10" style="font-weight: 400; font-size: 64px; outline: none; border: none; border-bottom: 2px solid #1E0E62; opacity: 0.5">
+            </div>
+            <div style="display: flex; justify-content: space-between; padding-top: 60px;">
+               <a href="/main"><i class="fa-solid fa-xmark fa-5x"></i></a>
+               <a href="/main"><i class="fa-solid fa-floppy-disk fa-5x"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    let fileurl = e.target.result;
+                    $('.profile-pic').attr('src',fileurl);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $(".file-upload").on('change', function() {
+            readURL(this);
+        });
+        $(".upload-button").on('click', function() {
+            $(".file-upload").click();
+        });
+
+        function checkRole() {
+            if (document.getElementsByName('dropdown')[0].value === 'student') {
+                document.getElementById('group').style.display = 'flex';
+            }
+            else {
+                document.getElementById('group').style.display = 'none';
+            }
+        }
+
+    </script>
+</body>
+</html>

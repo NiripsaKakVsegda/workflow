@@ -25,6 +25,10 @@ app.get('/main', (req, res) => {
     res.render('main');
 });
 
+app.get('/account', (req, res) => {
+    res.render('account');
+});
+
 app.get('/schedule', (req, res) => {
     res.render('scheduler');
 });
