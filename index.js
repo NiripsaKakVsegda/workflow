@@ -21,7 +21,7 @@ app.set('view engine', 'hbs');
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.render('login');
+    res.redirect('/auth/login');
 });
 
 app.get('/main', (req, res) => {

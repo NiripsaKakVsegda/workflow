@@ -6,11 +6,12 @@ module.exports = function (roles) {
             next()
         }
         try {
-            const token = req.cookies['sessionId']
+            const token = req.cookies.sessionId
             if(!token) {
                 return res.status(403).json({message: "Пользователь не авторизирован"})
             }
             const {roles: userRoles} = jwt.verify(token, 'secret')
+            console.log(jwt.verify(token, 'secret'))
             let hasRole = false
             userRoles.forEach(role => {
                 if(roles.includes(role)) {

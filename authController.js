@@ -6,10 +6,11 @@ const jwt = require('jsonwebtoken')
 const {validationResult} = require('express-validator')
 const bcrypt = require('bcryptjs')
 
-generateAccessToken = (id, roles) => {
+generateAccessToken = (id, roles, username) => {
     const payload = {
         id,
-        roles
+        roles,
+        username
     };
     return jwt.sign(payload, 'secret', {expiresIn: "24h"});
 }
@@ -59,10 +60,10 @@ class authController {
 
             if (user) {
                 validPassword = bcrypt.compareSync(password, user.password)
-                token = generateAccessToken(user._id, user.userame, user.roles)
+                token = generateAccessToken(user._id, user.roles, user.username)
             } else {
                 validPassword = bcrypt.compareSync(password, email.password)
-                token = generateAccessToken(email._id, email.userame, email.roles)
+                token = generateAccessToken(email._id, email.roles, user.username)
             }
 
             if (!validPassword) {
