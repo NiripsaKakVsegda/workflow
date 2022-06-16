@@ -24,6 +24,10 @@ app.get('/main', (req, res) => {
     res.render('main');
 });
 
+app.get('/schedule', (req, res) => {
+    res.render('scheduler');
+});
+
 app.use('/auth', authRouter)
 const start = async () => {
     try {

@@ -169,7 +169,7 @@
 
     <footer style="color: #1E0E62; font-weight: 500; font-size: 26px; position: fixed; bottom: 10px; right: 10px">
         <p id="time" > </p>
-        <script src="../public/js/time.js">   </script>
+        <script src="js/time.js">   </script>
     </footer>
 
     <script>
@@ -185,20 +185,19 @@
         let sunday = new Date(curr.setDate(first + 6)).toLocaleString();
 
         const mon = document.getElementsByClassName('date date-1')[0];
-        mon.innerText = monday.substring(0, 5)
+        mon.innerText = monday.substring(0, 5);
         const tue = document.getElementsByClassName('date date-2')[0];
-        tue.innerText = tuesday.substring(0, 5)
+        tue.innerText = tuesday.substring(0, 5);
         const wed = document.getElementsByClassName('date date-3')[0];
-        wed.innerText = wednesday.substring(0, 5)
+        wed.innerText = wednesday.substring(0, 5);
         const thu = document.getElementsByClassName('date date-4')[0];
-        thu.innerText = thursday.substring(0, 5)
+        thu.innerText = thursday.substring(0, 5);
         const fri = document.getElementsByClassName('date date-5')[0];
-        fri.innerText = friday.substring(0, 5)
+        fri.innerText = friday.substring(0, 5);
         const sat = document.getElementsByClassName('date date-6')[0];
-        sat.innerText = saturday.substring(0, 5)
+        sat.innerText = saturday.substring(0, 5);
         const sun = document.getElementsByClassName('date date-7')[0];
-        sun.innerText = sunday.substring(0, 5)
-
+        sun.innerText = sunday.substring(0, 5);
 
         function moveNav() {
             if (document.getElementById("sidenav").style.width === "280px") {
