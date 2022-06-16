@@ -17,7 +17,6 @@ generateAccessToken = (id, roles) => {
 class authController {
     async registration(req, res) {
         try {
-            console.log(req.body)
             const errors = validationResult(req)
             if (!errors.isEmpty()) {
                 return res.status(400).json({message: 'ошибка при регистрации', errors})
@@ -38,7 +37,8 @@ class authController {
             const userRole = await Role.findOne({value: 'USER'})
             const user = new User({username, email, password: hashPassword, roles: [userRole.value]})
             await user.save()
-            return res.json({message: 'Пользователь успешно зарегистрирован'})
+            res.redirect('/auth/login')
+            return
         } catch (e) {
             console.log(e)
             res.status(400).json({message: 'ошибка регистрации'})
@@ -47,18 +47,25 @@ class authController {
 
     async login(req, res) {
         try {
-            const {username, password} = req.body;
-            const user = await User.findOne({username});
-            if (!user) {
+            const {loginField, password} = req.body;
+            const user = await User.findOne({loginField});
+            const email = await User.findOne({email: loginField})
+            if (!user  && !email) {
                 return res.status(400).json({message: `Пользователь ${username} не найден`})
             }
-            const validPassword = bcrypt.compareSync(password, user.password)
+            let validPassword;
+            if (user) {
+                validPassword = bcrypt.compareSync(password, user.password)
+            } else {
+                validPassword = bcrypt.compareSync(password, email.password)
+            }
+
             if (!validPassword) {
                 return res.status(400).json({message: 'Неверный пароль'})
             }
 
             const token = generateAccessToken(user._id, user.roles)
-            return res.json({token})
+            return res.cookie('sessionId', token, { maxAge: 900000, httpOnly: true }).redirect('../main')
         } catch (e) {
             console.log(e)
             res.status(400).json({message: 'ошибка входа в систему'})
