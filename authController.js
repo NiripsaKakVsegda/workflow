@@ -17,12 +17,12 @@ generateAccessToken = (id, roles) => {
 class authController {
     async registration(req, res) {
         try {
-            console.log(req)
+            console.log(req.body)
             const errors = validationResult(req)
             if (!errors.isEmpty()) {
                 return res.status(400).json({message: 'ошибка при регистрации', errors})
             }
-            const {username, email, password, repeatedPassword} = req.query
+            const {username, email, password, repeatedPassword} = req.body
             const candidate = await User.findOne({username})
             if (candidate) {
                 return res.status(400).json({message: 'Пользователь с таким именем уже существует'})
