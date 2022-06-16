@@ -17,11 +17,12 @@ generateAccessToken = (id, roles) => {
 class authController {
     async registration(req, res) {
         try {
+            console.log(req)
             const errors = validationResult(req)
             if (!errors.isEmpty()) {
                 return res.status(400).json({message: 'ошибка при регистрации', errors})
             }
-            const {username, email, password} = req.body
+            const {username, email, password, repeatedPassword} = req.query
             const candidate = await User.findOne({username})
             if (candidate) {
                 return res.status(400).json({message: 'Пользователь с таким именем уже существует'})
@@ -29,6 +30,9 @@ class authController {
             const emailCandidate = await User.findOne({email: email})
             if (emailCandidate) {
                 return res.status(400).json({message: 'Пользователь с такой электронной почтой уже существует'})
+            }
+            if (password !== repeatedPassword) {
+                return res.status(400).json({message:'Пароли должны совпадать'})
             }
             const hashPassword = bcrypt.hashSync(password, 7)
             const userRole = await Role.findOne({value: 'USER'})
