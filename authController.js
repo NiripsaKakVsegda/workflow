@@ -33,6 +33,7 @@ class authController {
             if (password !== repeatedPassword) {
                 return res.status(400).json({message:'Пароли должны совпадать'})
             }
+
             const hashPassword = bcrypt.hashSync(password, 7)
             const userRole = await Role.findOne({value: 'USER'})
             const user = new User({username, email, password: hashPassword, roles: [userRole.value]})
@@ -48,24 +49,28 @@ class authController {
     async login(req, res) {
         try {
             const {loginField, password} = req.body;
-            const user = await User.findOne({loginField});
+            const user = await User.findOne({username: loginField});
             const email = await User.findOne({email: loginField})
             if (!user  && !email) {
                 return res.status(400).json({message: `Пользователь ${username} не найден`})
             }
             let validPassword;
+            let token;
+
             if (user) {
                 validPassword = bcrypt.compareSync(password, user.password)
+                token = generateAccessToken(user._id, user.userame, user.roles)
             } else {
                 validPassword = bcrypt.compareSync(password, email.password)
+                token = generateAccessToken(email._id, email.userame, email.roles)
             }
 
             if (!validPassword) {
                 return res.status(400).json({message: 'Неверный пароль'})
             }
-
-            const token = generateAccessToken(user._id, user.roles)
-            return res.cookie('sessionId', token, { maxAge: 900000, httpOnly: true }).redirect('../main')
+            res.cookie('sessionId', token, { maxAge: 900000, httpOnly: true });
+            res.redirect('../main')
+            return;
         } catch (e) {
             console.log(e)
             res.status(400).json({message: 'ошибка входа в систему'})

@@ -1,11 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const authRouter = require('./authRouter')
+const cookieParser = require("cookie-parser");
+const authMiddleware = require("./middleware/authMiddleware");
 const dburl = `mongodb+srv://admin:admin234@cluster0.knt3h.mongodb.net/?retryWrites=true&w=majority`;
 const PORT = process.env.PORT || 5000;
 
 const app = express();
 
+app.use(cookieParser());
 app.use(express.static('public'));
 app.use('/css', express.static(__dirname + 'public/css'));
 app.use('/js', express.static(__dirname + 'public/js'));
@@ -22,11 +25,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/main', (req, res) => {
-    res.render('main');
+    res.render('main', authMiddleware(req, res));
 });
 
 app.get('/schedule', (req, res) => {
-    res.render('scheduler');
+    res.render('scheduler', authMiddleware(req, res));
 });
 
 app.use('/auth', authRouter)
@@ -38,7 +41,5 @@ const start = async () => {
         console.log(e);
     }
 };
-
-
 
 start();
