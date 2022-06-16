@@ -19,4 +19,6 @@ router.post('/login', controller.login);
 router.get('/login', (req, res) => res.render('login'))
 router.get('/users', roleMiddleware(["ADMIN"]), controller.getUsers);
 
+router.get('/task', controller.getTask);
+
 module.exports = router;

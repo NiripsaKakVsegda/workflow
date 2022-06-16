@@ -23,7 +23,7 @@ class authController {
                 return res.status(400).json({message: 'ошибка при регистрации', errors})
             }
             const {username, email, password, repeatedPassword} = req.body
-            const candidate = await User.findOne({username})
+            const candidate = await User.findOne({username:username})
             if (candidate) {
                 return res.status(400).json({message: 'Пользователь с таким именем уже существует'})
             }
@@ -82,6 +82,22 @@ class authController {
         try {
             const users = await User.find()
             res.json(users)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    async getTask(req, res) {
+        try {
+            const token = req.cookies.sessionId;
+            const {id: userId} = jwt.verify(token, 'secret')
+            const user = await User.findById(userId)
+            const newTask = await Task.findById('62ab9d99cb7f22f128a8c5b9')
+
+            user.tasks.push(newTask)
+
+            await user.save()
+            res.send('ok')
         } catch (e) {
             console.log(e)
         }
