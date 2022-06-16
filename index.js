@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 
+app.use(express.static('public'));
 app.use('/css', express.static(__dirname + 'public/css'));
 app.use('/js', express.static(__dirname + 'public/js'));
 app.use('/img', express.static(__dirname + 'public/img'));
@@ -14,6 +15,14 @@ app.set('views', './views');
 app.set('view engine', 'hbs');
 
 app.use(express.json());
+
+app.get('/', (req, res) => {
+    res.render('login');
+});
+
+app.get('/main', (req, res) => {
+    res.render('main');
+});
 
 app.use('/auth', authRouter)
 const start = async () => {
@@ -25,12 +34,6 @@ const start = async () => {
     }
 };
 
-// app.get('/', (req, res) => {
-//     res.render('login');
-// });
-//
-// app.get('/main', (req, res) => {
-//     res.render('main');
-// });
+
 
 start();
