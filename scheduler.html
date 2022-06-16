@@ -16,7 +16,7 @@
             <i class="fa-solid fa-bars fa-3x" style="color: #fff; cursor: pointer" onclick="moveNav()"></i>
             <h1>Workflow</h1>
         </div>
-        <div  class="header-part">
+        <div class="header-part">
             <img src="avatar.png" class="avatar">
             <h2 style="font-weight: 400; font-size: 28px">Алёна<br>Полуяненко</h2>
         </div>
@@ -40,65 +40,68 @@
                     <i class="fa-solid fa-caret-down fa"></i></b></p>
         </div>
         <div class="table">
-            <div class="item">
+            <div class="item" ondblclick="document.getElementById('modal-new-task').style.display = 'flex'">
                 <p>Понедельник</p>
                 <p class="date date-1">06.06</p>
-                <div class="tasks" style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px;">
-                    <div class="task task-1">
+                <div class="tasks" style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; overflow-y: auto; margin-bottom: 10px;">
+                    <div class="task task-1" onclick="openModal('modal-task')">
                         <p>Веб</p>
                         <p>15:00</p>
                     </div>
-                    <div class="task task-2" style="background: #C1DBB3">
+                    <div class="task task-2" style="background: #C1DBB3" onclick="openModal('modal-task')">
                         <p>Алгоритмы</p>
                         <p>23:00</p>
                     </div>
                 </div>
             </div>
-            <div class="item">
+            <div class="item" ondblclick="document.getElementById('modal-new-task').style.display = 'flex'">
                 <p>Вторник</p>
                 <p class="date date-2">07.06</p>
             </div>
-            <div class="item">
+            <div class="item" ondblclick="document.getElementById('modal-new-task').style.display = 'flex'">
                 <p>Среда</p>
                 <p class="date date-3">08.06</p>
             </div>
-            <div class="item">
+            <div class="item" ondblclick="document.getElementById('modal-new-task').style.display = 'flex'">
                 <p>Четверг</p>
                 <p class="date date-4">09.06</p>
             </div>
-            <div class="item">
+            <div class="item" ondblclick="document.getElementById('modal-new-task').style.display = 'flex'">
                 <p>Пятница</p>
                 <p class="date date-5">10.06</p>
             </div>
-            <div class="item">
+            <div class="item" ondblclick="document.getElementById('modal-new-task').style.display = 'flex'">
                 <p>Суббота</p>
                 <p class="date date-6">11.06</p>
             </div>
-            <div class="item">
+            <div class="item" ondblclick="document.getElementById('modal-new-task').style.display = 'flex'">
                 <p>Воскресенье</p>
                 <p class="date date-7">12.06</p>
             </div>
-            <div class="item">
+            <div class="item" ondblclick="document.getElementById('modal-new-task-without-time').style.display = 'flex'">
                 <p style="margin-bottom: 10px;">Прочее</p>
                 <div class="tasks" style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px;">
-                    <div class="task task-3">
+                    <div class="task task-3" onclick="openModal('modal-task-without-time')">
                         <p>Уборка</p>
                     </div>
-                    <div class="task task-4">
+                    <div class="task task-4" onclick="openModal('modal-task-without-time')">
                         <p>Выполнить дейлики в генше</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal-container" id="modal-container">
-        <div class="modal" style="display: flex; flex-direction: column; gap: 20px">
-            <h1 style="font-weight: 300;font-size: 64px">Веб</h1>
+    <div class="modal-container" id="modal-task">
+        <div class="modal" style="display: flex; flex-direction: column; gap: 20px;">
+            <div style="display: flex; justify-content: space-between">
+                <h1 style="font-weight: 300;font-size: 64px">Веб</h1>
+                <i class="fa-solid fa-xmark fa-2x" onclick="document.getElementById('modal-task').style.display = 'none'"></i>
+            </div>
             <div style="display: flex; align-items: center; gap: 20px">
                 <i class="fa-solid fa-clock fa-3x"></i>
                 <p style="font-weight: 300;font-size: 40px">13.06, 15:00</p>
             </div>
-            <p style="font-weight: 300;font-size: 40px">Сделать дз на ULearn + разобраться с flexbox</p>
+            <p class="task-text" style="font-weight: 300;font-size: 40px; height: 300px; overflow: auto">Сделать дз на ULearn + разобраться с flexbox</p>
             <div style="display: flex; justify-content: space-between; margin-top: 40px">
                 <label class="form-control" style="font-weight: 300;font-size: 40px; display: flex; gap: 10px">
                     <input type="checkbox" name="checkbox" />
@@ -109,10 +112,63 @@
         </div>
     </div>
 
+    <div class="modal-container" id="modal-task-without-time">
+        <div class="modal" style="display: flex; flex-direction: column; gap: 20px;">
+            <div style="display: flex; justify-content: space-between">
+                <h1 style="font-weight: 300;font-size: 64px">Уборка</h1>
+                <i class="fa-solid fa-xmark fa-2x" onclick="document.getElementById('modal-task-without-time').style.display = 'none'"></i>
+            </div>
+            <p class="task-text" style="font-weight: 300;font-size: 40px; height: 300px; overflow: auto">Прибрать комнату, разобрать полки с аниме-фигурками, протереть пыль</p>
+            <div style="display: flex; justify-content: space-between; margin-top: 40px">
+                <label class="form-control" style="font-weight: 300;font-size: 40px; display: flex; gap: 10px">
+                    <input type="checkbox" name="checkbox" />
+                    Выполнено
+                </label>
+                <i class="fa-solid fa-pencil fa-3x"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-container" id="modal-new-task">
+        <div class="modal" style="display: flex; flex-direction: column; gap: 20px;">
+            <div style="display: flex; justify-content: space-between">
+                <input required type="text" style="font-weight: 300; font-size: 64px;" placeholder="Название">
+                <i class="fa-solid fa-xmark fa-2x" onclick="document.getElementById('modal-new-task').style.display = 'none'"></i>
+            </div>
+            <div style="display: flex; align-items: center; gap: 20px">
+                <i class="fa-solid fa-clock fa-3x"></i>
+                <p style="font-weight: 300;font-size: 40px">13.06, </p>
+                <input style="font-weight: 300;font-size: 40px" type="time" placeholder="15:00">
+            </div>
+            <textarea class="task-text" style="resize: none; font-weight: 300;font-size: 40px; height: 300px; overflow: auto; max-width: 100%; border: none; outline: none" placeholder="Что нужно сделать?"></textarea>
+            <div style="display: flex; justify-content: space-between; margin-top: 40px">
+                <i class="fa-solid fa-trash fa-3x"></i>
+                <i class="fa-solid fa-check fa-3x" onclick="document.getElementById('modal-new-task').style.display = 'none'"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-container" id="modal-new-task-without-time">
+        <div class="modal" style="display: flex; flex-direction: column; gap: 20px;">
+            <div style="display: flex; justify-content: space-between">
+                <input required type="text" style="font-weight: 300; font-size: 64px;" placeholder="Название">
+                <i class="fa-solid fa-xmark fa-2x" onclick="document.getElementById('modal-new-task-without-time').style.display = 'none'"></i>
+            </div>
+            <textarea class="task-text" style="resize: none; font-weight: 300;font-size: 40px; height: 300px; overflow: auto; max-width: 100%; border: none; outline: none" placeholder="Что нужно сделать?"></textarea>
+            <div style="display: flex; justify-content: space-between; margin-top: 40px">
+                <label class="form-control" style="font-weight: 300;font-size: 40px; display: flex; gap: 10px">
+                    <input type="checkbox" name="checkbox" />
+                    Выполнено
+                </label>
+                <i class="fa-solid fa-check fa-3x" onclick="document.getElementById('modal-new-task-without-time').style.display = 'none'"></i>
+            </div>
+        </div>
+    </div>
+
 
 
     <footer style="color: #1E0E62; font-weight: 500; font-size: 26px; position: fixed; bottom: 10px; right: 10px">
-        <p id="time" style="width: 204px"> </p>
+        <p id="time" > </p>
         <script src="time.js">   </script>
     </footer>
 
@@ -144,8 +200,6 @@
         sun.innerText = sunday.substring(0, 5)
 
 
-        let a = screen.width * 0.5;
-        document.getElementById("progress").style.width = `${a}px`;
         function moveNav() {
             if (document.getElementById("sidenav").style.width === "280px") {
                 document.getElementById("sidenav").style.width = "0";
@@ -155,6 +209,13 @@
                 document.getElementById("sidenav").style.width = "280px";
                 document.getElementById("content").style.marginLeft = "320px";
             }
+        }
+
+        function openModal(id) {
+            if (!e) var e = window.event;
+            e.cancelBubble = true;
+            if (e.stopPropagation) e.stopPropagation();
+            document.getElementById(id).style.display = 'flex';
         }
     </script>
 </body>

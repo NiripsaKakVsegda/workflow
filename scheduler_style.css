@@ -82,7 +82,6 @@ a i {
     flex-direction: column;
     align-items: center;
     color: #1E0E62;
-    cursor: pointer;
 }
 
 .item p {
@@ -102,6 +101,7 @@ a i {
     width: 80%;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     cursor: pointer;
 }
 
@@ -140,10 +140,78 @@ input[type="checkbox"]:checked {
 }
 
 .modal-container {
-    /*display: none;*/
-    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal {
     padding: 20px;
+    background: #fff;
     border-radius: 25px;
     width: 500px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+
+.fa-solid.fa-xmark.fa-2x, .fa-solid.fa-pencil.fa-3x, .fa-solid.fa-check.fa-3x, .fa-solid.fa-trash.fa-3x {
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.fa-solid.fa-xmark.fa-2x:hover, .fa-solid.fa-pencil.fa-3x:hover, .fa-solid.fa-check.fa-3x:hover {
+    color: #FE5D26;
+}
+
+.fa-solid.fa-trash.fa-3x:hover {
+    color: crimson;
+}
+
+.tasks::-webkit-scrollbar {
+    width: 10px;
+    padding-right: 10px;
+}
+
+/* Track */
+.tasks::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+/* Handle */
+.tasks::-webkit-scrollbar-thumb {
+    background: #f2c078;
+    border-radius: 10px;
+}
+
+.task-text::-webkit-scrollbar {
+    width: 10px;
+    padding-right: 10px;
+}
+
+/* Track */
+.task-text::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+/* Handle */
+.task-text::-webkit-scrollbar-thumb {
+    background: #D9D9D9;
+    border-radius: 10px;
+}
+
+input {
+    width: 100%;
+    border: none;
+    outline: none;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    display: none;
 }
