@@ -18,7 +18,7 @@
         </div>
         <a href="/account" class="header-part">
             <img src="images/avatar.png" class="avatar">
-            <h2 style="font-weight: 400; font-size: 28px">Алёна<br>Полуяненко</h2>
+            <h2 style="font-weight: 400; font-size: 28px"> {{{username}}} </h2>
         </a>
     </header>
     <div id="sidenav" class="sidenav">
@@ -40,95 +40,49 @@
                     <i class="fa-solid fa-caret-down fa"></i></b></p>
         </div>
         <div class="table">
-            <div class="item" ondblclick="document.getElementById('modal-new-task').style.display = 'flex'">
+            <div class="item" ondblclick="addNewTask(document.getElementById('Monday').textContent)">
                 <p>Понедельник</p>
-                <p class="date date-1">06.06</p>
-                <div class="tasks" style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; overflow-y: auto; margin-bottom: 10px;">
-                    <div class="task" onclick="openModal('modal-task')">
-                        <p>Веб</p>
-                        <p>15:00</p>
-                    </div>
-                    <div class="task" style="background: #C1DBB3" onclick="openModal('modal-task')">
-                        <p>Алгоритмы</p>
-                        <p>23:00</p>
-                    </div>
-                </div>
+                <p class="date date-1" id="Monday"></p>
+                {{{tasksDay0}}}
             </div>
-            <div class="item" ondblclick="document.getElementById('modal-new-task').style.display = 'flex'">
+            <div class="item" ondblclick="addNewTask(document.getElementById('Tuesday').textContent)">
                 <p>Вторник</p>
-                <p class="date date-2">07.06</p>
+                <p class="date date-2" id="Tuesday"></p>
+                {{{tasksDay1}}}
             </div>
-            <div class="item" ondblclick="document.getElementById('modal-new-task').style.display = 'flex'">
+            <div class="item" ondblclick="addNewTask(document.getElementById('Wednesday').textContent)">
                 <p>Среда</p>
-                <p class="date date-3">08.06</p>
+                <p class="date date-3" id="Wednesday"></p>
+                {{{tasksDay2}}}
             </div>
-            <div class="item" ondblclick="document.getElementById('modal-new-task').style.display = 'flex'">
+            <div class="item" ondblclick="addNewTask(document.getElementById('Thursday').textContent)">
                 <p>Четверг</p>
-                <p class="date date-4">09.06</p>
+                <p class="date date-4" id="Thursday"></p>
+                {{{tasksDay3}}}
             </div>
-            <div class="item" ondblclick="document.getElementById('modal-new-task').style.display = 'flex'">
+            <div class="item" ondblclick="addNewTask(document.getElementById('Friday').textContent)">
                 <p>Пятница</p>
-                <p class="date date-5">10.06</p>
+                <p class="date date-5" id="Friday"></p>
+                {{{tasksDay4}}}
             </div>
-            <div class="item" ondblclick="document.getElementById('modal-new-task').style.display = 'flex'">
+            <div class="item" ondblclick="addNewTask(document.getElementById('Saturday').textContent)">
                 <p>Суббота</p>
-                <p class="date date-6">11.06</p>
+                <p class="date date-6" id="Saturday"></p>
+                {{{tasksDay5}}}
             </div>
-            <div class="item" ondblclick="document.getElementById('modal-new-task').style.display = 'flex'">
+            <div class="item" ondblclick="addNewTask(document.getElementById('Sunday').textContent)">
                 <p>Воскресенье</p>
-                <p class="date date-7">12.06</p>
+                <p class="date date-7" id="Sunday"></p>
+                {{{tasksDay6}}}
             </div>
             <div class="item" ondblclick="document.getElementById('modal-new-task-without-time').style.display = 'flex'">
                 <p style="margin-bottom: 10px;">Прочее</p>
-                <div class="tasks" style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px;">
-                    <div class="task" onclick="openModal('modal-task-without-time')">
-                        <p>Уборка</p>
-                    </div>
-                    <div class="task" onclick="openModal('modal-task-without-time')">
-                        <p>Выполнить дейлики в генше</p>
-                    </div>
-                </div>
+                {{{tasksNoTime}}}
             </div>
         </div>
     </div>
 
-    <div class="modal-container" id="modal-task">
-        <div class="modal" style="display: flex; flex-direction: column; gap: 20px;">
-            <div style="display: flex; justify-content: space-between">
-                <h1 style="font-weight: 300;font-size: 64px">Веб</h1>
-                <i class="fa-solid fa-xmark fa-2x" onclick="document.getElementById('modal-task').style.display = 'none'"></i>
-            </div>
-            <div style="display: flex; align-items: center; gap: 20px">
-                <i class="fa-solid fa-clock fa-3x"></i>
-                <p style="font-weight: 300;font-size: 40px">13.06, 15:00</p>
-            </div>
-            <p class="task-text" style="font-weight: 300;font-size: 40px; height: 300px; overflow: auto">Сделать дз на ULearn + разобраться с flexbox</p>
-            <div style="display: flex; justify-content: space-between; margin-top: 40px">
-                <label class="form-control" style="font-weight: 300;font-size: 40px; display: flex; gap: 10px">
-                    <input type="checkbox" name="checkbox" />
-                    Выполнено
-                </label>
-                <i class="fa-solid fa-pencil fa-3x"></i>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-container" id="modal-task-without-time">
-        <div class="modal" style="display: flex; flex-direction: column; gap: 20px;">
-            <div style="display: flex; justify-content: space-between">
-                <h1 style="font-weight: 300;font-size: 64px">Уборка</h1>
-                <i class="fa-solid fa-xmark fa-2x" onclick="document.getElementById('modal-task-without-time').style.display = 'none'"></i>
-            </div>
-            <p class="task-text" style="font-weight: 300;font-size: 40px; height: 300px; overflow: auto">Прибрать комнату, разобрать полки с аниме-фигурками, протереть пыль</p>
-            <div style="display: flex; justify-content: space-between; margin-top: 40px">
-                <label class="form-control" style="font-weight: 300;font-size: 40px; display: flex; gap: 10px">
-                    <input type="checkbox" name="checkbox" />
-                    Выполнено
-                </label>
-                <i class="fa-solid fa-pencil fa-3x"></i>
-            </div>
-        </div>
-    </div>
+    {{{taskModals}}}
 
     <div class="modal-container" id="modal-new-task">
         <div class="modal" style="display: flex; flex-direction: column; gap: 20px;">
@@ -138,7 +92,7 @@
             </div>
             <div style="display: flex; align-items: center; gap: 20px">
                 <i class="fa-solid fa-clock fa-3x"></i>
-                <p style="font-weight: 300;font-size: 40px">13.06, </p>
+                <p style="font-weight: 300;font-size: 40px" id="newTaskDate"></p>
                 <input style="font-weight: 300;font-size: 40px" type="time" placeholder="15:00">
             </div>
             <textarea class="task-text" style="resize: none; font-weight: 300;font-size: 40px; height: 300px; overflow: auto; max-width: 100%; border: none; outline: none" placeholder="Что нужно сделать?"></textarea>
@@ -177,7 +131,7 @@
         function fillWeekdays() {
             let weekdays = getWeekdays();
             for (let i = 0; i < 7; i++) {
-                const weekday = weekdays[i];
+                const weekday = weekdays[i].toLocaleString();
                 const element = document.getElementsByClassName('date date-' + (i + 1))[0];
                 element.innerText = weekday.substring(0, 5);
             }
@@ -200,6 +154,11 @@
             e.cancelBubble = true;
             if (e.stopPropagation) e.stopPropagation();
             document.getElementById(id).style.display = 'flex';
+        }
+
+        function addNewTask(date) {
+            document.getElementById('modal-new-task').style.display = 'flex'
+            document.getElementById('newTaskDate').textContent = date
         }
     </script>
 </body>

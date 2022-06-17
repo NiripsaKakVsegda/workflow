@@ -4,9 +4,10 @@ function getWeekdays() {
 
     let weekdays = [];
     for (let i = 0; i < 7; i++) {
-        let weekday = new Date(curr.setDate(first + i)).toLocaleString();
+        let weekday = new Date(curr.setDate(first + i));
         weekdays.push(weekday);
     }
 
     return weekdays;
 }
+

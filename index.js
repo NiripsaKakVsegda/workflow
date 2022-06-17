@@ -1,6 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const authRouter = require('./authRouter')
+const authRouter = require('./authRouter');
+const hbs = require('hbs');
+const fs = require('fs');
+const readFile = require('util').promisify(fs.readFile);
 const cookieParser = require("cookie-parser");
 const authMiddleware = require("./middleware/authMiddleware");
 
@@ -62,16 +65,95 @@ app.get('/account', authMiddleware, (req, res) => {
 });
 
 app.get('/schedule', authMiddleware, async (req, res) => {
-    // const token = req.cookies.sessionId;
-    // const {id: userId} = jwt.verify(token, 'secret');
-    // const user = await User.findById(userId)
-    // let taskArray = new Array();
-    // for(let taskId of user.tasks) {
-    //     taskArray.push(await Task.findById(taskId))
-    // }
-    //
-    // // res.json(taskArray)
-    res.render('scheduler');
+    const token = req.cookies.sessionId;
+    const {id: userId} = jwt.verify(token, 'secret');
+    const user = await User.findById(userId)
+
+    let modals = [];
+    let taskArray = [];
+    let tasksNoDate = [];
+    let tasksNoDateDone = [];
+    let noDateIndexer = 0;
+
+    let taskDoneArray = [];
+    for(let taskId of user.tasksDone) {
+        const tempTask = await Task.findById(taskId);
+        if (!tempTask.endTime) {
+            tasksNoDateDone.push(await render('./views/taskModelDone.hbs',
+                {id: `nd${noDateIndexer}`, taskName: tempTask.taskName}))
+            let tempModal = await render('./views/modalNoTime.hbs',
+                {id: `nd${noDateIndexer}`, taskName: tempTask.taskName,
+                taskDescription: tempTask.description});
+            modals.push(tempModal);
+
+            noDateIndexer += 1
+            continue;
+        }
+        taskDoneArray.push(tempTask);
+    }
+    taskDoneArray.sort((a, b) => a['endTime'].getTime() >= b['endTime'].getTime() ? 1 : -1);
+
+    for(let taskId of user.tasks) {
+        const tempTask =await Task.findById(taskId);
+        if (!tempTask.endTime) {
+            if (!(tempTask in tasksNoDateDone)) {
+                tasksNoDate.push(await render('./views/taskModel.hbs',
+                    {id: `nd${noDateIndexer}`, taskName: tempTask.taskName}))
+                let tempModal = await render('./views/modalNoTime.hbs',
+                    {id: `nd${noDateIndexer}`, taskName: tempTask.taskName,
+                        taskDescription: tempTask.description});
+                modals.push(tempModal);
+                console.log(modals)
+
+                noDateIndexer += 1
+            }
+            continue;
+        }
+        taskArray.push(tempTask)
+    }
+    taskArray.sort((a, b) => a['endTime'].getTime() >= b['endTime'].getTime() ? 1 : -1);
+
+    let params = { username: user.username }
+
+    params['tasksNoTime'] = await render('./views/tasks.hbs',
+        {tasks: tasksNoDate.join('\n'),
+            tasksDone: tasksNoDateDone.join('\n')});
+
+    let weekdays = getWeekdays()
+    for (let i = 0; i < 7; i++) {
+        let currDay = weekdays[i].toLocaleDateString()
+        let currDayTasks = []
+        let currDayTasksDone = []
+
+
+        for(let j = 0; j < taskArray.length; j++) {
+            const currTask = taskArray[j];
+            const taskParams = {id: `${i}${j}`, taskName: currTask.taskName,
+                taskTime: currTask.endTime ? currTask.endTime.getHours() + ':' + currTask.endTime.getMinutes() : ''};
+
+            const modalDate = currDay.substring(0,5) + `, ${currTask.endTime.getHours()}:${currTask.endTime.getMinutes()}`
+            const modalParams = {id: `${i}${j}`, taskName: currTask.taskName, date: modalDate,
+                taskDescription: currTask.description};
+
+            if (currTask.endTime.toLocaleDateString() === currDay) {
+                let tempModal = await render('./views/modalWithTime.hbs', modalParams);
+                modals.push(tempModal);
+
+                if (currTask in taskDoneArray) {
+                    currDayTasksDone.push(await render('./views/taskModelDone.hbs', taskParams))
+                } else {
+                    currDayTasks.push(await render('./views/taskModel.hbs', taskParams))
+                }
+            }
+
+            params[`tasksDay${i}`] = await render('./views/tasks.hbs', {tasks: currDayTasks.join('\n'),
+                tasksDone: currDayTasksDone.join('\n')});
+        }
+    }
+
+    params['taskModals'] = modals.join('\n')
+
+    res.render('scheduler', params);
 });
 
 app.use('/auth', authRouter)
@@ -83,5 +165,26 @@ const start = async () => {
         console.log(e);
     }
 };
+
+
+function getWeekdays() {
+    const curr = new Date;
+    const first = curr.getDate() - curr.getDay() + 1;
+
+    let weekdays = [];
+    for (let i = 0; i < 7; i++) {
+        let weekday = new Date(curr.setDate(first + i));
+        weekdays.push(weekday);
+    }
+
+    return weekdays;
+}
+
+async function render(file, params) {
+    const content = await readFile(file, 'utf8');
+    const template = hbs.compile(content);
+
+    return template(params);
+}
 
 start();
