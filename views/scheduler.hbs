@@ -178,10 +178,8 @@
             let weekdays = getWeekdays();
             for (let i = 0; i < 7; i++) {
                 const weekday = weekdays[i];
-                const tasks = getTaskByWeekday(weekday);
-                console.log(tasks);
-                const element = document.getElementByClassName('date date-' + i)[0];
-                elements.innerText = weekday.substring(0, 5);
+                const element = document.getElementsByClassName('date date-' + (i + 1))[0];
+                element.innerText = weekday.substring(0, 5);
             }
         }
         fillWeekdays();
