@@ -39,6 +39,10 @@ class authController {
                 res.render('registration', {visibility: 'visible', text: 'Эта электронная почта уже занята'})
                 return //res.status(400).json({message: 'Пользователь с такой электронной почтой уже существует'})
             }
+            if (password.length < 6) {
+                res.render('registration', {visibility: 'visible', text: 'Пароль не может быть короче 6 символов'})
+                return
+            }
             if (password !== repeatedPassword) {
                 res.render('registration', {visibility: 'visible', text: 'Пароли должны совпадать'})
                 return //res.status(400).json({message:'Пароли должны совпадать'})
