@@ -1,8 +1,8 @@
 function getWeekdays() {
     const curr = new Date;
-    const first = curr.getDate() - curr.getDay();
+    const first = curr.getDate() - curr.getDay() + 1;
 
-    let weekdays = new Array;
+    let weekdays = [];
     for (let i = 0; i < 7; i++) {
         let weekday = new Date(curr.setDate(first + i)).toLocaleString();
         weekdays.push(weekday);
