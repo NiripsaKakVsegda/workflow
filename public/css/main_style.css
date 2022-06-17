@@ -45,7 +45,23 @@ header {
     justify-content: space-between;
 }
 
-.sidenav a {
+.dropmenu {
+    position: fixed;
+    margin-top: 100px;
+    margin-right: 20px;
+    background-color: #FAEDCA;
+    overflow-y: hidden;
+    transition: 0.5s;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    right: 0;
+    top: 0;
+    width: 280px;
+    height: 0;
+}
+
+.sidenav a, .dropmenu a {
     font-size: 32px;
     color: #1E0E62;
     transition: 0.3s;
@@ -53,7 +69,7 @@ header {
     align-items: baseline;
 }
 
-.sidenav a:hover {
+.sidenav a:hover, .dropmenu a:hover {
     color: #FE5D26;
 }
 
