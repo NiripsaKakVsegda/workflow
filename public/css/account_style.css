@@ -98,3 +98,9 @@ header {
 .fa-solid:hover {
     color: #FE5D26;
 }
+
+@media screen and (max-width: 1500px) {
+    body {
+        zoom: 80%;
+    }
+}
