@@ -216,9 +216,3 @@ input {
 input[type="time"]::-webkit-calendar-picker-indicator {
     display: none;
 }
-
-@media screen and (max-width: 1500px) {
-    body {
-        zoom: 70%;
-    }
-}

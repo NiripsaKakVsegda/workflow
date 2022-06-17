@@ -106,9 +106,3 @@ progress::-webkit-progress-value {
     border-radius: 12px;
     transition: 0.3s;
 }
-
-@media screen and (max-width: 1500px) {
-    body {
-        zoom: 70%;
-    }
-}
