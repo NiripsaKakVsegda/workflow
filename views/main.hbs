@@ -37,8 +37,8 @@
     <div style="display: flex; justify-content: flex-end;">
         <div id="dropmenu" class="dropmenu">
             <nav>
-                <a href="/account"><i class="fa-solid fa-user"></i>Аккаунт</a>
-                <a href="/auth/login"><i class="fa-solid fa-arrow-right-from-bracket"></i>Выход</a> <!-- как-то организовать выход из системы -->
+                <a href="/account"><i class="fa-solid fa-user" style="color: #fff"></i>Аккаунт</a>
+                <a href="/auth/login"><i class="fa-solid fa-arrow-right-from-bracket" style="color: #fff"></i>Выход</a> <!-- как-то организовать выход из системы -->
             </nav>
         </div>
     </div>
@@ -47,7 +47,7 @@
         <h1 style="font-size: 64px; font-weight: 600">Привет, Алёна!</h1>
         <div style="display: flex; gap: 50px; align-items: center">
             <p style="font-size: 36px; font-weight: 400"><b style="font-weight: 600">Ближайший дедлайн:</b> {{deadline}}</p>
-            <button class="orange-button">Перейти к заданию</button>
+            <button class="orange-button" id="task-button">Перейти к заданию</button>
         </div>
         <div style="display: flex; flex-direction: column; align-items: center; gap: 16px; align-self: center; padding-top: 120px">
             <p style="font-weight: 500; font-size: 36px">Уже выполнено:</p>
@@ -56,7 +56,7 @@
                 <label id="progress-label" style="font-weight: 500; font-size: 30px; width: 73px">{{percent}}%</label>
             </div>
             <div style="display: flex; align-items: center; gap: 10px; font-weight: 500; font-size: 20px; justify-content: flex-end; margin-left: 69%; margin-top: -20px">
-                <i class="fa-solid fa-caret-down fa-2x" style="color: #FE5D26; cursor: pointer" onclick="switchTiming()"></i>
+                <i class="fa-solid fa-caret-down fa-2x" style="color: #FE5D26;" ></i>
                 <p id="week_month" style="width: 102px">за неделю</p>
             </div>
         </div>
@@ -68,6 +68,11 @@
 
 
     <script>
+        let deadline = '{{deadline}}';
+        if (deadline === 'нет заданий') {
+            document.getElementById('task-button').style.display = 'none';
+        }
+
         let a = screen.width * 0.5;
         document.getElementById("progress").style.width = `${a}px`;
         function moveNavVertical(id) {

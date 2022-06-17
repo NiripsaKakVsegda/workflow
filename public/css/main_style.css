@@ -49,7 +49,7 @@ header {
     position: fixed;
     margin-top: 100px;
     margin-right: 20px;
-    background-color: #FAEDCA;
+    background-color: #f2c078;
     overflow-y: hidden;
     transition: 0.5s;
     display: flex;
@@ -67,6 +67,10 @@ header {
     transition: 0.3s;
     display: flex;
     align-items: baseline;
+}
+
+.dropmenu a {
+    color: #fff;
 }
 
 .sidenav a:hover, .dropmenu a:hover {

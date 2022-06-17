@@ -53,7 +53,7 @@ app.get('/main', authMiddleware, async (req, res) => {
         const time = taskArray[0]['endTime'].toLocaleString().substring(12, 17);
         res.render('main', {deadline: [task, date, time].join(', '), percent: donePercent});
     }
-    else res.render('main', {deadline: 'Нет заданий', percent: donePercent});
+    else res.render('main', {deadline: 'нет заданий', percent: donePercent});
 });
 
 
