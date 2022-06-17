@@ -174,7 +174,7 @@
 
     <script>
         const curr = new Date;
-        const first = curr.getDate() - curr.getDay();
+        const first = curr.getDate() - curr.getDay() + 1;
 
         let monday = new Date(curr.setDate(first)).toLocaleString();
         let tuesday = new Date(curr.setDate(first + 1)).toLocaleString();
