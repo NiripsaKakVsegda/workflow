@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const authRouter = require('./authRouter')
 const cookieParser = require("cookie-parser");
 const authMiddleware = require("./middleware/authMiddleware");
+
 const dburl = `mongodb+srv://admin:admin234@cluster0.knt3h.mongodb.net/?retryWrites=true&w=majority`;
 const PORT = process.env.PORT || 5000;
 
@@ -28,7 +29,7 @@ app.get('/', (req, res) => {
     res.redirect('/auth/login');
 });
 
-app.get('/main', async (req, res) => {
+app.get('/main', authMiddleware, async (req, res) => {
     const token = req.cookies.sessionId;
     const {id: userId} = jwt.verify(token, 'secret');
     const user = await User.findById(userId)
@@ -41,25 +42,25 @@ app.get('/main', async (req, res) => {
     const task = taskArray[0]['taskName'];
     const date = taskArray[0]['endTime'].toLocaleString().substring(0, 5)
     const time = taskArray[0]['endTime'].toLocaleString().substring(12, 17)
-    res.render('main', {deadline: task + ', ' + date + ', ' + time}, authMiddleware(req, res));
+    res.render('main', {deadline: task + ', ' + date + ', ' + time});
 });
 
 
-app.get('/account', (req, res) => {
+app.get('/account', authMiddleware, (req, res) => {
     res.render('account');
 });
 
-app.get('/schedule', async (req, res) => {
-    const token = req.cookies.sessionId;
-    const {id: userId} = jwt.verify(token, 'secret');
-    const user = await User.findById(userId)
-    let taskArray = new Array();
-    for(let taskId of user.tasks) {
-        taskArray.push(await Task.findById(taskId))
-    }
-
-    // res.json(taskArray)
-    res.render('scheduler', authMiddleware(req, res));
+app.get('/schedule', authMiddleware, async (req, res) => {
+    // const token = req.cookies.sessionId;
+    // const {id: userId} = jwt.verify(token, 'secret');
+    // const user = await User.findById(userId)
+    // let taskArray = new Array();
+    // for(let taskId of user.tasks) {
+    //     taskArray.push(await Task.findById(taskId))
+    // }
+    //
+    // // res.json(taskArray)
+    res.render('scheduler');
 });
 
 app.use('/auth', authRouter)
