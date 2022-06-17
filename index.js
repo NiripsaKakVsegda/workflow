@@ -33,19 +33,27 @@ app.get('/main', authMiddleware, async (req, res) => {
     const token = req.cookies.sessionId;
     const {id: userId} = jwt.verify(token, 'secret');
     const user = await User.findById(userId);
+
     let taskArray = [];
     for(let taskId of user.tasks) {
         taskArray.push(await Task.findById(taskId));
     }
+
+    let taskDoneArray = [];
+    for(let taskId of user.tasksDone) {
+        taskDoneArray.push(await Task.findById(taskId));
+    }
+    let donePercent = taskDoneArray.length / taskArray.length | 0;
+
     if (taskArray.length > 0) {
         taskArray = taskArray.filter((el) => el['endTime'].getTime() >= new Date().getTime());
         taskArray.sort((a, b) => a['endTime'].getTime() >= b['endTime'].getTime() ? 1 : -1);
         const task = taskArray[0]['taskName'];
         const date = taskArray[0]['endTime'].toLocaleString().substring(0, 5);
         const time = taskArray[0]['endTime'].toLocaleString().substring(12, 17);
-        res.render('main', {deadline: [task, date, time].join(', ')});
+        res.render('main', {deadline: [task, date, time].join(', '), percent: donePercent});
     }
-    else res.render('main', {deadline: 'Нет заданий'});
+    else res.render('main', {deadline: 'Нет заданий', percent: donePercent});
 });
 
 
