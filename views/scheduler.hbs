@@ -13,18 +13,18 @@
 <body>
     <header style="background: #f2c078; color: #FFF;">
         <div class="header-part">
-            <i class="fa-solid fa-bars fa-3x" style="color: #fff; cursor: pointer" onclick="moveNav()"></i>
+            <i class="fa-solid fa-bars fa-3x" style="color: #fff; cursor: pointer" onclick="moveNavHorizontal('sidenav', true)"></i>
             <h1>Workflow</h1>
         </div>
-        <a href="/account" class="header-part">
+        <div class="header-part" onclick="moveNavVertical('dropmenu')">
             <img src="images/avatar.png" class="avatar">
             <h2 style="font-weight: 400; font-size: 28px"> {{{username}}} </h2>
-        </a>
+        </div>
     </header>
     <div id="sidenav" class="sidenav">
         <nav style="padding-top: 30px;">
             <a href="/main"><i class="fa-solid fa-house"></i>Главная</a>
-            <a href="#"><i class="fa-solid fa-bars-progress"></i>Задачи</a>
+            <a href="/schedule"><i class="fa-solid fa-bars-progress"></i>Задачи</a>
             <a href="#"><i class="fa-solid fa-graduation-cap"></i>Группы</a>
             <a href="#"><i class="fa-solid fa-user-group"></i>Друзья</a>
             <a href="#"><i class="fa-solid fa-comment"></i>Сообщения</a>
@@ -32,6 +32,15 @@
         <nav>
             <a href="#" class="settings"><i class="fa-solid fa-screwdriver-wrench"></i>Настройки</a>
         </nav>
+    </div>
+
+    <div style="display: flex; justify-content: flex-end;">
+        <div id="dropmenu" class="dropmenu">
+            <nav>
+                <a href="/account"><i class="fa-solid fa-user" style="color: #fff"></i>Аккаунт</a>
+                <a href="/auth/login"><i class="fa-solid fa-arrow-right-from-bracket" style="color: #fff"></i>Выход</a> <!-- как-то организовать выход из системы -->
+            </nav>
+        </div>
     </div>
     <div class="content" id="content" style="display: flex; flex-direction: column; gap: 60px">
         <div style="display: flex; gap: 10px; align-items: center; justify-content: flex-end; padding: 10px 20px 0 0">
@@ -138,14 +147,27 @@
         }
         fillWeekdays();
 
-        function moveNav() {
-            if (document.getElementById("sidenav").style.width === "280px") {
-                document.getElementById("sidenav").style.width = "0";
-                document.getElementById("content").style.marginLeft = "40px";
+        function moveNavVertical(id) {
+            if (document.getElementById(id).style.height === "160px") {
+                document.getElementById(id).style.height = "0";
             }
             else {
-                document.getElementById("sidenav").style.width = "280px";
-                document.getElementById("content").style.marginLeft = "320px";
+                document.getElementById(id).style.height = "160px";
+            }
+        }
+
+        function moveNavHorizontal(id, margin) {
+            if (document.getElementById(id).style.width === "280px") {
+                document.getElementById(id).style.width = "0";
+                if (margin) {
+                    document.getElementById("content").style.marginLeft = "40px";
+                }
+            }
+            else {
+                document.getElementById(id).style.width = "280px";
+                if (margin) {
+                    document.getElementById("content").style.marginLeft = "320px";
+                }
             }
         }
 

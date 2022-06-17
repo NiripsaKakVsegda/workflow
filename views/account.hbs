@@ -49,7 +49,7 @@
             </div>
             <div style="display: none; justify-content: space-between" id="group">
                 <p style="font-weight: 500; font-size: 64px; padding-right: 40px">Группа:</p>
-                <input type="text" maxlength="10" style="font-weight: 400; font-size: 64px; outline: none; border: none; border-bottom: 2px solid #1E0E62; opacity: 0.5">
+                <input id='groupInput' type="text" maxlength="10" style="font-weight: 400; font-size: 64px; outline: none; border: none; border-bottom: 2px solid #1E0E62; opacity: 0.5">
             </div>
             <div style="display: flex; justify-content: space-between; padding-top: 60px;">
                <a href="/main"><i class="fa-solid fa-xmark fa-5x"></i></a>
@@ -84,6 +84,28 @@
                 document.getElementById('group').style.display = 'none';
             }
         }
+
+        function addFormatter (input, formatFn) {
+            let oldValue = input.value;
+
+            const handleInput = event => {
+                const result = formatFn(input.value, oldValue, event);
+                if (typeof result === 'string') {
+                    input.value = result;
+                }
+
+                oldValue = input.value;
+            }
+
+            handleInput();
+            input.addEventListener("input", handleInput);
+        }
+
+        function regexPrefix (regex, prefix) {
+            return (newValue, oldValue) => regex.test(newValue) ? newValue : (newValue ? oldValue : prefix);
+        }
+
+        addFormatter(document.getElementById('groupInput'), regexPrefix(/^ФТ-/, 'ФТ-'));
 
     </script>
 </body>
