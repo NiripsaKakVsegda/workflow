@@ -38,10 +38,10 @@ app.get('/main', async (req, res) => {
     }
     taskArray = taskArray.filter((el) => el['endTime'].getTime() >= new Date().getTime())
     taskArray.sort((a, b) => a['endTime'].getTime() >= b['endTime'].getTime() ? 1 : -1)
-    const task = taskArray[0]['taskName'] + ', ';
+    const task = taskArray[0]['taskName'];
     const date = taskArray[0]['endTime'].toLocaleString().substring(0, 5)
-    const time = taskArray[0]['endTime'].toLocaleString().substring(10, 17)
-    res.render('main', {deadline: task + date + time}, authMiddleware(req, res));
+    const time = taskArray[0]['endTime'].toLocaleString().substring(12, 17)
+    res.render('main', {deadline: task + ', ' + date + ', ' + time}, authMiddleware(req, res));
 });
 
 
