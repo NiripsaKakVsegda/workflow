@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Workflow</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
@@ -49,11 +50,18 @@
             <div style="display: flex; flex-direction: column; align-items: center; justify-content: space-around; flex:0.5">
                 <button class="form-button second">Войти с помощью Google</button>
             </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-direction: column">
+                <p class="error" style="position: fixed; font-size: 20px; color: #FE5D26; height: 20px; visibility: {{visibility}};">{{text}}</p>
+            </div>
             <div class="form-footer" style="font-size: 18px; display: flex; flex-direction: row; justify-content: space-around; flex: 1; align-items: center; margin-top: 30px">
                 <p style="color: rgba(21, 20, 57, 0.4);">Еще не с нами?</p>
                 <p><a href="/auth/register">Зарегистрироваться</a></p>
             </div>
         </form>
     </div>
+
+    <script>
+        setTimeout(() => {$('.error').fadeOut('slow')}, 3000);
+    </script>
 </body>
 </html>

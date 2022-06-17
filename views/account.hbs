@@ -64,7 +64,7 @@
                 let reader = new FileReader();
                 reader.onload = function (e) {
                     let fileurl = e.target.result;
-                    $('.profile-pic').attr('src',fileurl);
+                    $('.profile-pic').attr('src', fileurl);
                 }
                 reader.readAsDataURL(input.files[0]);
             }
