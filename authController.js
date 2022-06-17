@@ -18,26 +18,30 @@ generateAccessToken = (id, roles, username) => {
 class authController {
     async registration(req, res) {
         try {
-            const errors = validationResult(req)
-            if (!errors.isEmpty()) {
-                return res.status(400).json({message: 'ошибка при регистрации', errors})
-            }
+            //const errors = validationResult(req)
+            // if (!errors.isEmpty()) {
+            //     return res.status(400).json({message: 'ошибка при регистрации', errors})
+            // }
             const {username, email, password, repeatedPassword} = req.body
             for (let char of [' ', '\'', '"', '@']) {
                 if (username.indexOf(char) >= 0) {
-                    return res.status(400).json({message: 'В никнейме нельзя использовать \', \", @ и пробелы', errors})
+                    res.render('registration', {visibility: 'visible', text: 'В никнейме нельзя использовать \', \", @ и пробелы'})
+                    return //res.status(400).json({message: 'В никнейме нельзя использовать \', \", @ и пробелы', errors})
                 }
             }
             const candidate = await User.findOne({username:username})
             if (candidate) {
-                return res.status(400).json({message: 'Пользователь с таким именем уже существует'})
+                res.render('registration', {visibility: 'visible', text: 'Этот никнейм уже занят'})
+                return //res.status(400).json({message: 'Пользователь с таким именем уже существует'})
             }
             const emailCandidate = await User.findOne({email: email})
             if (emailCandidate) {
-                return res.status(400).json({message: 'Пользователь с такой электронной почтой уже существует'})
+                res.render('registration', {visibility: 'visible', text: 'Эта электронная почта уже занята'})
+                return //res.status(400).json({message: 'Пользователь с такой электронной почтой уже существует'})
             }
             if (password !== repeatedPassword) {
-                return res.status(400).json({message:'Пароли должны совпадать'})
+                res.render('registration', {visibility: 'visible', text: 'Пароли должны совпадать'})
+                return //res.status(400).json({message:'Пароли должны совпадать'})
             }
 
             const hashPassword = bcrypt.hashSync(password, 7)

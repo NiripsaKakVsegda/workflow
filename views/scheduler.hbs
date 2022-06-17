@@ -158,7 +158,7 @@
             <textarea class="task-text" style="resize: none; font-weight: 300;font-size: 40px; height: 300px; overflow: auto; max-width: 100%; border: none; outline: none" placeholder="Что нужно сделать?"></textarea>
             <div style="display: flex; justify-content: space-between; margin-top: 40px">
                 <label class="form-control" style="font-weight: 300;font-size: 40px; display: flex; gap: 10px">
-                    <input type="checkbox" name="checkbox" />
+                    <input type="checkbox" name="checkbox"/>
                     Выполнено
                 </label>
                 <i class="fa-solid fa-check fa-3x" onclick="document.getElementById('modal-new-task-without-time').style.display = 'none'"></i>
@@ -170,34 +170,19 @@
     <footer style="color: #1E0E62; font-weight: 500; font-size: 26px; position: fixed; bottom: 10px; right: 10px">
         <p id="time" > </p>
         <script src="js/time.js">   </script>
+        <script src="js/current_week.js"></script>
     </footer>
 
     <script>
-        const curr = new Date;
-        const first = curr.getDate() - curr.getDay() + 1;
-
-        let monday = new Date(curr.setDate(first)).toLocaleString();
-        let tuesday = new Date(curr.setDate(first + 1)).toLocaleString();
-        let wednesday = new Date(curr.setDate(first + 2)).toLocaleString();
-        let thursday = new Date(curr.setDate(first + 3)).toLocaleString();
-        let friday = new Date(curr.setDate(first + 4)).toLocaleString();
-        let saturday = new Date(curr.setDate(first + 5)).toLocaleString();
-        let sunday = new Date(curr.setDate(first + 6)).toLocaleString();
-
-        const mon = document.getElementsByClassName('date date-1')[0];
-        mon.innerText = monday.substring(0, 5);
-        const tue = document.getElementsByClassName('date date-2')[0];
-        tue.innerText = tuesday.substring(0, 5);
-        const wed = document.getElementsByClassName('date date-3')[0];
-        wed.innerText = wednesday.substring(0, 5);
-        const thu = document.getElementsByClassName('date date-4')[0];
-        thu.innerText = thursday.substring(0, 5);
-        const fri = document.getElementsByClassName('date date-5')[0];
-        fri.innerText = friday.substring(0, 5);
-        const sat = document.getElementsByClassName('date date-6')[0];
-        sat.innerText = saturday.substring(0, 5);
-        const sun = document.getElementsByClassName('date date-7')[0];
-        sun.innerText = sunday.substring(0, 5);
+        function fillWeekdays() {
+            let weekdays = getWeekdays();
+            for (let i = 0; i < 7; i++) {
+                const weekday = weekdays[i];
+                const element = document.getElementsByClassName('date date-' + (i + 1))[0];
+                element.innerText = weekday.substring(0, 5);
+            }
+        }
+        fillWeekdays();
 
         function moveNav() {
             if (document.getElementById("sidenav").style.width === "280px") {

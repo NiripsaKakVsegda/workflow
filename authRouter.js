@@ -14,7 +14,7 @@ router.post('/register', [
             .isLength({min:3, max:15}),
         check('email', 'Электронная почта должна быть валидна').isEmail()],
     controller.registration);
-router.get('/register', (req, res) => res.render('registration'))
+router.get('/register', (req, res) => res.render('registration', {visibility: 'hidden', text: ''}))
 router.post('/login', controller.login);
 router.get('/login', (req, res) => res.render('login', {visibility: 'hidden', text: ''}))
 router.get('/users', roleMiddleware(["ADMIN"]), controller.getUsers);

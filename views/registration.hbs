@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Workflow</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <link rel="stylesheet" href="css/registration_style.css">
 </head>
 <body>
@@ -12,8 +13,10 @@
     <div>
         <form name="registerForm" method="post" action="/auth/register">
             <div class="reg-header">
-                <h1 style="color: #1E0E62; font-size: 42px; font-weight: 700;">Регистрация</h1>
+                <h1 style="color: #1E0E62; font-size: 42px; font-weight: 700; padding-bottom: 20px">Регистрация</h1>
+                <p class="error" style="height: 0; position: fixed; font-size: 20px; color: #FE5D26; visibility: {{visibility}};">{{text}}</p>
             </div>
+
             <div class="inputs">
                 <label>
                     <input type="text" name="username" placeholder="Никнейм" required="required" data-validate-length-range="6">
@@ -35,5 +38,9 @@
             </div>
         </form>
     </div>
+
+    <script>
+        setTimeout(() => {$('.error').fadeOut('slow')}, 3000);
+    </script>
 </body>
 </html>

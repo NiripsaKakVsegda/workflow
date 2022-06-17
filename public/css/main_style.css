@@ -94,19 +94,15 @@ a i {
 progress {
     border-radius: 20px;
     height: 44px;
-    /*box-shadow: 1px 1px 4px rgba( 0, 0, 0, 0.2 );*/
 }
 
 progress::-webkit-progress-bar {
-    border: 2px solid #1E0E62;
+    border: 6px solid #7EBC89;
     background-color: #fff;
     border-radius: 24px;
 }
 progress::-webkit-progress-value {
     background-color: #7EBC89;
-    border-radius: 20px;
+    border-radius: 12px;
     transition: 0.3s;
 }
-
-
-
