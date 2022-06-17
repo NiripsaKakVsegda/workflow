@@ -16,7 +16,7 @@ router.post('/register', [
     controller.registration);
 router.get('/register', (req, res) => res.render('registration'))
 router.post('/login', controller.login);
-router.get('/login', (req, res) => res.render('login'))
+router.get('/login', (req, res) => res.render('login', {visibility: 'hidden', text: ''}))
 router.get('/users', roleMiddleware(["ADMIN"]), controller.getUsers);
 
 router.get('/task', controller.getTask);

@@ -23,6 +23,11 @@ class authController {
                 return res.status(400).json({message: 'ошибка при регистрации', errors})
             }
             const {username, email, password, repeatedPassword} = req.body
+            for (let char of [' ', '\'', '"', '@']) {
+                if (username.indexOf(char) >= 0) {
+                    return res.status(400).json({message: 'В никнейме нельзя использовать \', \", @ и пробелы', errors})
+                }
+            }
             const candidate = await User.findOne({username:username})
             if (candidate) {
                 return res.status(400).json({message: 'Пользователь с таким именем уже существует'})
@@ -40,7 +45,6 @@ class authController {
             const user = new User({username, email, password: hashPassword, roles: [userRole.value]})
             await user.save()
             res.redirect('/auth/login')
-            return
         } catch (e) {
             console.log(e)
             res.status(400).json({message: 'ошибка регистрации'})
@@ -50,10 +54,11 @@ class authController {
     async login(req, res) {
         try {
             const {loginField, password} = req.body;
-            const user = await User.findOne({username: loginField});
+            const user = await User.findOne({username: loginField.trim()});
             const email = await User.findOne({email: loginField})
             if (!user  && !email) {
-                return res.status(400).json({message: `Пользователь ${username} не найден`})
+                res.render('login', {visibility: 'visible', text: `Пользователь ${loginField.trim()} не найден`})
+                return //res.status(400).json({message: `Пользователь ${loginField.trim()} не найден`})
             }
             let validPassword;
             let token;
@@ -67,11 +72,11 @@ class authController {
             }
 
             if (!validPassword) {
-                return res.status(400).json({message: 'Неверный пароль'})
+                res.render('login', {visibility: 'visible', text: 'Неверный пароль'})
+                return // res.status(400).json({message: 'Неверный пароль'})
             }
             res.cookie('sessionId', token, { maxAge: 900000, httpOnly: true });
             res.redirect('../main')
-            return;
         } catch (e) {
             console.log(e)
             res.status(400).json({message: 'ошибка входа в систему'})
