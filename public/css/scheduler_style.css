@@ -26,6 +26,7 @@ header {
     align-items: center;
     gap: 15px;
     cursor: pointer;
+    color: #fff;
 }
 
 .sidenav {

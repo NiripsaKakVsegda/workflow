@@ -16,10 +16,10 @@
             <i class="fa-solid fa-bars fa-3x" style="color: #fff; cursor: pointer" onclick="moveNav()"></i>
             <h1>Workflow</h1>
         </div>
-        <div  class="header-part">
+        <a href="/account" class="header-part">
             <img src="images/avatar.png" class="avatar">
             <h2 style="font-weight: 400; font-size: 28px">Алёна<br>Полуяненко</h2>
-        </div>
+        </a>
     </header>
     <div id="sidenav" class="sidenav">
         <nav style="padding-top: 30px;">
@@ -36,7 +36,7 @@
     <div class="content" id="content" style="color: #1E0E62;">
         <h1 style="font-size: 64px; font-weight: 600">Привет, Алёна!</h1>
         <div style="display: flex; gap: 50px; align-items: center">
-            <p style="font-size: 36px; font-weight: 400"><b style="font-weight: 600">Ближайший дедлайн:</b> веб, 13.06, 15:00</p>
+            <p style="font-size: 36px; font-weight: 400"><b style="font-weight: 600">Ближайший дедлайн:</b> {{deadline}}</p>
             <button class="orange-button">Перейти к заданию</button>
         </div>
         <div style="display: flex; flex-direction: column; align-items: center; gap: 16px; align-self: center; padding-top: 120px">
