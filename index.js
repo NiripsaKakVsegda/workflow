@@ -43,23 +43,24 @@ app.post(
     body('description').exists(),
     authMiddleware,
     (req, res) => {
-        const {converted, convertedDate} = tryConvertDate(req.body.endTime);
-        if (!converted) {
+        const convertedDate = tryConvertDate(req.body.endTime);
+        if (!convertedDate) {
             return res
                 .status(400)
                 .send({message: "can not convert specified date"});
         }
         const taskData = {
-            taskName: taskName,
-            endTime: convertedDate,
-            description:description
+            taskName: req.body.taskName,
+            endTime: req.body.endTime,
+            description: req.body.description
         }
         task = new Task(taskData);
-        console.log(task);
-        taskData[_id] = task._id;
-        console.log(taskData);
+        task.save()
+        taskData['_id'] = task._id;
 
-        return taskData;
+        return res
+            .status(200)
+            .send(taskData);
     })
 app.delete(
     '/api/tasks/:taskId',
@@ -295,10 +296,10 @@ function tryConvertDate(date) {
     try {
         convertedDate = Date.parse(date);
     } catch (e) {
-        return false, null;
+        return null;
     }
 
-    return true, convertedDate;
+    return convertedDate;
 }
 
 start();
