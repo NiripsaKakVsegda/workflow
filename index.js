@@ -115,10 +115,22 @@ app.get('/main', authMiddleware, async (req, res) => {
             taskDoneArray.push(tempTask);
     }
 
-    let donePercent = (taskDoneArray.length / taskArray || 0) * 100;
+    const curr = new Date()
+    let weekday
+    if (curr.getDay() === 0)
+        weekday = 7
+    else weekday = curr.getDay()
+    let first = new Date(curr.setDate(curr.getDate() - (weekday - 1))).toISOString().split('T')[0];
+    let last = new Date(curr.setDate(curr.getDate() + 8)).toISOString().split('T')[0];
 
+    taskDoneArray = taskDoneArray.filter((el) => first < el['endTime'].toISOString().split('T')[0]
+        & el['endTime'].toISOString().split('T')[0] < last);
+    taskArray = taskArray.filter((el) => first <el['endTime'].toISOString().split('T')[0]
+        & el['endTime'].toISOString().split('T')[0] < last);
+
+    let donePercent = (taskDoneArray.length / taskArray || 0) * 100;
+    taskArray = taskArray.filter((el) => el['endTime'].getTime() >= new Date().getTime());
     if (taskArray.length > 0) {
-        taskArray = taskArray.filter((el) => el['endTime'].getTime() >= new Date().getTime());
         taskArray.sort((a, b) => a['endTime'].getTime() >= b['endTime'].getTime() ? 1 : -1);
         const task = taskArray[0]['taskName'];
         const date = taskArray[0]['endTime'].toLocaleString().substring(0, 5);
