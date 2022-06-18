@@ -30,8 +30,6 @@ header {
     height: 180px;
     width: 180px;
     border-radius: 50%;
-    background-size:100% 100%;
-    background-position:center;
     overflow: hidden;
     transition: all .3s ease;
 }
@@ -46,14 +44,11 @@ header {
 }
 
 .avatar-wrapper .profile-pic {
-    /*height: 180px;*/
-    /*width: 360px;*/
-    /*top:20px;*/
+    display: inline;
+    height: 100%;
+    width: auto;
     transition: all .3s ease;
-}
-
-.profile-pic {
-    width: 180px;
+    position: center;
 }
 
 .avatar-wrapper .profile-pic:after {
@@ -64,9 +59,6 @@ header {
     height: 100%;
     position: absolute;
     font-size: 190px;
-    /*background: #ecf0f1;*/
-    /*color: #34495e;*/
-    /*text-align: center;*/
 }
 
 .avatar-wrapper .upload-button {

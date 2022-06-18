@@ -18,7 +18,7 @@
         </div>
         <div class="header-part" onclick="moveNavVertical('dropmenu')">
             <img src="images/avatar.png" class="avatar">
-            <h2 style="font-weight: 400; font-size: 28px">Алёна<br>Полуяненко</h2>
+            <h2 style="font-weight: 400; font-size: 28px"> {{{username}}} </h2>
         </div>
     </header>
     <div id="sidenav" class="sidenav">
@@ -38,13 +38,13 @@
         <div id="dropmenu" class="dropmenu">
             <nav>
                 <a href="/account"><i class="fa-solid fa-user" style="color: #fff"></i>Аккаунт</a>
-                <a href="/auth/login"><i class="fa-solid fa-arrow-right-from-bracket" style="color: #fff"></i>Выход</a> <!-- как-то организовать выход из системы -->
+                <a href="/auth/login" onclick=""><i class="fa-solid fa-arrow-right-from-bracket" style="color: #fff"></i>Выход</a> <!-- как-то организовать выход из системы -->
             </nav>
         </div>
     </div>
 
     <div class="content" id="content" style="color: #1E0E62;">
-        <h1 style="font-size: 64px; font-weight: 600">Привет, Алёна!</h1>
+        <h1 style="font-size: 64px; font-weight: 600">Привет, {{{username}}}!</h1>
         <div style="display: flex; gap: 50px; align-items: center">
             <p style="font-size: 36px; font-weight: 400"><b style="font-weight: 600">Ближайший дедлайн:</b> {{deadline}}</p>
             <button class="orange-button" id="task-button">Перейти к заданию</button>

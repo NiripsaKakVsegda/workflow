@@ -16,7 +16,10 @@ router.post('/register', [
     controller.registration);
 router.get('/register', (req, res) => res.render('registration', {visibility: 'hidden', text: ''}))
 router.post('/login', controller.login);
-router.get('/login', (req, res) => res.render('login', {visibility: 'hidden', text: ''}))
+router.get('/login', (req, res) => {
+        res.clearCookie("sessionId");
+        res.render('login', {visibility: 'hidden', text: ''});
+})
 router.get('/users', roleMiddleware(["ADMIN"]), controller.getUsers);
 
 router.get('/task', controller.getTask);

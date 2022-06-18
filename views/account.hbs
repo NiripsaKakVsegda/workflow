@@ -19,14 +19,14 @@
         <div style="display: flex; gap: 40px; align-items: center">
             <div class="avatar-header">
                     <div class="avatar-wrapper">
-                        <img class="profile-pic" src="images/avatar.png"/>
+                        <img id="avatar" class="profile-pic" src="images/avatar.png"/>
                         <div class="upload-button">
                             <i class="fa fa-camera" aria-hidden="true"></i>
                         </div>
                         <input class="file-upload" type="file" accept="image/*"/>
                     </div>
                 </div>
-            <h1 style="font-weight: 600; font-size: 64px">niripsaaa</h1>
+            <h1 style="font-weight: 600; font-size: 64px"> {{username}} </h1>
         </div>
         <div style="display: flex; flex-direction: column; gap: 20px">
             <div style="display: flex; justify-content: space-between;">
@@ -61,9 +61,21 @@
     <script>
         function readURL(input) {
             if (input.files && input.files[0]) {
+                let i = new Image();
+                i.onload = function() {
+                    if (i.width < i.height) {
+                        document.getElementById('avatar').style.height = 'auto';
+                        document.getElementById('avatar').style.width = '100%';
+                    }
+                    else {
+                        document.getElementById('avatar').style.height = '100%';
+                        document.getElementById('avatar').style.width = 'auto';
+                    }
+                }
                 let reader = new FileReader();
                 reader.onload = function (e) {
                     let fileurl = e.target.result;
+                    i.src = fileurl;
                     $('.profile-pic').attr('src', fileurl);
                 }
                 reader.readAsDataURL(input.files[0]);

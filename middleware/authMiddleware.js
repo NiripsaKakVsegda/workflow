@@ -1,19 +1,19 @@
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 module.exports = function(req, res, next) {
     if (req.method === "OPTIONS") {
-        next()
+        next();
     }
     try {
         const token = req.cookies?.sessionId;
         if(!token) {
-            return res.status(403).json({message: "Пользователь не авторизирован"})
+            res.redirect('../auth/login');
+            return;
         }
-        const decodedData = jwt.verify(token, 'secret')
-        req.user = decodedData
-        next()
+        req.user = jwt.verify(token, 'secret');
+        next();
     } catch(e) {
-        console.log(e)
-        return res.status(403).json({message: "Пользователь не авторизован"})
+        console.log(e);
+        return res.status(403).json({message: "Пользователь не авторизован"});
     }
-}
+};

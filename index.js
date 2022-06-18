@@ -56,12 +56,15 @@ app.get('/main', authMiddleware, async (req, res) => {
         const time = taskArray[0]['endTime'].toLocaleString().substring(12, 17);
         res.render('main', {deadline: [task, date, time].join(', '), percent: donePercent});
     }
-    else res.render('main', {deadline: 'нет заданий', percent: donePercent});
+    else res.render('main', {deadline: 'нет заданий', percent: donePercent, username: user.username});
 });
 
 
-app.get('/account', authMiddleware, (req, res) => {
-    res.render('account');
+app.get('/account', authMiddleware, async (req, res) => {
+    const token = req.cookies.sessionId;
+    const {id: userId} = jwt.verify(token, 'secret');
+    const user = await User.findById(userId);
+    res.render('account', {username: user.username});
 });
 
 app.get('/schedule', authMiddleware, async (req, res) => {
