@@ -39,12 +39,16 @@ app.get('/main', authMiddleware, async (req, res) => {
 
     let taskArray = [];
     for(let taskId of user.tasks) {
-        taskArray.push(await Task.findById(taskId));
+        const tempTask = await Task.findById(taskId);
+        if (tempTask.endTime)
+            taskArray.push(tempTask);
     }
 
     let taskDoneArray = [];
     for(let taskId of user.tasksDone) {
-        taskDoneArray.push(await Task.findById(taskId));
+        const tempTask = await Task.findById(taskId);
+        if (tempTask.endTime)
+            taskDoneArray.push(tempTask);
     }
     let donePercent = taskDoneArray.length / taskArray.length | 0;
 
