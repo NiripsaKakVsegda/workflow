@@ -242,9 +242,9 @@ app.get('/schedule', authMiddleware, async (req, res) => {
         if (!tempTask.endTime) {
             if (tasksNoDateDone.filter(e => e._id.equals(tempTask._id)).length === 0) {
                 tasksNoDate.push(await render('./views/taskModel.hbs',
-                    {id: `nd${noDateIndexer}`, taskName: tempTask.taskName}))
+                    {id: taskId.valueOf(), taskName: tempTask.taskName}))
                 let tempModal = await render('./views/modalNoTime.hbs',
-                    {id: `nd${noDateIndexer}`, taskName: tempTask.taskName,
+                    {id: taskId.valueOf(), taskName: tempTask.taskName,
                         taskDescription: tempTask.description});
                 modals.push(tempModal);
 
@@ -275,11 +275,11 @@ app.get('/schedule', authMiddleware, async (req, res) => {
 
         for(let j = 0; j < taskArray.length; j++) {
             const currTask = taskArray[j];
-            const taskParams = {id: `${i}${j}`, taskName: currTask.taskName,
+            const taskParams = {id: currTask._id.valueOf(), taskName: currTask.taskName,
                 taskTime: currTask.endTime ? currTask.endTime.getHours() + ':' + currTask.endTime.getMinutes() : ''};
 
             const modalDate = currDay.substring(0,5) + `, ${currTask.endTime.getHours()}:${currTask.endTime.getMinutes()}`
-            const modalParams = {id: `${i}${j}`, taskName: currTask.taskName, date: modalDate,
+            const modalParams = {id: currTask._id.valueOf(), taskName: currTask.taskName, date: modalDate,
                 taskDescription: currTask.description};
 
             if (currTask.endTime.toLocaleDateString() === currDay) {
@@ -288,7 +288,6 @@ app.get('/schedule', authMiddleware, async (req, res) => {
 
 
                 if (taskDoneArray.filter(e => e._id.equals(currTask._id)).length > 0) {
-                    // console.log(currTask._id.valueOf())
                     currDayTasksDone.push(await render('./views/taskModelDone.hbs', taskParams))
                 } else {
                     currDayTasks.push(await render('./views/taskModel.hbs', taskParams))
