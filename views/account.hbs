@@ -19,7 +19,7 @@
         <div style="display: flex; gap: 40px; align-items: center">
             <div class="avatar-header">
                     <div class="avatar-wrapper">
-                        <img id="avatar" class="profile-pic" src="images/avatar.png"/>
+                        <img id="avatar" class="profile-pic" src={{avatar}} />
                         <div class="upload-button">
                             <i class="fa fa-camera" aria-hidden="true"></i>
                         </div>
@@ -31,32 +31,41 @@
         <div style="display: flex; flex-direction: column; gap: 20px">
             <div style="display: flex; justify-content: space-between;">
                 <p style="font-weight: 500; font-size: 64px; padding-right: 40px">Имя:</p>
-                <input type="text" maxlength="13" style="font-weight: 400; font-size: 64px; outline: none; border: none; border-bottom: 2px solid #1E0E62; opacity: 0.5">
+                <input id="nameField" type="text" maxlength="13" style="font-weight: 400; font-size: 64px; outline: none; border: none; border-bottom: 2px solid #1E0E62; opacity: 0.5" value={{name}} >
             </div>
             <div style="display: flex; justify-content: space-between">
                 <p style="font-weight: 500; font-size: 64px; padding-right: 40px">Фамилия:</p>
-                <input type="text" maxlength="15" style="font-weight: 400; font-size: 64px; outline: none; border: none; border-bottom: 2px solid #1E0E62; opacity: 0.5">
+                <input id="surnameField" type="text" maxlength="15" style="font-weight: 400; font-size: 64px; outline: none; border: none; border-bottom: 2px solid #1E0E62; opacity: 0.5" value={{surname}} >
             </div>
             <div style="display: flex; justify-content: space-between">
                 <p style="font-weight: 500; font-size: 64px; padding-right: 40px">Роль:</p>
                 <form>
-                    <select onclick="checkRole()" name="dropdown" style="font-weight: 400; font-size: 64px; outline: none; border: none; border-bottom: 2px solid #1E0E62; opacity: 0.5">
-                        <option value = "student">Студент</option>
-                        <option value = "teacher">Преподаватель</option>
-                        <option value = "user" selected>Не выбрано</option>
+                    <select id="roleSelect" onclick="checkRole()" name="dropdown" style="font-weight: 400; font-size: 64px; outline: none; border: none; border-bottom: 2px solid #1E0E62; opacity: 0.5">
+                        <option value ="student">Студент</option>
+                        <option value ="teacher">Преподаватель</option>
+                        <option value ="user" selected>Не выбрано</option>
+                        <option value="{{value}}" hidden="hidden" selected="selected">{{status}}</option>
                     </select>
                 </form>
             </div>
             <div style="display: none; justify-content: space-between" id="group">
                 <p style="font-weight: 500; font-size: 64px; padding-right: 40px">Группа:</p>
-                <input id='groupInput' type="text" maxlength="10" style="font-weight: 400; font-size: 64px; outline: none; border: none; border-bottom: 2px solid #1E0E62; opacity: 0.5">
+                <input id='groupInput' type="text" maxlength="10" style="font-weight: 400; font-size: 64px; outline: none; border: none; border-bottom: 2px solid #1E0E62; opacity: 0.5" value={{group}}>
             </div>
             <div style="display: flex; justify-content: space-between; padding-top: 60px;">
                <a href="/main"><i class="fa-solid fa-xmark fa-5x"></i></a>
-               <a href="/main"><i class="fa-solid fa-floppy-disk fa-5x"></i></a>
+               <a onclick="submit()"><i class="fa-solid fa-floppy-disk fa-5x"></i></a>
             </div>
         </div>
     </div>
+
+    <form id="submitForm" method="post" action="/account" style="display: none;" enctype="multipart/form-data">
+        <input type="hidden" name="avatar">
+        <input type="hidden" name="name">
+        <input type="hidden" name="surname">
+        <input type="hidden" name="role">
+        <input type="hidden" name="studentGroup">
+    </form>
 
     <script>
         function readURL(input) {
@@ -97,6 +106,8 @@
             }
         }
 
+        checkRole()
+
         function addFormatter (input, formatFn) {
             let oldValue = input.value;
 
@@ -105,7 +116,6 @@
                 if (typeof result === 'string') {
                     input.value = result;
                 }
-
                 oldValue = input.value;
             }
 
@@ -115,6 +125,19 @@
 
         function regexPrefix (regex, prefix) {
             return (newValue, oldValue) => regex.test(newValue) ? newValue : (newValue ? oldValue : prefix);
+        }
+
+        function submit() {
+            const submitForm = document.getElementById('submitForm')
+            const selectField = document.getElementById('roleSelect')
+            submitForm.avatar.value = document.getElementById('avatar').src
+            submitForm.name.value = document.getElementById('nameField').value
+            submitForm.surname.value = document.getElementById('surnameField').value
+            submitForm.role.value = selectField.options[selectField.selectedIndex].value;
+            submitForm.studentGroup.value = document.getElementById('groupInput').value;
+
+            submitForm.submit();
+
         }
 
         addFormatter(document.getElementById('groupInput'), regexPrefix(/^ФТ-/, 'ФТ-'));

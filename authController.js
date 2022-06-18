@@ -6,14 +6,7 @@ const jwt = require('jsonwebtoken')
 const {validationResult} = require('express-validator')
 const bcrypt = require('bcryptjs')
 
-generateAccessToken = (id, roles, username) => {
-    const payload = {
-        id,
-        roles,
-        username
-    };
-    return jwt.sign(payload, 'secret', {expiresIn: "24h"});
-}
+const generateAccessToken = require('./public/js/generateAccessToken')
 
 class authController {
     async registration(req, res) {

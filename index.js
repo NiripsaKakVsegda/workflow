@@ -1,11 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const authRouter = require('./authRouter');
+const multer  = require('multer');
+const upload = multer({ dest: 'uploads/' });
 const hbs = require('hbs');
 const fs = require('fs');
 const readFile = require('util').promisify(fs.readFile);
 const cookieParser = require("cookie-parser");
 const authMiddleware = require("./middleware/authMiddleware");
+const generateAccessToken = require('./public/js/generateAccessToken')
 
 const dburl = `mongodb+srv://admin:admin234@cluster0.knt3h.mongodb.net/?retryWrites=true&w=majority`;
 const PORT = process.env.PORT || 5000;
@@ -37,6 +40,7 @@ app.get('/main', authMiddleware, async (req, res) => {
     const token = req.cookies.sessionId;
     const {id: userId} = jwt.verify(token, 'secret');
     const user = await User.findById(userId);
+    const avatar = user.avatar;
 
     let taskArray = [];
     for(let taskId of user.tasks) {
@@ -60,23 +64,78 @@ app.get('/main', authMiddleware, async (req, res) => {
         const task = taskArray[0]['taskName'];
         const date = taskArray[0]['endTime'].toLocaleString().substring(0, 5);
         const time = taskArray[0]['endTime'].toLocaleString().substring(12, 17);
-        res.render('main', {deadline: [task, date, time].join(', '), percent: donePercent * 100, username: user.username});
+        res.render('main', {
+            deadline: [task, date, time].join(', '),
+            percent: donePercent * 100,
+            username: user.username,
+            avatar: avatar? avatar : "images/avatar.png"
+        });
     }
-    else res.render('main', {deadline: 'нет заданий', percent: donePercent * 100, username: user.username});
+    else res.render('main', {
+        deadline: 'нет заданий',
+        percent: donePercent * 100,
+        username: user.username,
+        avatar: avatar? avatar : "images/avatar.png"});
 });
 
 
 app.get('/account', authMiddleware, async (req, res) => {
     const token = req.cookies.sessionId;
-    const {id: userId} = jwt.verify(token, 'secret');
+    const {id: userId, roles: roles} = jwt.verify(token, 'secret');
     const user = await User.findById(userId);
-    res.render('account', {username: user.username});
+    const avatar = user.avatar;
+    let roleValue = 'user';
+    let roleName = 'Не выбрано';
+    if (roles.includes('STUDENT')) {
+        roleValue='student';
+        roleName='Студент';
+    } else if (roles.includes('TEACHER')) {
+        roleValue='teacher';
+        roleName='Преподаватель';
+    }
+
+
+
+    res.render('account', {
+        username: user.username,
+        name: user.name,
+        surname: user.surname,
+        value: roleValue,
+        status: roleName,
+        group: user.group,
+        avatar: avatar? avatar :  "images/avatar.png"});
 });
+
+app.post('/account', [authMiddleware, upload.single('avatar')], async (req, res) => {
+    const token = req.cookies.sessionId;
+    const {id: userId} = jwt.verify(token, 'secret');
+    const currentUser = await User.findById(userId);
+    currentUser.name = req.body.name;
+    currentUser.surname = req.body.surname;
+    const newRole = req.body.role.toUpperCase();
+    const inverseRoles = {'STUDENT': 'TEACHER', 'TEACHER':'STUDENT'}
+    if (currentUser.roles.includes(inverseRoles[newRole])) {
+        currentUser.roles[currentUser.roles.length - 1] = newRole
+    } else if(!currentUser.roles.includes(newRole)){
+        currentUser.roles.push(newRole);
+    }
+
+
+    currentUser.group = req.body.studentGroup;
+    currentUser.avatar = req.body.avatar;
+
+    const newToken = generateAccessToken(currentUser._id, currentUser.roles, currentUser.username)
+    await currentUser.save();
+
+    res.cookie('sessionId', newToken, { maxAge: 900000, httpOnly: true });
+    res.redirect('main');
+})
 
 app.get('/schedule', authMiddleware, async (req, res) => {
     const token = req.cookies.sessionId;
     const {id: userId} = jwt.verify(token, 'secret');
     const user = await User.findById(userId)
+    const avatar = user.avatar
 
     let modals = [];
     let taskArray = [];
@@ -104,8 +163,6 @@ app.get('/schedule', authMiddleware, async (req, res) => {
     }
     taskDoneArray.sort((a, b) => a['endTime'].getTime() >= b['endTime'].getTime() ? 1 : -1);
 
-    console.log(tasksNoDateDone)
-
     for(let taskId of user.tasks) {
         const tempTask =await Task.findById(taskId);
         if (!tempTask.endTime) {
@@ -126,6 +183,10 @@ app.get('/schedule', authMiddleware, async (req, res) => {
     taskArray.sort((a, b) => a['endTime'].getTime() >= b['endTime'].getTime() ? 1 : -1);
 
     let params = { username: user.username }
+
+    // if (user.name && user.surname) {
+    //     params.username = `${user.name}<br>${user.surname}`
+    // }
 
     params['tasksNoTime'] = await render('./views/tasks.hbs',
         {tasks: tasksNoDate.join('\n'),
@@ -166,6 +227,7 @@ app.get('/schedule', authMiddleware, async (req, res) => {
     }
 
     params['taskModals'] = modals.join('\n')
+    params['avatar'] = avatar ? avatar: "images/avatar.png"
 
     res.render('scheduler', params);
 });
