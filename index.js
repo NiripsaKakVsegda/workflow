@@ -51,7 +51,8 @@ app.get('/main', authMiddleware, async (req, res) => {
         if (tempTask.endTime)
             taskDoneArray.push(tempTask);
     }
-    let donePercent = taskDoneArray.length / taskArray.length | 0;
+
+    let donePercent = taskDoneArray.length / taskArray.length || 0;
 
     if (taskArray.length > 0) {
         taskArray = taskArray.filter((el) => el['endTime'].getTime() >= new Date().getTime());
@@ -59,9 +60,9 @@ app.get('/main', authMiddleware, async (req, res) => {
         const task = taskArray[0]['taskName'];
         const date = taskArray[0]['endTime'].toLocaleString().substring(0, 5);
         const time = taskArray[0]['endTime'].toLocaleString().substring(12, 17);
-        res.render('main', {deadline: [task, date, time].join(', '), percent: donePercent, username: user.username});
+        res.render('main', {deadline: [task, date, time].join(', '), percent: donePercent * 100, username: user.username});
     }
-    else res.render('main', {deadline: 'нет заданий', percent: donePercent, username: user.username});
+    else res.render('main', {deadline: 'нет заданий', percent: donePercent * 100, username: user.username});
 });
 
 
