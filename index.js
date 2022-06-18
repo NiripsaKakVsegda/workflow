@@ -13,6 +13,7 @@ const PORT = process.env.PORT || 5000;
 const User = require('./models/User')
 const Task = require('./models/Task')
 const jwt = require("jsonwebtoken");
+const {c} = require("swig/lib/dateformatter");
 
 const app = express();
 
@@ -79,6 +80,7 @@ app.get('/schedule', authMiddleware, async (req, res) => {
     let modals = [];
     let taskArray = [];
     let tasksNoDate = [];
+    let tasksNoDateDoneHTML = [];
     let tasksNoDateDone = [];
     let noDateIndexer = 0;
 
@@ -86,7 +88,8 @@ app.get('/schedule', authMiddleware, async (req, res) => {
     for(let taskId of user.tasksDone) {
         const tempTask = await Task.findById(taskId);
         if (!tempTask.endTime) {
-            tasksNoDateDone.push(await render('./views/taskModelDone.hbs',
+            tasksNoDateDone.push(tempTask);
+            tasksNoDateDoneHTML.push(await render('./views/taskModelDone.hbs',
                 {id: `nd${noDateIndexer}`, taskName: tempTask.taskName}))
             let tempModal = await render('./views/modalNoTime.hbs',
                 {id: `nd${noDateIndexer}`, taskName: tempTask.taskName,
@@ -100,17 +103,18 @@ app.get('/schedule', authMiddleware, async (req, res) => {
     }
     taskDoneArray.sort((a, b) => a['endTime'].getTime() >= b['endTime'].getTime() ? 1 : -1);
 
+    console.log(tasksNoDateDone)
+
     for(let taskId of user.tasks) {
         const tempTask =await Task.findById(taskId);
         if (!tempTask.endTime) {
-            if (!(tempTask in tasksNoDateDone)) {
+            if (tasksNoDateDone.filter(e => e._id.equals(tempTask._id)).length === 0) {
                 tasksNoDate.push(await render('./views/taskModel.hbs',
                     {id: `nd${noDateIndexer}`, taskName: tempTask.taskName}))
                 let tempModal = await render('./views/modalNoTime.hbs',
                     {id: `nd${noDateIndexer}`, taskName: tempTask.taskName,
                         taskDescription: tempTask.description});
                 modals.push(tempModal);
-                console.log(modals)
 
                 noDateIndexer += 1
             }
@@ -124,14 +128,14 @@ app.get('/schedule', authMiddleware, async (req, res) => {
 
     params['tasksNoTime'] = await render('./views/tasks.hbs',
         {tasks: tasksNoDate.join('\n'),
-            tasksDone: tasksNoDateDone.join('\n')});
+            tasksDone: tasksNoDateDoneHTML.join('\n')});
 
     let weekdays = getWeekdays()
+
     for (let i = 0; i < 7; i++) {
         let currDay = weekdays[i].toLocaleDateString()
         let currDayTasks = []
         let currDayTasksDone = []
-
 
         for(let j = 0; j < taskArray.length; j++) {
             const currTask = taskArray[j];
@@ -146,7 +150,9 @@ app.get('/schedule', authMiddleware, async (req, res) => {
                 let tempModal = await render('./views/modalWithTime.hbs', modalParams);
                 modals.push(tempModal);
 
-                if (currTask in taskDoneArray) {
+
+                if (taskDoneArray.filter(e => e._id.equals(currTask._id)).length > 0) {
+                    // console.log(currTask._id.valueOf())
                     currDayTasksDone.push(await render('./views/taskModelDone.hbs', taskParams))
                 } else {
                     currDayTasks.push(await render('./views/taskModel.hbs', taskParams))
