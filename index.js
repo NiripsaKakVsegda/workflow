@@ -143,10 +143,10 @@ app.get('/account', authMiddleware, async (req, res) => {
     const avatar = user.avatar;
     let roleValue = 'user';
     let roleName = 'Не выбрано';
-    if (roles.includes('STUDENT')) {
+    if (user.roles.includes('STUDENT')) {
         roleValue='student';
         roleName='Студент';
-    } else if (roles.includes('TEACHER')) {
+    } else if (user.roles.includes('TEACHER')) {
         roleValue='teacher';
         roleName='Преподаватель';
     }
