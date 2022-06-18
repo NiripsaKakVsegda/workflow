@@ -51,7 +51,7 @@ app.get('/main', authMiddleware, async (req, res) => {
         if (tempTask.endTime)
             taskDoneArray.push(tempTask);
     }
-    let donePercent = taskDoneArray.length / taskArray.length | 0;
+    let donePercent = (taskDoneArray.length / taskArray || 0) * 100;
 
     if (taskArray.length > 0) {
         taskArray = taskArray.filter((el) => el['endTime'].getTime() >= new Date().getTime());
@@ -182,7 +182,11 @@ const start = async () => {
 
 function getWeekdays() {
     const curr = new Date;
-    const first = curr.getDate() - curr.getDay() + 1;
+    let first;
+    if (curr.getDay() === 0)
+        first = curr.getDate() - 6;
+    else
+        first = curr.getDate() - curr.getDay() + 1;
 
     let weekdays = [];
     for (let i = 0; i < 7; i++) {
