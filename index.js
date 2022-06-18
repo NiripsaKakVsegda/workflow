@@ -18,6 +18,8 @@ const Task = require('./models/Task')
 const jwt = require("jsonwebtoken");
 const {c} = require("swig/lib/dateformatter");
 
+const { body, validationResult } = require('express-validator')
+
 const app = express();
 
 app.use(cookieParser());
@@ -36,10 +38,67 @@ app.get('/', (req, res) => {
     res.redirect('/auth/login');
 });
 
+
+app.post(
+    '/api/tasks',
+    body('taskName').exists(),
+    body('endTime').exists(),
+    body('description').exists(),
+    authMiddleware,
+    (req, res) => {
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            res
+                .status(400)
+                .send({errors: errors.array()});
+        }
+        return res
+            .status(200)
+            .send(req.body);
+    })
+app.delete(
+    '/api/tasks/:taskId',
+    authMiddleware,
+    async (req, res) => {
+        const user = await getUser(req);
+        const taskId = req.params.taskId;
+        user.tasks = user.tasks.filter(function(e) { return e.valueOf() != taskId });
+        user.tasksDone = user.tasksDone.filter(function(e) { return e.valueOf() != taskId });
+        user.save()
+
+        return res
+            .status(200)
+            .send(user.tasks);
+    })
+app.patch(
+    '/api/tasks/:taskId',
+    authMiddleware,
+    async (req, res) => {
+        const taskId = req.params.taskId;
+        let task;
+        try {
+            task = await Task.findById(taskId);
+        } catch (e) {
+            return res
+                .status(400)
+                .send({message: 'can not find specified task'});
+        }
+
+        let convertedTime;
+        try {
+            convertedTime = Date.parse(req.body.endTime);
+        } catch (e) {
+            return res
+                .status(400)
+                .send({message: 'invalid time'});
+        }
+        updateTask(task, convertedTime, req.body.description, req.body.taskName);
+
+        return res.status(200).send(task);
+    })
+
 app.get('/main', authMiddleware, async (req, res) => {
-    const token = req.cookies.sessionId;
-    const {id: userId} = jwt.verify(token, 'secret');
-    const user = await User.findById(userId);
+    const user = await getUser(req)
     const avatar = user.avatar;
 
     let taskArray = [];
@@ -56,7 +115,7 @@ app.get('/main', authMiddleware, async (req, res) => {
             taskDoneArray.push(tempTask);
     }
 
-    let donePercent = taskDoneArray.length / taskArray.length || 0;
+    let donePercent = (taskDoneArray.length / taskArray || 0) * 100;
 
     if (taskArray.length > 0) {
         taskArray = taskArray.filter((el) => el['endTime'].getTime() >= new Date().getTime());
@@ -80,9 +139,7 @@ app.get('/main', authMiddleware, async (req, res) => {
 
 
 app.get('/account', authMiddleware, async (req, res) => {
-    const token = req.cookies.sessionId;
-    const {id: userId, roles: roles} = jwt.verify(token, 'secret');
-    const user = await User.findById(userId);
+    const user = await getUser(req)
     const avatar = user.avatar;
     let roleValue = 'user';
     let roleName = 'Не выбрано';
@@ -93,8 +150,6 @@ app.get('/account', authMiddleware, async (req, res) => {
         roleValue='teacher';
         roleName='Преподаватель';
     }
-
-
 
     res.render('account', {
         username: user.username,
@@ -132,9 +187,7 @@ app.post('/account', [authMiddleware, upload.single('avatar')], async (req, res)
 })
 
 app.get('/schedule', authMiddleware, async (req, res) => {
-    const token = req.cookies.sessionId;
-    const {id: userId} = jwt.verify(token, 'secret');
-    const user = await User.findById(userId)
+    const user = await getUser(req)
     const avatar = user.avatar
 
     let modals = [];
@@ -245,7 +298,11 @@ const start = async () => {
 
 function getWeekdays() {
     const curr = new Date;
-    const first = curr.getDate() - curr.getDay() + 1;
+    let first;
+    if (curr.getDay() === 0)
+        first = curr.getDate() - 6;
+    else
+        first = curr.getDate() - curr.getDay() + 1;
 
     let weekdays = [];
     for (let i = 0; i < 7; i++) {
@@ -261,6 +318,29 @@ async function render(file, params) {
     const template = hbs.compile(content);
 
     return template(params);
+}
+
+async function getUser(req) {
+    const token = req.cookies.sessionId;
+    const {id: userId} = jwt.verify(token, 'secret');
+
+    return await User.findById(userId)
+}
+
+function updateTask(task, endTime, description, taskName) {
+    if (description) {
+        task.description = description;
+    }
+
+    if (taskName) {
+        task.taskName = taskName;
+    }
+
+    if (endTime) {
+        task.endTime = endTime
+    }
+
+    task.save();
 }
 
 start();
