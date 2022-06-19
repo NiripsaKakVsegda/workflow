@@ -57,9 +57,7 @@ app.post(
             endTime: req.body.endTime,
             description: req.body.description
         }
-        const token = req.cookies.sessionId;
-        const {id: userId} = jwt.verify(token, 'secret');
-        const currentUser = await User.findById(userId);
+        const currentUser = await getUser(req);
         task = new Task(taskData);
         task.save();
         taskData['_id'] = task._id;
@@ -69,12 +67,12 @@ app.post(
             .status(200)
             .send(taskData);
     })
-app.delete(
-    '/api/tasks/:taskId',
+app.post( //delete
+    '/api/tasks/delete/:taskId',
     authMiddleware,
     async (req, res) => {
         const user = await getUser(req);
-        const taskId = req.params.taskId;
+        const taskId = req.params.taskId.slice(1);
         user.tasks = user.tasks.filter(function(e) { return e.valueOf() != taskId });
         user.tasksDone = user.tasksDone.filter(function(e) { return e.valueOf() != taskId });
         user.save()
@@ -83,12 +81,13 @@ app.delete(
             .status(200)
             .send(user.tasks);
     })
-app.patch(
+app.post( //patch
     '/api/tasks/:taskId',
     authMiddleware,
     async (req, res) => {
-        const taskId = req.params.taskId;
+        const taskId = req.params.taskId.slice(1);
         let task;
+
         try {
             task = await Task.findById(taskId);
         } catch (e) {
@@ -358,7 +357,7 @@ async function getUser(req) {
     const token = req.cookies.sessionId;
     const {id: userId} = jwt.verify(token, 'secret');
 
-    return await User.findById(userId)
+    return await User.findById(userId);
 }
 
 function updateTask(task, endTime, description, taskName) {
