@@ -21,6 +21,7 @@ const transporter = nodemailer.createTransport(smtpTransport({
     }
 }));
 
+
 const dburl = process.env.DBURL;
 const PORT = process.env.PORT || 5000;
 const jwtSecret = process.env.SECRET
@@ -69,7 +70,7 @@ app.post(
             endTime: req.body.endTime,
             description: req.body.description
         }
-        task = new Task(taskData);
+        const task = new Task(taskData);
         task.save();
         taskData['_id'] = task._id;
 
@@ -185,6 +186,15 @@ app.get('/groups', authMiddleware, async (req, res) => {
         username: user.username,
         avatar: avatar? avatar : "images/avatar.png",
         access: accept ? 'true' : 'false'
+    });
+});
+
+app.get('/settings', authMiddleware, async (req, res) => {
+    const user = await getUser(req)
+    const avatar = user.avatar;
+    res.render('settings', {
+        username: user.username,
+        avatar: avatar? avatar : "images/avatar.png",
     });
 });
 
@@ -354,24 +364,6 @@ const start = async () => {
     }
 };
 
-
-function getWeekdays() {
-    const curr = new Date;
-    let first;
-    if (curr.getDay() === 0)
-        first = curr.getDate() - 6;
-    else
-        first = curr.getDate() - curr.getDay() + 1;
-
-    let weekdays = [];
-    for (let i = 0; i < 7; i++) {
-        let weekday = new Date(curr.setDate(first + i));
-        weekdays.push(weekday);
-    }
-
-    return weekdays;
-}
-
 async function render(file, params) {
     const content = await readFile(file, 'utf8');
     const template = hbs.compile(content);
@@ -504,6 +496,22 @@ async function sendNotifications() {
 
 function formatTime(date) {
     return date.getHours() + ':' + (date.getMinutes()<10?'0':'') + date.getMinutes()
+}
+
+function getWeekdays() {
+    const curr = new Date;
+    let first;
+    if (curr.getDay() === 0)
+        first = curr.getDate() - 6;
+    else
+        first = curr.getDate() - curr.getDay() + 1;
+    let weekdays = [];
+    for (let i = 0; i < 7; i++) {
+        let weekday = new Date(curr.setDate(first + i));
+        weekdays.push(weekday);
+    }
+
+    return weekdays;
 }
 
 start();
