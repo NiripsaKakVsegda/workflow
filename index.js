@@ -193,7 +193,19 @@ app.get('/settings', authMiddleware, async (req, res) => {
     res.render('settings', {
         username: user.username,
         avatar: avatar? avatar : "images/avatar.png",
+        value: user.notificationInterval,
+        checkVal: user.notifications ? `checked='true'`: ''
     });
+});
+
+
+app.post('/settings', authMiddleware, async (req, res) => {
+    const user = await getUser(req)
+    user.notificationInterval = +req.body.dropdown;
+    user.notifications = Boolean(req.body.checkbox);
+
+    await user.save();
+    res.redirect('/main')
 });
 
 app.get('/account', authMiddleware, async (req, res) => {
