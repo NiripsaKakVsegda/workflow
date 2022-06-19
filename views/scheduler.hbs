@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
     <script src="https://kit.fontawesome.com/0d348efd9b.js" crossorigin="anonymous"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <title>Workflow</title>
 </head>
 <body>
@@ -179,6 +180,20 @@
             document.getElementById('modal-new-task').style.display = 'flex'
             document.getElementById('newTaskDate').textContent = date
         }
+
+        function getParameterByName(name) {
+            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            const regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                    results = regex.exec(location.search);
+            return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+
+        $(function(){
+            const term = getParameterByName("showModal");
+            if(term.length) {
+                openModal(term);
+            }
+        });
     </script>
 </body>
 </html>
