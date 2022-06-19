@@ -282,17 +282,24 @@
         let currentId;
         function closeModal(id) {
             if (id === '') {
-                id = currentId;
+                if (currentId) {
+                    id = currentId;
+                } else {
+                    id = 'modal-new-task';
+                }
             }
-            const currentCheck = document.getElementById(`checkbox-${id}`).checked;
-            const form = document.getElementById('submitFormCheck');
-            if (currentCheck !== checked) {
-                form.setAttribute('action', `api/tasks/check/:${id}`);
-                form.progress.value = currentCheck ? 'true' : 'false';
-                form.submit();
-            } else {
-                document.getElementById(id).style.display = 'none';
+            console.log(currentId)
+            const checkbox = document.getElementById(`checkbox-${id}`);
+            if (checkbox) {
+                const currentCheck = checkbox.checked;
+                const form = document.getElementById('submitFormCheck');
+                if (currentCheck !== checked) {
+                    form.setAttribute('action', `api/tasks/check/:${id}`);
+                    form.progress.value = currentCheck ? 'true' : 'false';
+                    form.submit();
+                }
             }
+            document.getElementById(id).style.display = 'none';
         }
 
         function deleteTask() {
