@@ -9,10 +9,6 @@ const generateAccessToken = require('./public/js/generateAccessToken')
 class authController {
     async registration(req, res) {
         try {
-            //const errors = validationResult(req)
-            // if (!errors.isEmpty()) {
-            //     return res.status(400).json({message: 'ошибка при регистрации', errors})
-            // }
             const {username, email, password, repeatedPassword} = req.body
             for (let char of [' ', '\'', '"', '@']) {
                 if (username.indexOf(char) >= 0) {

@@ -1,6 +1,8 @@
+require('dotenv').config()
 const express = require('express');
 const mongoose = require('mongoose');
 const authRouter = require('./authRouter');
+const cron = require('node-cron');
 const multer  = require('multer');
 const upload = multer({ dest: 'uploads/' });
 const hbs = require('hbs');
@@ -9,9 +11,19 @@ const readFile = require('util').promisify(fs.readFile);
 const cookieParser = require("cookie-parser");
 const authMiddleware = require("./middleware/authMiddleware");
 const generateAccessToken = require('./public/js/generateAccessToken')
+const nodemailer = require("nodemailer");
+const smtpTransport = require('nodemailer-smtp-transport');
+const transporter = nodemailer.createTransport(smtpTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASS
+    }
+}));
 
-const dburl = `mongodb+srv://admin:admin234@cluster0.knt3h.mongodb.net/?retryWrites=true&w=majority`;
+const dburl = process.env.DBURL;
 const PORT = process.env.PORT || 5000;
+const jwtSecret = process.env.SECRET
 
 const User = require('./models/User')
 const Task = require('./models/Task')
@@ -141,40 +153,11 @@ app.post( //done/undone
     })
 
 app.get('/main', authMiddleware, async (req, res) => {
-    const user = await getUser(req)
+    const user = await getUser(req);
     const avatar = user.avatar;
 
-    let taskArray = [];
-    for(let taskId of user.tasks) {
-        const tempTask = await Task.findById(taskId);
-        if (tempTask.endTime)
-            taskArray.push(tempTask);
-    }
-
-    let taskDoneArray = [];
-    for(let taskId of user.tasksDone) {
-        const tempTask = await Task.findById(taskId);
-        if (tempTask.endTime)
-            taskDoneArray.push(tempTask);
-    }
-
-    const curr = new Date()
-    let weekday
-    if (curr.getDay() === 0)
-        weekday = 7
-    else weekday = curr.getDay()
-    let first = new Date(curr.setDate(curr.getDate() - (weekday - 1))).toISOString().split('T')[0];
-    let last = new Date(curr.setDate(curr.getDate() + 8)).toISOString().split('T')[0];
-
-    taskDoneArray = taskDoneArray.filter((el) => first < el['endTime'].toISOString().split('T')[0]
-        & el['endTime'].toISOString().split('T')[0] < last);
-    taskArray = taskArray.filter((el) => first <el['endTime'].toISOString().split('T')[0]
-        & el['endTime'].toISOString().split('T')[0] < last);
-
-    let donePercent = (taskDoneArray.length / taskArray.length || 0)  * 100;
-    taskArray = taskArray.filter((el) => el['endTime'].getTime() >= new Date().getTime());
+    let {donePercent: donePercent, taskArray:taskArray} = await findNearestDeadlineForUser(user);
     if (taskArray.length > 0) {
-        taskArray.sort((a, b) => a['endTime'].getTime() >= b['endTime'].getTime() ? 1 : -1);
         const nearestTask = taskArray[0];
         const task = nearestTask['taskName'];
         const date = nearestTask['endTime'].toLocaleString().substring(0, 5);
@@ -230,7 +213,7 @@ app.get('/account', authMiddleware, async (req, res) => {
 
 app.post('/account', [authMiddleware, upload.single('avatar')], async (req, res) => {
     const token = req.cookies.sessionId;
-    const {id: userId} = jwt.verify(token, 'secret');
+    const {id: userId} = jwt.verify(token, jwtSecret);
     const currentUser = await User.findById(userId);
     currentUser.name = req.body.name;
     currentUser.surname = req.body.surname;
@@ -326,9 +309,9 @@ app.get('/schedule', authMiddleware, async (req, res) => {
         for(let j = 0; j < taskArray.length; j++) {
             const currTask = taskArray[j];
             const taskParams = {id: currTask._id.valueOf(), taskName: currTask.taskName,
-                taskTime: currTask.endTime ? currTask.endTime.getHours() + ':' + (currTask.endTime.getMinutes()<10?'0':'') + currTask.endTime.getMinutes() : ''};
+                taskTime: currTask.endTime ? formatTime(currTask.endTime) : ''};
 
-            const modalDate = currDay.substring(0,5) + `, ${currTask.endTime.getHours()}:${(currTask.endTime.getMinutes()<10?'0':'') + currTask.endTime.getMinutes()}`
+            const modalDate = currDay.substring(0,5) + `, ${formatTime(currTask.endTime)}`
             const modalParams = {id: currTask._id.valueOf(), taskName: currTask.taskName, date: modalDate,
                 taskDescription: currTask.description};
 
@@ -359,6 +342,10 @@ const start = async () => {
     try {
         await mongoose.connect(dburl);
         app.listen(PORT, ()=>console.log(`server started on port ${PORT}`));
+        cron.schedule('*/10 * * * *', function() {
+            sendNotifications()
+            console.log('notifications sent')
+        });
     } catch(e) {
         console.log(e);
     }
@@ -391,7 +378,7 @@ async function render(file, params) {
 
 async function getUser(req) {
     const token = req.cookies.sessionId;
-    const {id: userId} = jwt.verify(token, 'secret');
+    const {id: userId} = jwt.verify(token, jwtSecret);
 
     return await User.findById(userId);
 }
@@ -421,6 +408,99 @@ function tryConvertDate(date) {
     }
 
     return convertedDate;
+}
+
+
+async function findNearestDeadlineForUser(user) {
+    let taskArray = [];
+    for(let taskId of user.tasks) {
+        const tempTask = await Task.findById(taskId);
+        if (tempTask.endTime)
+            taskArray.push(tempTask);
+    }
+
+    let taskDoneArray = [];
+    for(let taskId of user.tasksDone) {
+        const tempTask = await Task.findById(taskId);
+        if (tempTask.endTime)
+            taskDoneArray.push(tempTask);
+    }
+
+    const curr = new Date()
+    let weekday
+    if (curr.getDay() === 0)
+        weekday = 7
+    else weekday = curr.getDay()
+    let first = new Date(curr.setDate(curr.getDate() - (weekday - 1))).toISOString().split('T')[0];
+    let last = new Date(curr.setDate(curr.getDate() + 8)).toISOString().split('T')[0];
+
+    taskDoneArray = taskDoneArray.filter((el) => first < el['endTime'].toISOString().split('T')[0]
+        & el['endTime'].toISOString().split('T')[0] < last);
+    taskArray = taskArray.filter((el) => first <el['endTime'].toISOString().split('T')[0]
+        & el['endTime'].toISOString().split('T')[0] < last);
+
+    let donePercent = (taskDoneArray.length / taskArray.length || 0)  * 100;
+    taskArray = taskArray.filter((el) => el['endTime'].getTime() >= new Date().getTime());
+    taskArray = taskArray.filter((el) => taskDoneArray.filter((e) => e._id.equals(el._id)).length === 0);
+
+    taskArray.sort((a, b) => a['endTime'].getTime() >= b['endTime'].getTime() ? 1 : -1);
+
+    return {donePercent: donePercent, taskArray:taskArray, taskDoneArray:taskDoneArray}
+}
+
+
+function sendEmail(adress, text) {
+    const mailOptions = {
+        from: "WorkFlow <workflownotificationfiit@gmail.com>",
+        to: adress,
+        subject: 'Скоро дедлайн',
+        text: text
+        // html: html
+    }
+
+
+    transporter.sendMail(mailOptions, (err, info) => {
+        if(err) {
+            console.log(err)
+        }
+    });
+}
+
+async function sendNotifications() {
+    const users = await User.find();
+    for(const user of users) {
+        const {taskArray: taskArray} = await findNearestDeadlineForUser(user);
+        if (taskArray.length === 0) {
+            continue;
+        }
+
+        const nearestDeadline = taskArray[0];
+
+        const difference = (nearestDeadline.endTime - new Date())/(1000 * 60 * 60);
+
+        if (difference >= 3) {
+            continue;
+        }
+
+        const deadline = nearestDeadline.endTime.toLocaleString().substring(0, 5) + `, ${formatTime(nearestDeadline.endTime)}`
+
+        const text = `Привет, это Workflow!
+Спешу напомнить про твое задание :)
+
+Название: ${nearestDeadline.taskName}
+Дедлайн: ${deadline}
+Описание: ${nearestDeadline.description}
+
+Осталось совсем немного, поспеши!
+
+Удачи <3`;
+
+        sendEmail(user.email, text)
+    }
+}
+
+function formatTime(date) {
+    return date.getHours() + ':' + (date.getMinutes()<10?'0':'') + date.getMinutes()
 }
 
 start();

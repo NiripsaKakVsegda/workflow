@@ -10,7 +10,7 @@ module.exports = function(req, res, next) {
             res.redirect('../auth/login');
             return;
         }
-        req.user = jwt.verify(token, 'secret');
+        req.user = jwt.verify(token, process.env.SECRET);
         next();
     } catch(e) {
         console.log(e);
