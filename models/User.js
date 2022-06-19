@@ -1,4 +1,4 @@
-const {Schema, model} = require('mongoose')
+const {Schema, model} = require('mongoose');
 
 const User = new Schema({
     username: {type: String, unique: true, required: true},
@@ -16,4 +16,4 @@ const User = new Schema({
     notificationInterval: {type: Number, default:3}
 })
 
-module.exports = model('User', User)
+module.exports = model('User', User);

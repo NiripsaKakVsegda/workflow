@@ -1,4 +1,4 @@
-function getWeekdays() {
+getWeekdays = () => {
     const curr = new Date;
     let first;
     if (curr.getDay() === 0)

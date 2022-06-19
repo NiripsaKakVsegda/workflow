@@ -21,6 +21,7 @@ const transporter = nodemailer.createTransport(smtpTransport({
     }
 }));
 
+
 const dburl = process.env.DBURL;
 const PORT = process.env.PORT || 5000;
 const jwtSecret = process.env.SECRET
@@ -69,7 +70,7 @@ app.post(
             endTime: req.body.endTime,
             description: req.body.description
         }
-        task = new Task(taskData);
+        const task = new Task(taskData);
         task.save();
         taskData['_id'] = task._id;
 
@@ -185,6 +186,15 @@ app.get('/groups', authMiddleware, async (req, res) => {
         username: user.username,
         avatar: avatar? avatar : "images/avatar.png",
         access: accept ? 'true' : 'false'
+    });
+});
+
+app.get('/settings', authMiddleware, async (req, res) => {
+    const user = await getUser(req)
+    const avatar = user.avatar;
+    res.render('settings', {
+        username: user.username,
+        avatar: avatar? avatar : "images/avatar.png",
     });
 });
 
@@ -517,11 +527,11 @@ function formatTime(date) {
     return date.getHours() + ':' + (date.getMinutes()<10?'0':'') + date.getMinutes()
 }
 
+
 function formatEmailTask(taskName, deadline, description) {
     return `Название: ${taskName}
 Дедлайн: ${deadline}
 Описание: ${description};
 `
 }
-
 start();

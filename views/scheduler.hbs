@@ -35,7 +35,7 @@
             <a href="#"><i class="fa-solid fa-comment"></i>Сообщения</a>
         </nav>
         <nav>
-            <a href="#" class="settings"><i class="fa-solid fa-screwdriver-wrench"></i>Настройки</a>
+            <a href="/settings" class="settings"><i class="fa-solid fa-screwdriver-wrench"></i>Настройки</a>
         </nav>
     </div>
 
@@ -265,11 +265,10 @@
     <footer style="color: #1E0E62; font-weight: 500; font-size: 26px; position: fixed; bottom: 10px; right: 10px">
         <p id="time" > </p>
         <script src="js/time.js">   </script>
-        <script src="js/current_week.js"></script>
-        <div class="lol"></div>
     </footer>
-
+    <script src="js/current_week.js"></script>
     <script>
+
         $('.slider').slick({
             infinite: false,
             speed: 800,
@@ -359,7 +358,7 @@
         function fillWeekdays() {
             let weekdays = getWeekdays();
             for (let i = 0; i < 7; i++) {
-                const weekday = weekdays[i].toLocaleString();
+                const weekday = weekdays[i].toLocaleString('ru-RU')
                 const element = document.getElementsByClassName('date date-' + (i + 1))[0];
                 element.innerText = weekday.substring(0, 5);
             }
