@@ -76,7 +76,7 @@ class authController {
                 res.render('login', {visibility: 'visible', text: 'Неверный пароль'})
                 return // res.status(400).json({message: 'Неверный пароль'})
             }
-            res.cookie('sessionId', token, { maxAge: 900000, httpOnly: true });
+            res.cookie('sessionId', token, { maxAge: 60 * 60 * 1000, httpOnly: true });
             res.redirect('../main')
         } catch (e) {
             console.log(e)
