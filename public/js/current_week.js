@@ -1,13 +1,16 @@
 function getWeekdays(curr=new Date) {
+    curr = new Date(curr);
     let first;
     if (curr.getDay() === 0)
         first = curr.getDate() - 6;
     else
         first = curr.getDate() - curr.getDay() + 1;
+    curr.setDate(first);
     let weekdays = [];
     for (let i = 0; i < 7; i++) {
-        let weekday = new Date(curr.setDate(first + i));
-        weekdays.push(weekday);
+        curr.setDate(curr.getDate() + 1);
+        console.log(curr);
+        weekdays.push(new Date(curr));
     }
 
     return weekdays;
