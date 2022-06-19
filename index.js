@@ -183,12 +183,14 @@ app.get('/main', authMiddleware, async (req, res) => {
         avatar: avatar? avatar : "images/avatar.png"});
 });
 
-app.get('/groups', roleMiddleware(['TEACHER', 'ADMIN']), async (req, res) => {
+app.get('/groups', authMiddleware, async (req, res) => {
     const user = await getUser(req)
     const avatar = user.avatar;
+    let accept = user.roles.includes('TEACHER') || user.roles.includes('ADMIN');
     res.render('groups', {
         username: user.username,
-        avatar: avatar? avatar : "images/avatar.png"
+        avatar: avatar? avatar : "images/avatar.png",
+        access: accept ? 'true' : 'false'
     });
 });
 
