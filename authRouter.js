@@ -2,8 +2,7 @@ const Router = require('express');
 const router = new Router();
 const {check} = require('express-validator')
 const controller = require('./authController')
-// const authMiddleware = require('./middleware/authMiddleware')
-const roleMiddleware = require('./middleware/roleMiddleware')
+const authMiddleware = require('./middleware/authMiddleware')
 const express = require("express");
 
 router.use(express.static('public'))
@@ -20,8 +19,5 @@ router.get('/login', (req, res) => {
         res.clearCookie("sessionId");
         res.render('login', {visibility: 'hidden', text: ''});
 })
-router.get('/users', roleMiddleware(["ADMIN"]), controller.getUsers);
-
-router.get('/task', controller.getTask);
 
 module.exports = router;

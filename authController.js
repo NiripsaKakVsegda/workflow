@@ -1,7 +1,5 @@
 const User = require('./models/User')
 const Role = require('./models/Role')
-const Task = require('./models/Task')
-const jwt = require('jsonwebtoken')
 
 const {validationResult} = require('express-validator')
 const bcrypt = require('bcryptjs')
@@ -81,31 +79,6 @@ class authController {
         } catch (e) {
             console.log(e)
             res.status(400).json({message: 'ошибка входа в систему'})
-        }
-    }
-
-    async getUsers(req, res) {
-        try {
-            const users = await User.find()
-            res.json(users)
-        } catch (e) {
-            console.log(e)
-        }
-    }
-
-    async getTask(req, res) {
-        try {
-            const token = req.cookies.sessionId;
-            const {id: userId} = jwt.verify(token, 'secret')
-            const user = await User.findById(userId)
-            const newTask = await Task.findById('62ae685d11e0fd50d09c49d8')
-
-            user.tasks.push(newTask)
-
-            await user.save()
-            res.send('ok')
-        } catch (e) {
-            console.log(e)
         }
     }
 }

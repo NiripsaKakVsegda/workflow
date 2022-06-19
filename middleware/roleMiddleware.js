@@ -11,7 +11,6 @@ module.exports = function (roles) {
                 return res.status(403).json({message: "Пользователь не авторизирован"});
             }
             const {roles: userRoles} = jwt.verify(token, 'secret');
-            console.log(jwt.verify(token, 'secret'));
             let hasRole = false;
             userRoles.forEach(role => {
                 if(roles.includes(role)) {
@@ -20,7 +19,7 @@ module.exports = function (roles) {
             })
 
             if (!hasRole) {
-                return res.status(403).json({message: 'У вас недостаточно прав доступа'});
+                return res.redirect(req.url + '?error=1')
             }
             next();
         } catch(e) {

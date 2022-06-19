@@ -97,7 +97,7 @@
             </div>
             <textarea class="task-text" style="resize: none; font-weight: 300;font-size: 40px; height: 300px; overflow: auto; max-width: 100%; border: none; outline: none" placeholder="Что нужно сделать?"></textarea>
             <div style="display: flex; justify-content: flex-end; margin-top: 40px">
-                <i class="fa-solid fa-check fa-3x" onclick="document.getElementById('modal-new-task').style.display = 'none'"></i>
+                <i class="fa-solid fa-check fa-3x" onclick="submit()"></i>
             </div>
         </div>
     </div>
@@ -107,7 +107,17 @@
         <script src="js/time.js">   </script>
     </footer>
 
+    <form id="submitForm" method="post" style="display: none;" enctype="multipart/form-data">
+        <input type="hidden" name="taskName">
+        <input type="hidden" name="taskDesc">
+        <input type="hidden" name="taskEndTime">
+    </form>
+
     <script>
+        function submit() {
+
+        }
+
         function setAttributes() {
             let date = new Date().toLocaleDateString().split('.');
             let day = date[0];

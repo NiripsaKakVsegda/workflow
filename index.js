@@ -8,7 +8,6 @@ const fs = require('fs');
 const readFile = require('util').promisify(fs.readFile);
 const cookieParser = require("cookie-parser");
 const authMiddleware = require("./middleware/authMiddleware");
-const roleMiddleware = require("./middleware/roleMiddleware");
 const generateAccessToken = require('./public/js/generateAccessToken')
 
 const dburl = `mongodb+srv://admin:admin234@cluster0.knt3h.mongodb.net/?retryWrites=true&w=majority`;
@@ -58,10 +57,11 @@ app.post(
             endTime: req.body.endTime,
             description: req.body.description
         }
-        const currentUser = await getUser(req);
         task = new Task(taskData);
         task.save();
         taskData['_id'] = task._id;
+
+        const currentUser = await getUser(req);
         currentUser.tasks.push(taskData['_id']);
         currentUser.save();
         res.redirect('/schedule');
