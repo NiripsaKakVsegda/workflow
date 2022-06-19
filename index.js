@@ -137,7 +137,7 @@ app.get('/main', authMiddleware, async (req, res) => {
     taskArray = taskArray.filter((el) => first <el['endTime'].toISOString().split('T')[0]
         & el['endTime'].toISOString().split('T')[0] < last);
 
-    let donePercent = (taskDoneArray.length / taskArray || 0) * 100;
+    let donePercent = (taskDoneArray.length / taskArray.length || 0) * 100;
     taskArray = taskArray.filter((el) => el['endTime'].getTime() >= new Date().getTime());
     if (taskArray.length > 0) {
         taskArray.sort((a, b) => a['endTime'].getTime() >= b['endTime'].getTime() ? 1 : -1);
