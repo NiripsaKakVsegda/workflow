@@ -344,13 +344,12 @@ const start = async () => {
         app.listen(PORT, ()=>console.log(`server started on port ${PORT}`));
         cron.schedule('*/10 * * * *', function() {
             sendNotifications()
-            console.log('notifications sent')
+            log('notifications sent')
         });
     } catch(e) {
         console.log(e);
     }
 };
-
 
 function getWeekdays() {
     const curr = new Date;
@@ -434,10 +433,10 @@ async function findNearestDeadlineForUser(user) {
     let first = new Date(curr.setDate(curr.getDate() - (weekday - 1))).toISOString().split('T')[0];
     let last = new Date(curr.setDate(curr.getDate() + 8)).toISOString().split('T')[0];
 
-    taskDoneArray = taskDoneArray.filter((el) => first < el['endTime'].toISOString().split('T')[0]
-        & el['endTime'].toISOString().split('T')[0] < last);
-    taskArray = taskArray.filter((el) => first <el['endTime'].toISOString().split('T')[0]
-        & el['endTime'].toISOString().split('T')[0] < last);
+    taskDoneArray = taskDoneArray.filter((el) => first <= el['endTime'].toISOString().split('T')[0]
+        & el['endTime'].toISOString().split('T')[0] <= last);
+    taskArray = taskArray.filter((el) => first <= el['endTime'].toISOString().split('T')[0]
+        & el['endTime'].toISOString().split('T')[0] <= last);
 
     let donePercent = (taskDoneArray.length / taskArray.length || 0)  * 100;
     taskArray = taskArray.filter((el) => el['endTime'].getTime() >= new Date().getTime());
@@ -469,38 +468,60 @@ function sendEmail(adress, text) {
 async function sendNotifications() {
     const users = await User.find();
     for(const user of users) {
+        if(!user.notifications) {
+            continue;
+        }
         const {taskArray: taskArray} = await findNearestDeadlineForUser(user);
         if (taskArray.length === 0) {
             continue;
         }
 
-        const nearestDeadline = taskArray[0];
+        let tasksText = [];
 
-        const difference = (nearestDeadline.endTime - new Date())/(1000 * 60 * 60);
+        for (let i = 0; i < taskArray.length; i++) {
+            const currentTask = taskArray[i];
 
-        if (difference >= 3) {
-            continue;
+
+            const difference = (currentTask.endTime - new Date())/(1000 * 60 * 60);
+
+            if (difference >= user.notificationInterval) {
+                break;
+            } else if (user.taskNotificated.filter(e => e._id.equals(currentTask._id)).length > 0) {
+                continue;
+            }
+
+            const deadline = currentTask.endTime.toLocaleString().substring(0, 5) + `, ${formatTime(currentTask.endTime)}`
+            const taskText = formatEmailTask(currentTask.taskName, deadline, currentTask.description);
+            tasksText.push(taskText)
+
+            user.taskNotificated.push(currentTask._id)
+            await user.save()
         }
 
-        const deadline = nearestDeadline.endTime.toLocaleString().substring(0, 5) + `, ${formatTime(nearestDeadline.endTime)}`
+        if (tasksText.length > 0) {
+            const text = `Привет, это Workflow!
+Спешу напомнить про твои задания :)
 
-        const text = `Привет, это Workflow!
-Спешу напомнить про твое задание :)
-
-Название: ${nearestDeadline.taskName}
-Дедлайн: ${deadline}
-Описание: ${nearestDeadline.description}
+${tasksText.join('\n\n')}
 
 Осталось совсем немного, поспеши!
 
 Удачи <3`;
 
-        sendEmail(user.email, text)
+            sendEmail(user.email, text)
+        }
     }
 }
 
 function formatTime(date) {
     return date.getHours() + ':' + (date.getMinutes()<10?'0':'') + date.getMinutes()
+}
+
+function formatEmailTask(taskName, deadline, description) {
+    return `Название: ${taskName}
+Дедлайн: ${deadline}
+Описание: ${description};
+`
 }
 
 start();
