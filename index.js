@@ -319,8 +319,10 @@ app.get('/schedule', authMiddleware, async (req, res) => {
 
     for (let k = 0; k < 4; k++) {
         for (let i = 0; i < 7; i++) {
-            const currDate = new Date(weekdays[i].setDate(weekdays[i].getDate() + k*7));
-            let currDay = currDate.toLocaleDateString();
+            const weekday = new Date(weekdays[i]);
+            const currDate = new Date(weekday.setDate(weekday.getDate() + k*7));
+            let currDay = currDate.toLocaleDateString('ru-RU');
+            console.log(currDay)
             let currDayTasks = [];
             let currDayTasksDone = [];
 
@@ -333,7 +335,7 @@ app.get('/schedule', authMiddleware, async (req, res) => {
                 const modalParams = {id: currTask._id.valueOf(), taskName: currTask.taskName, date: modalDate,
                     taskDescription: currTask.description};
 
-                if (currTask.endTime.toLocaleDateString() === currDay) {
+                if (currTask.endTime.toLocaleDateString('ru-RU') === currDay) {
                     let tempModal = await render('./views/preparedModal.hbs', modalParams);
                     modals.push(tempModal);
 
