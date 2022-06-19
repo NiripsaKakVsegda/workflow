@@ -48,7 +48,7 @@
         </div>
     </div>
     <div class="content">
-        <div class="slider" style="position:relative; margin-top: 50px; text-align: center">
+        <div class="slider" style="position:relative; margin-top: 50px;">
             <div style="display: flex; justify-content: center">
                 <div class="table">
                     <div class="item" ondblclick="addNewTask(document.getElementById('Monday').textContent)">
@@ -349,7 +349,8 @@
                 }
                 submitForm.endTime.value = `${year}-${date[1]}-${date[0]}T${time}:00`;
             }
-            submitForm.taskName.value = document.getElementById('taskName').value;
+            let name = document.getElementById('taskName').value;
+            submitForm.taskName.value = name === '' ? 'Без названия' : name;
             submitForm.description.value = document.getElementById('description').value;
             submitForm.submit();
             document.getElementById('modal-new-task').style.display = 'none';
@@ -358,7 +359,7 @@
         function fillWeekdays() {
             let weekdays = getWeekdays();
             for (let i = 0; i < 7; i++) {
-                const weekday = weekdays[i].toLocaleString();
+                const weekday = weekdays[i].toLocaleString('ru-RU')
                 const element = document.getElementsByClassName('date date-' + (i + 1))[0];
                 element.innerText = weekday.substring(0, 5);
             }
