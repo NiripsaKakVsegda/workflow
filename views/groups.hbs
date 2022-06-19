@@ -67,22 +67,22 @@
         <div style="margin-top:30px; display: flex; gap: 40px">
             <div class="group" id="one">
                 <label>
-                    <input id="cb-one" type="checkbox" onclick="checkedBox('one')"><span class="groupName">ФТ-101</span>
+                    <input id="cb-1" type="checkbox" onclick="checkedBox('one')"><span class="groupName">ФТ-101</span>
                 </label>
             </div>
             <div class="group" id="two">
                 <label>
-                    <input id="cb-two" type="checkbox" onclick="checkedBox('two')"><span class="groupName">ФТ-102</span>
+                    <input id="cb-2" type="checkbox" onclick="checkedBox('two')"><span class="groupName">ФТ-102</span>
                 </label>
             </div>
             <div class="group" id="three">
                 <label>
-                    <input id="cb-three" type="checkbox" onclick="checkedBox('three')"><span class="groupName">ФТ-103</span>
+                    <input id="cb-3" type="checkbox" onclick="checkedBox('three')"><span class="groupName">ФТ-103</span>
                 </label>
             </div>
             <div class="group" id="four">
                 <label>
-                    <input id="cb-four" type="checkbox" onclick="checkedBox('four')"><span class="groupName">ФТ-104</span>
+                    <input id="cb-4" type="checkbox" onclick="checkedBox('four')"><span class="groupName">ФТ-104</span>
                 </label>
             </div>
         </div>
@@ -92,7 +92,7 @@
     <div class="modal-container" id="modal-new-task">
         <div class="modal" style="display: flex; flex-direction: column; gap: 20px;">
             <div style="display: flex; justify-content: space-between">
-                <input required type="text" style="font-weight: 300; font-size: 64px;" placeholder="Предмет">
+                <input required type="text" style="font-weight: 300; font-size: 64px;" placeholder="Предмет" id="taskName">
                 <i class="fa-solid fa-xmark fa-2x" onclick="document.getElementById('modal-new-task').style.display = 'none'"></i>
             </div>
             <div style="display: flex; align-items: center; gap: 20px">
@@ -100,7 +100,7 @@
                 <input type="date" id="newTaskDate" name="trip-start" style="font-weight: 300;font-size: 40px" onfocus="this.showPicker()">
                 <input style="font-weight: 300;font-size: 40px" type="time" id="timeValue" value="15:00">
             </div>
-            <textarea class="task-text" style="resize: none; font-weight: 300;font-size: 40px; height: 300px; overflow: auto; max-width: 100%; border: none; outline: none" placeholder="Что нужно сделать?"></textarea>
+            <textarea class="task-text" style="resize: none; font-weight: 300;font-size: 40px; height: 300px; overflow: auto; max-width: 100%; border: none; outline: none" placeholder="Что нужно сделать?" id="taskDesc"></textarea>
             <div style="display: flex; justify-content: flex-end; margin-top: 40px">
                 <i class="fa-solid fa-check fa-3x" onclick="submit()"></i>
             </div>
@@ -112,16 +112,42 @@
         <script src="js/time.js">   </script>
     </footer>
 
-    <form id="submitForm" method="post" style="display: none;" enctype="multipart/form-data">
+    <form id="submitForm" method="post" style="display: none;" enctype="application/x-www-form-urlencoded">
         <input type="hidden" name="taskName">
-        <input type="hidden" name="taskDesc">
-        <input type="hidden" name="taskEndTime">
+        <input type="hidden" name="description">
+        <input type="hidden" name="endTime">
     </form>
 
     <script>
         if ('{{access}}' === 'false') {
             document.getElementById('content').style.display = 'none';
             document.getElementById('student').style.display = 'flex';
+        }
+
+        function submit() {
+            let groups = [];
+            const groupNames = document.getElementsByClassName('groupName');
+            for (let i = 1; i < 5; i++) {
+                const checked = document.getElementById(`cb-${i}`).checked;
+                if (checked) {
+                    groups.push(groupNames[i-1].innerText);
+                }
+            }
+
+            const submitForm = document.getElementById('submitForm');
+
+            submitForm.action = `/api/tasks?groups=${groups.join(',')}`
+            submitForm.taskName.value = document.getElementById('taskName').value
+            submitForm.description.value = document.getElementById('taskDesc').value
+
+            let time = document.getElementById('timeValue').value;
+            let date = document.getElementById('newTaskDate').value;
+            if (time === '') {
+                time = '23:59';
+            }
+            submitForm.endTime.value = `${date}T${time}:00`;
+            submitForm.submit();
+
         }
 
         function setAttributes() {

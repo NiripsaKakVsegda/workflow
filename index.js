@@ -62,8 +62,19 @@ app.post(
         taskData['_id'] = task._id;
 
         const currentUser = await getUser(req);
-        currentUser.tasks.push(taskData['_id']);
-        currentUser.save();
+        if (req.query.groups) {
+            const groups = req.query.groups.split(',');
+            for(const groupId of groups) {
+                const groupUsers = await User.find({group: groupId})
+                for (const currentUser of groupUsers) {
+                    currentUser.tasks.push(taskData['_id']);
+                    await currentUser.save();
+                }
+            }
+        } else {
+            currentUser.tasks.push(taskData['_id']);
+            currentUser.save();
+        }
         res.redirect('/schedule');
     })
 app.post( //delete
@@ -234,6 +245,10 @@ app.post('/account', [authMiddleware, upload.single('avatar')], async (req, res)
     currentUser.group = req.body.studentGroup;
     currentUser.avatar = req.body.avatar;
 
+    if (newRole==='TEACHER') {
+        currentUser.group = '';
+    }
+
     const newToken = generateAccessToken(currentUser._id, currentUser.roles, currentUser.username)
     await currentUser.save();
 
@@ -313,7 +328,6 @@ app.get('/schedule', authMiddleware, async (req, res) => {
             const taskParams = {id: currTask._id.valueOf(), taskName: currTask.taskName,
                 taskTime: currTask.endTime ? currTask.endTime.getHours() + ':' + (currTask.endTime.getMinutes()<10?'0':'') + currTask.endTime.getMinutes() : ''};
 
-
             const modalDate = currDay.substring(0,5) + `, ${currTask.endTime.getHours()}:${(currTask.endTime.getMinutes()<10?'0':'') + currTask.endTime.getMinutes()}`
             const modalParams = {id: currTask._id.valueOf(), taskName: currTask.taskName, date: modalDate,
                 taskDescription: currTask.description};
@@ -321,7 +335,6 @@ app.get('/schedule', authMiddleware, async (req, res) => {
             if (currTask.endTime.toLocaleDateString() === currDay) {
                 let tempModal = await render('./views/preparedModal.hbs', modalParams);
                 modals.push(tempModal);
-
 
                 if (taskDoneArray.filter(e => e._id.equals(currTask._id)).length > 0) {
                     currDayTasksDone.push(await render('./views/taskModelDone.hbs', taskParams))
