@@ -256,7 +256,7 @@ app.get('/schedule', authMiddleware, async (req, res) => {
             tasksNoDateDone.push(tempTask);
             tasksNoDateDoneHTML.push(await render('./views/taskModelDone.hbs',
                 {id: tempTask._id, taskName: tempTask.taskName}))
-            let tempModal = await render('./views/modalWithTime.hbs',
+            let tempModal = await render('./views/preparedModal.hbs',
                 {id: tempTask._id, taskName: tempTask.taskName,
                 taskDescription: tempTask.description, date: 'null'});
             modals.push(tempModal);
@@ -274,7 +274,7 @@ app.get('/schedule', authMiddleware, async (req, res) => {
             if (tasksNoDateDone.filter(e => e._id.equals(tempTask._id)).length === 0) {
                 tasksNoDate.push(await render('./views/taskModel.hbs',
                     {id: taskId.valueOf(), taskName: tempTask.taskName}))
-                let tempModal = await render('./views/modalWithTime.hbs',
+                let tempModal = await render('./views/preparedModal.hbs',
                     {id: taskId.valueOf(), taskName: tempTask.taskName,
                         date: 'null',
                         taskDescription: tempTask.description});
@@ -316,7 +316,7 @@ app.get('/schedule', authMiddleware, async (req, res) => {
                 taskDescription: currTask.description};
 
             if (currTask.endTime.toLocaleDateString() === currDay) {
-                let tempModal = await render('./views/modalWithTime.hbs', modalParams);
+                let tempModal = await render('./views/preparedModal.hbs', modalParams);
                 modals.push(tempModal);
 
 
