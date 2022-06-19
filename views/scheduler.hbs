@@ -85,7 +85,7 @@
                 <p class="date date-7" id="Sunday"></p>
                 {{{tasksDay6}}}
             </div>
-            <div class="item" ondblclick="document.getElementById('modal-new-task-without-time').style.display = 'flex'">
+            <div class="item" ondblclick="addNewTask(false)">
                 <p style="margin-bottom: 10px;">Прочее</p>
                 {{{tasksNoTime}}}
             </div>
@@ -98,9 +98,9 @@
         <div class="modal" style="display: flex; flex-direction: column; gap: 20px;">
             <div style="display: flex; justify-content: space-between">
                 <input required type="text" style="font-weight: 300; font-size: 64px;" placeholder="Название" id="taskName">
-                <i class="fa-solid fa-xmark fa-2x" onclick="document.getElementById('modal-new-task').style.display = 'none'"></i>
+                <i class="fa-solid fa-xmark fa-2x" onclick="closeModal('taskName')"></i>
             </div>
-            <div style="display: flex; align-items: center; gap: 20px">
+            <div style="display: flex; align-items: center; gap: 20px" id="timePart">
                 <i class="fa-solid fa-clock fa-3x"></i>
                 <p style="font-weight: 300;font-size: 40px" id="newTaskDate"></p>
                 <input style="font-weight: 300;font-size: 40px" type="time" id="newTaskTime">
@@ -109,7 +109,7 @@
 
             <div style="display: flex; justify-content: space-between; margin-top: 40px">
                 <i class="fa-solid fa-trash fa-3x" onclick="deleteTask()"></i>
-                <i class="fa-solid fa-check fa-3x" onclick="submit()"></i>
+                <i class="fa-solid fa-check fa-3x" onclick="submit(true)"></i>
             </div>
         </div>
     </div>
@@ -126,20 +126,9 @@
         <input type="text" name="description">
     </form>
 
-    <div class="modal-container" id="modal-new-task-without-time">
-        <div class="modal" style="display: flex; flex-direction: column; gap: 20px;">
-            <div style="display: flex; justify-content: space-between">
-                <input required type="text" style="font-weight: 300; font-size: 64px;" placeholder="Название" id="taskName">
-                <i class="fa-solid fa-xmark fa-2x" onclick="document.getElementById('modal-new-task-without-time').style.display = 'none'"></i>
-            </div>
-            <textarea id="description" class="task-text" style="resize: none; font-weight: 300;font-size: 40px; height: 300px; overflow: auto; max-width: 100%; border: none; outline: none" placeholder="Что нужно сделать?" name="description"></textarea>
-            <div style="display: flex; justify-content: space-between; margin-top: 40px">
-                <i class="fa-solid fa-trash fa-3x" onclick="deleteTask()"></i>
-                <i class="fa-solid fa-check fa-3x" onclick="document.getElementById('modal-new-task-without-time').style.display = 'none'"></i>
-            </div>
-        </div>
-    </div>
-
+    <form id="submitFormCheck" method="post" style="display: none;" enctype="application/x-www-form-urlencoded"> <!--action="/scheduler" -->
+        <input type="text" name="progress">
+    </form>
 
     <footer style="color: #1E0E62; font-weight: 500; font-size: 26px; position: fixed; bottom: 10px; right: 10px">
         <p id="time" > </p>
@@ -148,6 +137,19 @@
     </footer>
 
     <script>
+        let checked;
+        function closeModal(id) {
+            const currentCheck = document.getElementById(`checkbox-${id}`).checked;
+            const form = document.getElementById('submitFormCheck');
+            if (currentCheck !== checked) {
+                form.setAttribute('action', `api/tasks/check/:${id}`);
+                form.progress.value = currentCheck ? 'true' : 'false';
+                form.submit();
+            } else {
+                document.getElementById(id).style.display = 'none';
+            }
+        }
+
         function deleteTask() {
             const id = document.getElementById('submitFormEdit').getAttribute('action').split(':')[1];
             const form = document.getElementById('submitFormEdit');
@@ -160,14 +162,15 @@
         function edit(id, name, time, description) {
             let prevModal = document.getElementById(id);
             prevModal.style.display = 'none';
-            if (time) {
+            if (time !== 'null') {
                 document.getElementById('modal-new-task').style.display = 'flex';
                 let fullDate = time.split(', ');
                 document.getElementById('newTaskDate').textContent = fullDate[0];
                 document.getElementById('newTaskTime').value = fullDate[1];
 
             } else {
-                document.getElementById('modal-new-task-without-time').style.display = 'flex';
+                document.getElementById('timePart').style.display = 'none';
+                document.getElementById('modal-new-task').style.display = 'flex';
             }
             document.getElementById('taskName').value = name;
             document.getElementById('description').value = description;
@@ -177,21 +180,25 @@
 
         function submit() {
             let id = '';
+            const withTime = document.getElementById('timePart').style.display === 'flex';
             if (!afterEdit) {
                 id = 'submitForm';
             } else {
                 id = 'submitFormEdit';
             }
             const submitForm = document.getElementById(id);
-            let time = document.getElementById('newTaskTime').value;
-            let date = document.getElementById('newTaskDate').textContent.split('.');
-            let year = new Date().getFullYear().toString();
-            let fullDate = `${year}-${date[1]}-${date[0]}T${time}:00`;
+            if (withTime) {
+                let time = document.getElementById('newTaskTime').value;
+                let date = document.getElementById('newTaskDate').textContent.split('.');
+                let year = new Date().getFullYear().toString();
+                if (time === '') {
+                    time = '23:59';
+                }
+                submitForm.endTime.value = `${year}-${date[1]}-${date[0]}T${time}:00`;
+            }
             submitForm.taskName.value = document.getElementById('taskName').value;
-            submitForm.endTime.value = fullDate;
             submitForm.description.value = document.getElementById('description').value;
             submitForm.submit();
-
             document.getElementById('modal-new-task').style.display = 'none';
         }
 
@@ -230,10 +237,11 @@
         }
 
         function openModal(id) {
-            if (!e) var e = window.event;
-            e.cancelBubble = true;
-            if (e.stopPropagation) e.stopPropagation();
             document.getElementById(id).style.display = 'flex';
+            let color = document.getElementById(`color-${id}`).style.background;
+            checked = color === 'rgb(193, 219, 179)';
+            console.log(`checkbox-${id}`)
+            document.getElementById(`checkbox-${id}`).checked = checked;
         }
 
         function addNewTask(date) {
@@ -242,7 +250,13 @@
             document.getElementById('taskName').value = '';
             document.getElementById('description').value = '';
             document.getElementById('modal-new-task').style.display = 'flex';
-            document.getElementById('newTaskDate').textContent = date;
+            if (date) {
+                document.getElementById('newTaskDate').textContent = date;
+            } else {
+                document.getElementById('newTaskDate').textContent = '';
+                document.getElementById('timePart').style.display = 'none';
+            }
+
         }
 
         function getParameterByName(name) {

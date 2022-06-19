@@ -63,9 +63,7 @@ app.post(
         taskData['_id'] = task._id;
         currentUser.tasks.push(taskData['_id']);
         currentUser.save();
-        return res
-            .status(200)
-            .send(taskData);
+        res.redirect('/schedule');
     })
 app.post( //delete
     '/api/tasks/delete/:taskId',
@@ -76,10 +74,7 @@ app.post( //delete
         user.tasks = user.tasks.filter(function(e) { return e.valueOf() != taskId });
         user.tasksDone = user.tasksDone.filter(function(e) { return e.valueOf() != taskId });
         user.save()
-
-        return res
-            .status(200)
-            .send(user.tasks);
+        res.redirect('/schedule');
     })
 app.post( //patch
     '/api/tasks/:taskId',
@@ -105,8 +100,32 @@ app.post( //patch
                 .send({message: 'invalid time'});
         }
         updateTask(task, convertedTime, req.body.description, req.body.taskName);
+        res.redirect('/schedule');
+    })
+app.post( //done/undone
+    '/api/tasks/check/:taskId',
+    authMiddleware,
+    async (req, res) => {
+        const taskId = req.params.taskId.slice(1);
+        const isDone = req.body.progress === 'true';
+        const user = await getUser(req);
+        let task;
 
-        return res.status(200).send(task);
+        try {
+            task = await Task.findById(taskId);
+        } catch (e) {
+            return res
+                .status(400)
+                .send({message: 'can not find specified task'});
+        }
+
+        if (isDone) {
+            user.tasksDone.push(task._id);
+        } else {
+            user.tasksDone = user.tasksDone.filter(function(e) { return e.valueOf() != taskId });
+        }
+        user.save();
+        res.redirect('/schedule');
     })
 
 app.get('/main', authMiddleware, async (req, res) => {
@@ -140,7 +159,7 @@ app.get('/main', authMiddleware, async (req, res) => {
     taskArray = taskArray.filter((el) => first <el['endTime'].toISOString().split('T')[0]
         & el['endTime'].toISOString().split('T')[0] < last);
 
-    let donePercent = (taskDoneArray.length / taskArray.length || 0) * 100;
+    let donePercent = (taskDoneArray.length / taskArray.length || 0)  * 100;
     taskArray = taskArray.filter((el) => el['endTime'].getTime() >= new Date().getTime());
     if (taskArray.length > 0) {
         taskArray.sort((a, b) => a['endTime'].getTime() >= b['endTime'].getTime() ? 1 : -1);
@@ -150,7 +169,7 @@ app.get('/main', authMiddleware, async (req, res) => {
         const time = nearestTask['endTime'].toLocaleString().substring(12, 17);
         res.render('main', {
             deadline: [task, date, time].join(', '),
-            percent: donePercent * 100,
+            percent: donePercent,
             username: user.username,
             avatar: avatar? avatar : "images/avatar.png",
             deadlineTaskId: nearestTask._id
@@ -158,7 +177,7 @@ app.get('/main', authMiddleware, async (req, res) => {
     }
     else res.render('main', {
         deadline: 'нет заданий',
-        percent: donePercent * 100,
+        percent: donePercent,
         username: user.username,
         avatar: avatar? avatar : "images/avatar.png"});
 });
@@ -250,13 +269,14 @@ app.get('/schedule', authMiddleware, async (req, res) => {
     taskDoneArray.sort((a, b) => a['endTime'].getTime() >= b['endTime'].getTime() ? 1 : -1);
 
     for(let taskId of user.tasks) {
-        const tempTask =await Task.findById(taskId);
+        const tempTask = await Task.findById(taskId);
         if (!tempTask.endTime) {
             if (tasksNoDateDone.filter(e => e._id.equals(tempTask._id)).length === 0) {
                 tasksNoDate.push(await render('./views/taskModel.hbs',
                     {id: taskId.valueOf(), taskName: tempTask.taskName}))
-                let tempModal = await render('./views/modalNoTime.hbs',
+                let tempModal = await render('./views/modalWithTime.hbs',
                     {id: taskId.valueOf(), taskName: tempTask.taskName,
+                        date: 'null',
                         taskDescription: tempTask.description});
                 modals.push(tempModal);
 

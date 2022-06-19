@@ -2,19 +2,24 @@
     <div class="modal" style="display: flex; flex-direction: column; gap: 20px;">
         <div style="display: flex; justify-content: space-between">
             <h1 style="font-weight: 300;font-size: 64px">{{taskName}}</h1>
-            <i class="fa-solid fa-xmark fa-2x" onclick="document.getElementById('{{id}}').style.display = 'none'"></i>
+            <i class="fa-solid fa-xmark fa-2x" onclick="closeModal('{{id}}')"></i>
         </div>
-        <div style="display: flex; align-items: center; gap: 20px">
+        <div style="display: flex; align-items: center; gap: 20px" id="modalTime">
             <i class="fa-solid fa-clock fa-3x"></i>
             <p style="font-weight: 300;font-size: 40px">{{date}}</p>
         </div>
         <p class="task-text" style="font-weight: 300;font-size: 40px; height: 300px; overflow: auto">{{taskDescription}}</p>
         <div style="display: flex; justify-content: space-between; margin-top: 40px">
             <label class="form-control" style="font-weight: 300;font-size: 40px; display: flex; gap: 10px">
-                <input type="checkbox" name="checkbox" />
+                <input type="checkbox" name="checkbox" id="checkbox-{{id}}"/>
                 Выполнено
             </label>
             <i class="fa-solid fa-pencil fa-3x" onclick="edit('{{id}}', '{{taskName}}', '{{date}}', '{{taskDescription}}')"></i>
         </div>
     </div>
 </div>
+<script>
+    if ('{{date}}' === 'null') {
+        document.getElementById('modalTime').style.display = 'none';
+    }
+</script>
