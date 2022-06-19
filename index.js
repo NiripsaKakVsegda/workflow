@@ -38,7 +38,6 @@ app.get('/', (req, res) => {
     res.redirect('/auth/login');
 });
 
-
 app.post(
     '/api/tasks',
     body('taskName').exists(),
@@ -158,6 +157,14 @@ app.get('/main', authMiddleware, async (req, res) => {
         avatar: avatar? avatar : "images/avatar.png"});
 });
 
+app.get('/groups', authMiddleware, async (req, res) => {
+    const user = await getUser(req)
+    const avatar = user.avatar;
+    res.render('groups', {
+        username: user.username,
+        avatar: avatar? avatar : "images/avatar.png"
+    });
+});
 
 app.get('/account', authMiddleware, async (req, res) => {
     const user = await getUser(req)
