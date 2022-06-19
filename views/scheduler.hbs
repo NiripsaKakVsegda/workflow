@@ -98,7 +98,7 @@
         <div class="modal" style="display: flex; flex-direction: column; gap: 20px;">
             <div style="display: flex; justify-content: space-between">
                 <input required type="text" style="font-weight: 300; font-size: 64px;" placeholder="Название" id="taskName">
-                <i class="fa-solid fa-xmark fa-2x" onclick="closeModal('taskName')"></i>
+                <i class="fa-solid fa-xmark fa-2x" onclick="closeModal('')"></i>
             </div>
             <div style="display: flex; align-items: center; gap: 20px" id="timePart">
                 <i class="fa-solid fa-clock fa-3x"></i>
@@ -138,7 +138,12 @@
 
     <script>
         let checked;
+        let currentId;
         function closeModal(id) {
+            if (id === '') {
+                id = currentId;
+            }
+            console.log(`checkbox-${id}`)
             const currentCheck = document.getElementById(`checkbox-${id}`).checked;
             const form = document.getElementById('submitFormCheck');
             if (currentCheck !== checked) {
@@ -160,6 +165,7 @@
         let afterEdit = false;
 
         function edit(id, name, time, description) {
+            console.log(time)
             let prevModal = document.getElementById(id);
             prevModal.style.display = 'none';
             if (time !== 'null') {
@@ -242,6 +248,7 @@
             checked = color === 'rgb(193, 219, 179)';
             console.log(`checkbox-${id}`)
             document.getElementById(`checkbox-${id}`).checked = checked;
+            currentId = id;
         }
 
         function addNewTask(date) {

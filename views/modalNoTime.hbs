@@ -7,7 +7,7 @@
         <p class="task-text" style="font-weight: 300;font-size: 40px; height: 300px; overflow: auto">{{taskDescription}}</p>
         <div style="display: flex; justify-content: space-between; margin-top: 40px">
             <label class="form-control" style="font-weight: 300;font-size: 40px; display: flex; gap: 10px">
-                <input type="checkbox" name="checkbox" />
+                <input type="checkbox" name="checkbox" id="checkbox-{{id}}"/>
                 Выполнено
             </label>
             <i class="fa-solid fa-pencil fa-3x" onclick="edit('{{id}}', '{{taskName}}', null, '{{taskDescription}}')"></i>

@@ -256,9 +256,9 @@ app.get('/schedule', authMiddleware, async (req, res) => {
             tasksNoDateDone.push(tempTask);
             tasksNoDateDoneHTML.push(await render('./views/taskModelDone.hbs',
                 {id: tempTask._id, taskName: tempTask.taskName}))
-            let tempModal = await render('./views/modalNoTime.hbs',
+            let tempModal = await render('./views/modalWithTime.hbs',
                 {id: tempTask._id, taskName: tempTask.taskName,
-                taskDescription: tempTask.description});
+                taskDescription: tempTask.description, date: 'null'});
             modals.push(tempModal);
 
             noDateIndexer += 1
