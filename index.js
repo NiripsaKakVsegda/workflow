@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const authRouter = require('./authRouter');
@@ -10,7 +10,7 @@ const fs = require('fs');
 const readFile = require('util').promisify(fs.readFile);
 const cookieParser = require("cookie-parser");
 const authMiddleware = require("./middleware/authMiddleware");
-const generateAccessToken = require('./public/js/generateAccessToken')
+const generateAccessToken = require('./public/js/generate_access_token');
 const nodemailer = require("nodemailer");
 const smtpTransport = require('nodemailer-smtp-transport');
 const transporter = nodemailer.createTransport(smtpTransport({
@@ -24,15 +24,13 @@ const transporter = nodemailer.createTransport(smtpTransport({
 
 const dburl = process.env.DBURL;
 const PORT = process.env.PORT || 5000;
-const jwtSecret = process.env.SECRET
+const jwtSecret = process.env.SECRET;
 
-const User = require('./models/User')
-const Task = require('./models/Task')
+const User = require('./models/User');
+const Task = require('./models/Task');
 const jwt = require("jsonwebtoken");
-const {c} = require("swig/lib/dateformatter");
 
-const { body, validationResult } = require('express-validator')
-const {log} = require("util");
+const { body } = require('express-validator');
 
 const app = express();
 
@@ -41,7 +39,7 @@ app.use(express.static('public'));
 app.use('/css', express.static(__dirname + 'public/css'));
 app.use('/js', express.static(__dirname + 'public/js'));
 app.use('/img', express.static(__dirname + 'public/img'));
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: false }));
 
 app.set('views', './views');
 app.set('view engine', 'hbs');
@@ -69,7 +67,7 @@ app.post(
             taskName: req.body.taskName,
             endTime: req.body.endTime,
             description: req.body.description
-        }
+        };
         const task = new Task(taskData);
         task.save();
         taskData['_id'] = task._id;
@@ -78,7 +76,7 @@ app.post(
         if (req.query.groups) {
             const groups = req.query.groups.split(',');
             for(const groupId of groups) {
-                const groupUsers = await User.find({group: groupId})
+                const groupUsers = await User.find({group: groupId});
                 for (const currentUser of groupUsers) {
                     currentUser.tasks.push(taskData['_id']);
                     await currentUser.save();
@@ -90,7 +88,7 @@ app.post(
         }
         res.redirect('/schedule');
     })
-app.post( //delete
+app.post(
     '/api/tasks/delete/:taskId',
     authMiddleware,
     async (req, res) => {
@@ -98,10 +96,10 @@ app.post( //delete
         const taskId = req.params.taskId.slice(1);
         user.tasks = user.tasks.filter(function(e) { return e.valueOf() != taskId });
         user.tasksDone = user.tasksDone.filter(function(e) { return e.valueOf() != taskId });
-        user.save()
+        user.save();
         res.redirect('/schedule');
     })
-app.post( //patch
+app.post(
     '/api/tasks/:taskId',
     authMiddleware,
     async (req, res) => {
@@ -127,7 +125,7 @@ app.post( //patch
         updateTask(task, convertedTime, req.body.description, req.body.taskName);
         res.redirect('/schedule');
     })
-app.post( //done/undone
+app.post(
     '/api/tasks/check/:taskId',
     authMiddleware,
     async (req, res) => {
@@ -179,7 +177,7 @@ app.get('/main', authMiddleware, async (req, res) => {
 });
 
 app.get('/groups', authMiddleware, async (req, res) => {
-    const user = await getUser(req)
+    const user = await getUser(req);
     const avatar = user.avatar;
     let accept = user.roles.includes('TEACHER') || user.roles.includes('ADMIN');
     res.render('groups', {
@@ -190,7 +188,7 @@ app.get('/groups', authMiddleware, async (req, res) => {
 });
 
 app.get('/settings', authMiddleware, async (req, res) => {
-    const user = await getUser(req)
+    const user = await getUser(req);
     const avatar = user.avatar;
     res.render('settings', {
         username: user.username,
@@ -199,7 +197,7 @@ app.get('/settings', authMiddleware, async (req, res) => {
 });
 
 app.get('/account', authMiddleware, async (req, res) => {
-    const user = await getUser(req)
+    const user = await getUser(req);
     const avatar = user.avatar;
     let roleValue = 'user';
     let roleName = 'Не выбрано';
@@ -228,9 +226,9 @@ app.post('/account', [authMiddleware, upload.single('avatar')], async (req, res)
     currentUser.name = req.body.name;
     currentUser.surname = req.body.surname;
     const newRole = req.body.role.toUpperCase();
-    const inverseRoles = {'STUDENT': 'TEACHER', 'TEACHER':'STUDENT'}
+    const inverseRoles = {'STUDENT': 'TEACHER', 'TEACHER':'STUDENT'};
     if (currentUser.roles.includes(inverseRoles[newRole])) {
-        currentUser.roles[currentUser.roles.length - 1] = newRole
+        currentUser.roles[currentUser.roles.length - 1] = newRole;
     } else if(!currentUser.roles.includes(newRole)){
         currentUser.roles.push(newRole);
     }
@@ -242,7 +240,7 @@ app.post('/account', [authMiddleware, upload.single('avatar')], async (req, res)
         currentUser.group = '';
     }
 
-    const newToken = generateAccessToken(currentUser._id, currentUser.roles, currentUser.username)
+    const newToken = generateAccessToken(currentUser._id, currentUser.roles, currentUser.username);
     await currentUser.save();
 
     res.cookie('sessionId', newToken, { maxAge: 900000, httpOnly: true });
@@ -250,8 +248,8 @@ app.post('/account', [authMiddleware, upload.single('avatar')], async (req, res)
 })
 
 app.get('/schedule', authMiddleware, async (req, res) => {
-    const user = await getUser(req)
-    const avatar = user.avatar
+    const user = await getUser(req);
+    const avatar = user.avatar;
 
     let modals = [];
     let taskArray = [];
@@ -266,13 +264,13 @@ app.get('/schedule', authMiddleware, async (req, res) => {
         if (!tempTask.endTime) {
             tasksNoDateDone.push(tempTask);
             tasksNoDateDoneHTML.push(await render('./views/taskModelDone.hbs',
-                {id: tempTask._id, taskName: tempTask.taskName}))
+                {id: tempTask._id, taskName: tempTask.taskName}));
             let tempModal = await render('./views/preparedModal.hbs',
                 {id: tempTask._id, taskName: tempTask.taskName,
                 taskDescription: tempTask.description, date: 'null'});
             modals.push(tempModal);
 
-            noDateIndexer += 1
+            noDateIndexer += 1;
             continue;
         }
         taskDoneArray.push(tempTask);
@@ -284,46 +282,42 @@ app.get('/schedule', authMiddleware, async (req, res) => {
         if (!tempTask.endTime) {
             if (tasksNoDateDone.filter(e => e._id.equals(tempTask._id)).length === 0) {
                 tasksNoDate.push(await render('./views/taskModel.hbs',
-                    {id: taskId.valueOf(), taskName: tempTask.taskName}))
+                    {id: taskId.valueOf(), taskName: tempTask.taskName}));
                 let tempModal = await render('./views/preparedModal.hbs',
                     {id: taskId.valueOf(), taskName: tempTask.taskName,
                         date: 'null',
                         taskDescription: tempTask.description});
                 modals.push(tempModal);
 
-                noDateIndexer += 1
+                noDateIndexer += 1;
             }
             continue;
         }
-        taskArray.push(tempTask)
+        taskArray.push(tempTask);
     }
     taskArray.sort((a, b) => a['endTime'].getTime() >= b['endTime'].getTime() ? 1 : -1);
 
-    let params = { username: user.username }
-
-    // if (user.name && user.surname) {
-    //     params.username = `${user.name}<br>${user.surname}`
-    // }
+    let params = { username: user.username };
 
     params['tasksNoTime'] = await render('./views/tasks.hbs',
         {tasks: tasksNoDate.join('\n'),
             tasksDone: tasksNoDateDoneHTML.join('\n')});
 
-    let weekdays = getWeekdays()
+    let weekdays = getWeekdays();
 
     for (let k = 0; k < 4; k++) {
         for (let i = 0; i < 7; i++) {
             const currDate = new Date(weekdays[i].setDate(weekdays[i].getDate() + k*7));
-            let currDay = currDate.toLocaleDateString()
-            let currDayTasks = []
-            let currDayTasksDone = []
+            let currDay = currDate.toLocaleDateString();
+            let currDayTasks = [];
+            let currDayTasksDone = [];
 
             for(let j = 0; j < taskArray.length; j++) {
                 const currTask = taskArray[j];
                 const taskParams = {id: currTask._id.valueOf(), taskName: currTask.taskName,
                     taskTime: currTask.endTime ? formatTime(currTask.endTime) : ''};
 
-                const modalDate = currDay.substring(0,5) + `, ${formatTime(currTask.endTime)}`
+                const modalDate = currDay.substring(0,5) + `, ${formatTime(currTask.endTime)}`;
                 const modalParams = {id: currTask._id.valueOf(), taskName: currTask.taskName, date: modalDate,
                     taskDescription: currTask.description};
 
@@ -332,9 +326,9 @@ app.get('/schedule', authMiddleware, async (req, res) => {
                     modals.push(tempModal);
 
                     if (taskDoneArray.filter(e => e._id.equals(currTask._id)).length > 0) {
-                        currDayTasksDone.push(await render('./views/taskModelDone.hbs', taskParams))
+                        currDayTasksDone.push(await render('./views/taskModelDone.hbs', taskParams));
                    } else {
-                        currDayTasks.push(await render('./views/taskModel.hbs', taskParams))
+                        currDayTasks.push(await render('./views/taskModel.hbs', taskParams));
                     }
                 }
 
@@ -344,8 +338,8 @@ app.get('/schedule', authMiddleware, async (req, res) => {
         }
     }
 
-    params['taskModals'] = modals.join('\n')
-    params['avatar'] = avatar ? avatar: "images/avatar.png"
+    params['taskModals'] = modals.join('\n');
+    params['avatar'] = avatar ? avatar: "images/avatar.png";
 
     res.render('scheduler', params);
 });
@@ -388,7 +382,7 @@ function updateTask(task, endTime, description, taskName) {
     }
 
     if (endTime) {
-        task.endTime = endTime
+        task.endTime = endTime;
     }
 
     task.save();
@@ -397,7 +391,7 @@ function updateTask(task, endTime, description, taskName) {
 function tryConvertDate(date) {
     let convertedDate;
     try {
-        convertedDate = new Date(date); //Date.parse(date);
+        convertedDate = new Date(date);
     } catch (e) {
         return null;
     }
@@ -421,11 +415,11 @@ async function findNearestDeadlineForUser(user) {
             taskDoneArray.push(tempTask);
     }
 
-    const curr = new Date()
-    let weekday
+    const curr = new Date();
+    let weekday;
     if (curr.getDay() === 0)
-        weekday = 7
-    else weekday = curr.getDay()
+        weekday = 7;
+    else weekday = curr.getDay();
     let first = new Date(curr.setDate(curr.getDate() - (weekday - 1))).toISOString().split('T')[0];
     let last = new Date(curr.setDate(curr.getDate() + 8)).toISOString().split('T')[0];
 
@@ -440,7 +434,7 @@ async function findNearestDeadlineForUser(user) {
 
     taskArray.sort((a, b) => a['endTime'].getTime() >= b['endTime'].getTime() ? 1 : -1);
 
-    return {donePercent: donePercent, taskArray:taskArray, taskDoneArray:taskDoneArray}
+    return {donePercent: donePercent, taskArray:taskArray, taskDoneArray:taskDoneArray};
 }
 
 
@@ -450,9 +444,7 @@ function sendEmail(adress, text) {
         to: adress,
         subject: 'Скоро дедлайн',
         text: text
-        // html: html
-    }
-
+    };
 
     transporter.sendMail(mailOptions, (err, info) => {
         if(err) {
@@ -477,25 +469,25 @@ async function sendNotifications() {
             continue;
         }
 
-        const deadline = nearestDeadline.endTime.toLocaleString().substring(0, 5) + `, ${formatTime(nearestDeadline.endTime)}`
+        const deadline = nearestDeadline.endTime.toLocaleString().substring(0, 5) + `, ${formatTime(nearestDeadline.endTime)}`;
 
         const text = `Привет, это Workflow!
-Спешу напомнить про твое задание :)
+                      Спешу напомнить про твое задание :)
+                      
+                      Название: ${nearestDeadline.taskName}
+                      Дедлайн: ${deadline}
+                      Описание: ${nearestDeadline.description}
+                      
+                      Осталось совсем немного, поспеши!
+                      
+                      Удачи <3`;
 
-Название: ${nearestDeadline.taskName}
-Дедлайн: ${deadline}
-Описание: ${nearestDeadline.description}
-
-Осталось совсем немного, поспеши!
-
-Удачи <3`;
-
-        sendEmail(user.email, text)
+        sendEmail(user.email, text);
     }
 }
 
 function formatTime(date) {
-    return date.getHours() + ':' + (date.getMinutes()<10?'0':'') + date.getMinutes()
+    return date.getHours() + ':' + (date.getMinutes()<10?'0':'') + date.getMinutes();
 }
 
 function getWeekdays() {
