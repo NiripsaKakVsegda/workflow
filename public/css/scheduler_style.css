@@ -30,12 +30,14 @@ header {
 }
 
 .sidenav {
+    z-index: 3;
     height: calc(100% - 100px);
     position: fixed;
     width: 0;
     top: 0;
-    left: 0;
+    left: -6px;
     background-color: #FAEDCA;
+    border-right: 6px solid #F2C078;
     overflow-x: hidden;
     transition: 0.5s;
     margin-top: 100px;
@@ -46,6 +48,7 @@ header {
 }
 
 .dropmenu {
+    z-index: 2;
     position: fixed;
     margin-top: 100px;
     margin-right: 20px;
@@ -81,18 +84,20 @@ a i {
     color: #111;
     width: 40px;
     height: 40px;
-    padding: 20px 10px;
+    padding: 20px 20px;
 }
 
 .content {
+    margin-top: 50px;
     transition: 0.5s;
 }
 
 .table {
-    margin: 0 120px 0 80px;
+    margin: 0 120px 0 120px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-gap: 55px;
+    grid-column-gap: 100px;
+    grid-row-gap: 55px;
     grid-auto-rows: 300px;
 }
 
@@ -236,4 +241,20 @@ input {
 
 input[type="time"]::-webkit-calendar-picker-indicator {
     display: none;
+}
+
+body {
+    place-items: center;
+}
+
+.slick-prev:before {
+    content: "<";
+    color: red;
+    font-size: 30px;
+}
+
+.slick-next:before {
+    content: ">";
+    color: red;
+    font-size: 30px;
 }
