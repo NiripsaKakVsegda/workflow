@@ -39,7 +39,7 @@
         <div id="dropmenu" class="dropmenu">
             <nav>
                 <a href="/account"><i class="fa-solid fa-user" style="color: #fff"></i>Аккаунт</a>
-                <a href="/auth/login"><i class="fa-solid fa-arrow-right-from-bracket" style="color: #fff"></i>Выход</a> <!-- как-то организовать выход из системы -->
+                <a href="/auth/login"><i class="fa-solid fa-arrow-right-from-bracket" style="color: #fff"></i>Выход</a>
             </nav>
         </div>
     </div>
@@ -49,45 +49,170 @@
                 <b style="font-weight: 600; font-size: 30px; color: #7EBC89;">неделю
                     <i class="fa-solid fa-caret-down fa"></i></b></p>
         </div>
-        <div class="table">
-            <div class="item" ondblclick="addNewTask(document.getElementById('Monday').textContent)">
-                <p>Понедельник</p>
-                <p class="date date-1" id="Monday"></p>
-                {{{tasksDay0}}}
+        <div style="display: flex;">
+            <div class="table">
+                <div class="item" ondblclick="addNewTask(document.getElementById('Monday').textContent)">
+                    <p>Понедельник</p>
+                    <p class="date date-1" id="Monday"></p>
+                    {{{tasksDay0}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Tuesday').textContent)">
+                    <p>Вторник</p>
+                    <p class="date date-2" id="Tuesday"></p>
+                    {{{tasksDay1}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Wednesday').textContent)">
+                    <p>Среда</p>
+                    <p class="date date-3" id="Wednesday"></p>
+                    {{{tasksDay2}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Thursday').textContent)">
+                    <p>Четверг</p>
+                    <p class="date date-4" id="Thursday"></p>
+                    {{{tasksDay3}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Friday').textContent)">
+                    <p>Пятница</p>
+                    <p class="date date-5" id="Friday"></p>
+                    {{{tasksDay4}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Saturday').textContent)">
+                    <p>Суббота</p>
+                    <p class="date date-6" id="Saturday"></p>
+                    {{{tasksDay5}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Sunday').textContent)">
+                    <p>Воскресенье</p>
+                    <p class="date date-7" id="Sunday"></p>
+                    {{{tasksDay6}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(false)">
+                    <p style="margin-bottom: 10px;">Прочее</p>
+                    {{{tasksNoTime}}}
+                </div>
             </div>
-            <div class="item" ondblclick="addNewTask(document.getElementById('Tuesday').textContent)">
-                <p>Вторник</p>
-                <p class="date date-2" id="Tuesday"></p>
-                {{{tasksDay1}}}
+            <div class="table">
+                <div class="item" ondblclick="addNewTask(document.getElementById('Monday').textContent)">
+                    <p>Понедельник</p>
+                    <p class="date date-1" id="Monday"></p>
+                    {{{tasksDay0}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Tuesday').textContent)">
+                    <p>Вторник</p>
+                    <p class="date date-2" id="Tuesday"></p>
+                    {{{tasksDay1}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Wednesday').textContent)">
+                    <p>Среда</p>
+                    <p class="date date-3" id="Wednesday"></p>
+                    {{{tasksDay2}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Thursday').textContent)">
+                    <p>Четверг</p>
+                    <p class="date date-4" id="Thursday"></p>
+                    {{{tasksDay3}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Friday').textContent)">
+                    <p>Пятница</p>
+                    <p class="date date-5" id="Friday"></p>
+                    {{{tasksDay4}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Saturday').textContent)">
+                    <p>Суббота</p>
+                    <p class="date date-6" id="Saturday"></p>
+                    {{{tasksDay5}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Sunday').textContent)">
+                    <p>Воскресенье</p>
+                    <p class="date date-7" id="Sunday"></p>
+                    {{{tasksDay6}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(false)">
+                    <p style="margin-bottom: 10px;">Прочее</p>
+                    {{{tasksNoTime}}}
+                </div>
             </div>
-            <div class="item" ondblclick="addNewTask(document.getElementById('Wednesday').textContent)">
-                <p>Среда</p>
-                <p class="date date-3" id="Wednesday"></p>
-                {{{tasksDay2}}}
+            <div class="table">
+                <div class="item" ondblclick="addNewTask(document.getElementById('Monday').textContent)">
+                    <p>Понедельник</p>
+                    <p class="date date-1" id="Monday"></p>
+                    {{{tasksDay0}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Tuesday').textContent)">
+                    <p>Вторник</p>
+                    <p class="date date-2" id="Tuesday"></p>
+                    {{{tasksDay1}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Wednesday').textContent)">
+                    <p>Среда</p>
+                    <p class="date date-3" id="Wednesday"></p>
+                    {{{tasksDay2}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Thursday').textContent)">
+                    <p>Четверг</p>
+                    <p class="date date-4" id="Thursday"></p>
+                    {{{tasksDay3}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Friday').textContent)">
+                    <p>Пятница</p>
+                    <p class="date date-5" id="Friday"></p>
+                    {{{tasksDay4}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Saturday').textContent)">
+                    <p>Суббота</p>
+                    <p class="date date-6" id="Saturday"></p>
+                    {{{tasksDay5}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Sunday').textContent)">
+                    <p>Воскресенье</p>
+                    <p class="date date-7" id="Sunday"></p>
+                    {{{tasksDay6}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(false)">
+                    <p style="margin-bottom: 10px;">Прочее</p>
+                    {{{tasksNoTime}}}
+                </div>
             </div>
-            <div class="item" ondblclick="addNewTask(document.getElementById('Thursday').textContent)">
-                <p>Четверг</p>
-                <p class="date date-4" id="Thursday"></p>
-                {{{tasksDay3}}}
-            </div>
-            <div class="item" ondblclick="addNewTask(document.getElementById('Friday').textContent)">
-                <p>Пятница</p>
-                <p class="date date-5" id="Friday"></p>
-                {{{tasksDay4}}}
-            </div>
-            <div class="item" ondblclick="addNewTask(document.getElementById('Saturday').textContent)">
-                <p>Суббота</p>
-                <p class="date date-6" id="Saturday"></p>
-                {{{tasksDay5}}}
-            </div>
-            <div class="item" ondblclick="addNewTask(document.getElementById('Sunday').textContent)">
-                <p>Воскресенье</p>
-                <p class="date date-7" id="Sunday"></p>
-                {{{tasksDay6}}}
-            </div>
-            <div class="item" ondblclick="addNewTask(false)">
-                <p style="margin-bottom: 10px;">Прочее</p>
-                {{{tasksNoTime}}}
+            <div class="table">
+                <div class="item" ondblclick="addNewTask(document.getElementById('Monday').textContent)">
+                    <p>Понедельник</p>
+                    <p class="date date-1" id="Monday"></p>
+                    {{{tasksDay0}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Tuesday').textContent)">
+                    <p>Вторник</p>
+                    <p class="date date-2" id="Tuesday"></p>
+                    {{{tasksDay1}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Wednesday').textContent)">
+                    <p>Среда</p>
+                    <p class="date date-3" id="Wednesday"></p>
+                    {{{tasksDay2}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Thursday').textContent)">
+                    <p>Четверг</p>
+                    <p class="date date-4" id="Thursday"></p>
+                    {{{tasksDay3}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Friday').textContent)">
+                    <p>Пятница</p>
+                    <p class="date date-5" id="Friday"></p>
+                    {{{tasksDay4}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Saturday').textContent)">
+                    <p>Суббота</p>
+                    <p class="date date-6" id="Saturday"></p>
+                    {{{tasksDay5}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(document.getElementById('Sunday').textContent)">
+                    <p>Воскресенье</p>
+                    <p class="date date-7" id="Sunday"></p>
+                    {{{tasksDay6}}}
+                </div>
+                <div class="item" ondblclick="addNewTask(false)">
+                    <p style="margin-bottom: 10px;">Прочее</p>
+                    {{{tasksNoTime}}}
+                </div>
             </div>
         </div>
     </div>
