@@ -103,6 +103,7 @@ a i {
     flex-direction: column;
     align-items: center;
     color: #1E0E62;
+    width: 300px;
 }
 
 .item p {
