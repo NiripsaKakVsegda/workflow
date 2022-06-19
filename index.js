@@ -19,6 +19,7 @@ const jwt = require("jsonwebtoken");
 const {c} = require("swig/lib/dateformatter");
 
 const { body, validationResult } = require('express-validator')
+const {log} = require("util");
 
 const app = express();
 
@@ -40,11 +41,11 @@ app.get('/', (req, res) => {
 
 app.post(
     '/api/tasks',
+    authMiddleware,
     body('taskName').exists(),
     body('endTime').exists(),
     body('description').exists(),
-    // authMiddleware,
-    (req, res) => {
+    async (req, res) => {
         const convertedDate = tryConvertDate(req.body.endTime);
         if (!convertedDate) {
             return res
@@ -56,10 +57,14 @@ app.post(
             endTime: req.body.endTime,
             description: req.body.description
         }
+        const token = req.cookies.sessionId;
+        const {id: userId} = jwt.verify(token, 'secret');
+        const currentUser = await User.findById(userId);
         task = new Task(taskData);
-        task.save()
+        task.save();
         taskData['_id'] = task._id;
-
+        currentUser.tasks.push(taskData['_id']);
+        currentUser.save();
         return res
             .status(200)
             .send(taskData);
@@ -204,7 +209,6 @@ app.post('/account', [authMiddleware, upload.single('avatar')], async (req, res)
     } else if(!currentUser.roles.includes(newRole)){
         currentUser.roles.push(newRole);
     }
-
 
     currentUser.group = req.body.studentGroup;
     currentUser.avatar = req.body.avatar;
@@ -376,7 +380,7 @@ function updateTask(task, endTime, description, taskName) {
 function tryConvertDate(date) {
     let convertedDate;
     try {
-        convertedDate = Date.parse(date);
+        convertedDate = new Date(date); //Date.parse(date);
     } catch (e) {
         return null;
     }

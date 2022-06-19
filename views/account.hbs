@@ -54,7 +54,7 @@
             </div>
             <div style="display: flex; justify-content: space-between; padding-top: 60px;">
                <a href="/main"><i class="fa-solid fa-xmark fa-5x"></i></a>
-               <a onclick="submit()"><i class="fa-solid fa-floppy-disk fa-5x"></i></a>
+               <i class="fa-solid fa-floppy-disk fa-5x" onclick="submit()"></i>
             </div>
         </div>
     </div>
@@ -106,7 +106,7 @@
             }
         }
 
-        checkRole()
+        checkRole();
 
         function addFormatter (input, formatFn) {
             let oldValue = input.value;
@@ -137,7 +137,6 @@
             submitForm.studentGroup.value = document.getElementById('groupInput').value;
 
             submitForm.submit();
-
         }
 
         addFormatter(document.getElementById('groupInput'), regexPrefix(/^ФТ-/, 'ФТ-'));

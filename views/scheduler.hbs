@@ -97,21 +97,28 @@
     <div class="modal-container" id="modal-new-task">
         <div class="modal" style="display: flex; flex-direction: column; gap: 20px;">
             <div style="display: flex; justify-content: space-between">
-                <input required type="text" style="font-weight: 300; font-size: 64px;" placeholder="Название">
+                <input required type="text" style="font-weight: 300; font-size: 64px;" placeholder="Название" id="taskName">
                 <i class="fa-solid fa-xmark fa-2x" onclick="document.getElementById('modal-new-task').style.display = 'none'"></i>
             </div>
             <div style="display: flex; align-items: center; gap: 20px">
                 <i class="fa-solid fa-clock fa-3x"></i>
                 <p style="font-weight: 300;font-size: 40px" id="newTaskDate"></p>
-                <input style="font-weight: 300;font-size: 40px" type="time" placeholder="15:00">
+                <input style="font-weight: 300;font-size: 40px" type="time" placeholder="15:00" id="newTaskTime">
             </div>
-            <textarea class="task-text" style="resize: none; font-weight: 300;font-size: 40px; height: 300px; overflow: auto; max-width: 100%; border: none; outline: none" placeholder="Что нужно сделать?"></textarea>
+            <textarea id="description" class="task-text" style="resize: none; font-weight: 300;font-size: 40px; height: 300px; overflow: auto; max-width: 100%; border: none; outline: none" placeholder="Что нужно сделать?"></textarea>
+
             <div style="display: flex; justify-content: space-between; margin-top: 40px">
                 <i class="fa-solid fa-trash fa-3x"></i>
-                <i class="fa-solid fa-check fa-3x" onclick="document.getElementById('modal-new-task').style.display = 'none'"></i>
+                <i class="fa-solid fa-check fa-3x" onclick="submit()"></i>
             </div>
         </div>
     </div>
+
+    <form id="submitForm" method="post" style="display: none;" action="/api/tasks" enctype="application/x-www-form-urlencoded"> <!--action="/scheduler" -->
+        <input type="text" name="taskName">
+        <input type="text" name="endTime">
+        <input type="text" name="description">
+    </form>
 
     <div class="modal-container" id="modal-new-task-without-time">
         <div class="modal" style="display: flex; flex-direction: column; gap: 20px;">
@@ -119,7 +126,7 @@
                 <input required type="text" style="font-weight: 300; font-size: 64px;" placeholder="Название">
                 <i class="fa-solid fa-xmark fa-2x" onclick="document.getElementById('modal-new-task-without-time').style.display = 'none'"></i>
             </div>
-            <textarea class="task-text" style="resize: none; font-weight: 300;font-size: 40px; height: 300px; overflow: auto; max-width: 100%; border: none; outline: none" placeholder="Что нужно сделать?"></textarea>
+            <textarea id="description" class="task-text" style="resize: none; font-weight: 300;font-size: 40px; height: 300px; overflow: auto; max-width: 100%; border: none; outline: none" placeholder="Что нужно сделать?" name="description"></textarea>
             <div style="display: flex; justify-content: space-between; margin-top: 40px">
                 <i class="fa-solid fa-trash fa-3x"></i>
                 <i class="fa-solid fa-check fa-3x" onclick="document.getElementById('modal-new-task-without-time').style.display = 'none'"></i>
@@ -135,6 +142,28 @@
     </footer>
 
     <script>
+        $(document).ready(function(){
+            $("#but1").click(function(){
+                let comment = $.trim($("#description").val());
+                alert(comment);
+            });
+        });
+
+        function submit() {
+            console.log($('textarea').val())
+            const submitForm = document.getElementById('submitForm');
+            let time = document.getElementById('newTaskTime').value;
+            let date = document.getElementById('newTaskDate').textContent.split('.');
+            let year = new Date().getFullYear().toString();
+            let fullDate = `${year}-${date[1]}-${date[0]}T${time}:00`
+            submitForm.taskName.value = document.getElementById('taskName').value;
+            submitForm.endTime.value = fullDate;
+            submitForm.description.value = document.getElementById('description').value;
+            submitForm.submit();
+
+            document.getElementById('modal-new-task').style.display = 'none';
+        }
+
         function fillWeekdays() {
             let weekdays = getWeekdays();
             for (let i = 0; i < 7; i++) {
