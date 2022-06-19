@@ -359,7 +359,7 @@
         function fillWeekdays() {
             let weekdays = getWeekdays();
             for (let i = 0; i < 7; i++) {
-                const weekday = weekdays[i].toLocaleString();
+                const weekday = weekdays[i].toLocaleString('ru-RU')
                 const element = document.getElementsByClassName('date date-' + (i + 1))[0];
                 element.innerText = weekday.substring(0, 5);
             }
