@@ -287,7 +287,6 @@
                     id = 'modal-new-task';
                 }
             }
-            console.log(currentId)
             const checkbox = document.getElementById(`checkbox-${id}`);
             if (checkbox) {
                 const currentCheck = checkbox.checked;
@@ -311,7 +310,6 @@
         let afterEdit = false;
 
         function edit(id, name, time, description) {
-            console.log(time)
             let prevModal = document.getElementById(id);
             prevModal.style.display = 'none';
             if (time !== 'null') {
@@ -358,13 +356,10 @@
         function fillWeekdays() {
             let currDate = new Date();
             for (let k = 0; k < 4; k++) {
-                console.log(currDate)
                 currDate.setDate(currDate.getDate() + 7*(k > 0));
-                console.log(currDate)
                 let weekdays = getWeekdays(new Date(currDate));
                 for (let i = 0; i < 7; i++) {
                     const weekday = weekdays[i].toLocaleString('ru-RU')
-                    console.log(weekday)
                     const element = document.getElementsByClassName(`date date-${k}${i + 1}`)[0];
                     element.innerText = weekday.substring(0, 5);
                 }
@@ -400,7 +395,6 @@
             document.getElementById(id).style.display = 'flex';
             let color = document.getElementById(`color-${id}`).style.background;
             checked = color === 'rgb(193, 219, 179)';
-            console.log(`checkbox-${id}`)
             document.getElementById(`checkbox-${id}`).checked = checked;
             currentId = id;
         }

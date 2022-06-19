@@ -11,6 +11,13 @@ const readFile = require('util').promisify(fs.readFile);
 const cookieParser = require("cookie-parser");
 const authMiddleware = require("./middleware/authMiddleware");
 const generateAccessToken = require('./public/js/generate_access_token');
+const getUser = require('./public/js/get_user');
+const createTask = require('./public/js/post_task');
+const deleteTask = require('./public/js/delete_task');
+const editTask = require('./public/js/edit_task');
+const loadMainPage = require('./public/js/load_main_page');
+const findNearestDeadlineForUser = require('./public/js/find_nearest_deadline');
+const updateTaskProgress = require('./public/js/update_task_progress');
 const nodemailer = require("nodemailer");
 const smtpTransport = require('nodemailer-smtp-transport');
 const transporter = nodemailer.createTransport(smtpTransport({
@@ -56,125 +63,24 @@ app.post(
     body('taskName').exists(),
     body('endTime').exists(),
     body('description').exists(),
-    async (req, res) => {
-        const convertedDate = tryConvertDate(req.body.endTime);
-        if (!convertedDate) {
-            return res
-                .status(400)
-                .send({message: "can not convert specified date"});
-        }
-        const taskData = {
-            taskName: req.body.taskName,
-            endTime: req.body.endTime,
-            description: req.body.description
-        };
-        const task = new Task(taskData);
-        task.save();
-        taskData['_id'] = task._id;
+    createTask);
 
-        const currentUser = await getUser(req);
-        if (req.query.groups) {
-            const groups = req.query.groups.split(',');
-            for(const groupId of groups) {
-                const groupUsers = await User.find({group: groupId});
-                for (const currentUser of groupUsers) {
-                    currentUser.tasks.push(taskData['_id']);
-                    await currentUser.save();
-                }
-            }
-        } else {
-            currentUser.tasks.push(taskData['_id']);
-            currentUser.save();
-        }
-        res.redirect('/schedule');
-    })
 app.post(
     '/api/tasks/delete/:taskId',
     authMiddleware,
-    async (req, res) => {
-        const user = await getUser(req);
-        const taskId = req.params.taskId.slice(1);
-        user.tasks = user.tasks.filter(function(e) { return e.valueOf() != taskId });
-        user.tasksDone = user.tasksDone.filter(function(e) { return e.valueOf() != taskId });
-        user.save();
-        res.redirect('/schedule');
-    })
+    deleteTask);
+
 app.post(
     '/api/tasks/:taskId',
     authMiddleware,
-    async (req, res) => {
-        const taskId = req.params.taskId.slice(1);
-        let task;
+    editTask);
 
-        try {
-            task = await Task.findById(taskId);
-        } catch (e) {
-            return res
-                .status(400)
-                .send({message: 'can not find specified task'});
-        }
-
-        let convertedTime;
-        try {
-            convertedTime = Date.parse(req.body.endTime);
-        } catch (e) {
-            return res
-                .status(400)
-                .send({message: 'invalid time'});
-        }
-        updateTask(task, convertedTime, req.body.description, req.body.taskName);
-        res.redirect('/schedule');
-    })
 app.post(
     '/api/tasks/check/:taskId',
     authMiddleware,
-    async (req, res) => {
-        const taskId = req.params.taskId.slice(1);
-        const isDone = req.body.progress === 'true';
-        const user = await getUser(req);
-        let task;
+    updateTaskProgress);
 
-        try {
-            task = await Task.findById(taskId);
-        } catch (e) {
-            return res
-                .status(400)
-                .send({message: 'can not find specified task'});
-        }
-
-        if (isDone) {
-            user.tasksDone.push(task._id);
-        } else {
-            user.tasksDone = user.tasksDone.filter(function(e) { return e.valueOf() != taskId });
-        }
-        user.save();
-        res.redirect('/schedule');
-    })
-
-app.get('/main', authMiddleware, async (req, res) => {
-    const user = await getUser(req);
-    const avatar = user.avatar;
-
-    let {donePercent: donePercent, taskArray:taskArray} = await findNearestDeadlineForUser(user);
-    if (taskArray.length > 0) {
-        const nearestTask = taskArray[0];
-        const task = nearestTask['taskName'];
-        const date = nearestTask['endTime'].toLocaleString().substring(0, 5);
-        const time = nearestTask['endTime'].toLocaleString().substring(12, 17);
-        res.render('main', {
-            deadline: [task, date, time].join(', '),
-            percent: donePercent,
-            username: user.username,
-            avatar: avatar? avatar : "images/avatar.png",
-            deadlineTaskId: nearestTask._id
-        });
-    }
-    else res.render('main', {
-        deadline: 'нет заданий',
-        percent: donePercent,
-        username: user.username,
-        avatar: avatar? avatar : "images/avatar.png"});
-});
+app.get('/main', authMiddleware, loadMainPage);
 
 app.get('/groups', authMiddleware, async (req, res) => {
     const user = await getUser(req);
@@ -382,78 +288,6 @@ async function render(file, params) {
     return template(params);
 }
 
-async function getUser(req) {
-    const token = req.cookies.sessionId;
-    const {id: userId} = jwt.verify(token, jwtSecret);
-
-    return await User.findById(userId);
-}
-
-function updateTask(task, endTime, description, taskName) {
-    if (description) {
-        task.description = description;
-    }
-
-    if (taskName) {
-        task.taskName = taskName;
-    }
-
-    if (endTime) {
-        task.endTime = endTime;
-    }
-
-    task.save();
-}
-
-function tryConvertDate(date) {
-    let convertedDate;
-    try {
-        convertedDate = new Date(date);
-    } catch (e) {
-        return null;
-    }
-
-    return convertedDate;
-}
-
-
-async function findNearestDeadlineForUser(user) {
-    let taskArray = [];
-    for(let taskId of user.tasks) {
-        const tempTask = await Task.findById(taskId);
-        if (tempTask.endTime)
-            taskArray.push(tempTask);
-    }
-
-    let taskDoneArray = [];
-    for(let taskId of user.tasksDone) {
-        const tempTask = await Task.findById(taskId);
-        if (tempTask.endTime)
-            taskDoneArray.push(tempTask);
-    }
-
-    const curr = new Date();
-    let weekday;
-    if (curr.getDay() === 0)
-        weekday = 7;
-    else weekday = curr.getDay();
-    let first = new Date(curr.setDate(curr.getDate() - (weekday - 1))).toISOString().split('T')[0];
-    let last = new Date(curr.setDate(curr.getDate() + 8)).toISOString().split('T')[0];
-
-    taskDoneArray = taskDoneArray.filter((el) => first <= el['endTime'].toISOString().split('T')[0]
-        & el['endTime'].toISOString().split('T')[0] <= last);
-    taskArray = taskArray.filter((el) => first <= el['endTime'].toISOString().split('T')[0]
-        & el['endTime'].toISOString().split('T')[0] <= last);
-
-    let donePercent = (taskDoneArray.length / taskArray.length || 0)  * 100;
-    taskArray = taskArray.filter((el) => el['endTime'].getTime() >= new Date().getTime());
-    taskArray = taskArray.filter((el) => taskDoneArray.filter((e) => e._id.equals(el._id)).length === 0);
-
-    taskArray.sort((a, b) => a['endTime'].getTime() >= b['endTime'].getTime() ? 1 : -1);
-
-    return {donePercent: donePercent, taskArray:taskArray, taskDoneArray:taskDoneArray};
-}
-
 
 function sendEmail(adress, text) {
     const mailOptions = {
@@ -465,7 +299,7 @@ function sendEmail(adress, text) {
 
     transporter.sendMail(mailOptions, (err, info) => {
         if(err) {
-            console.log(err)
+            console.log(err);
         }
     });
 }

@@ -9,7 +9,6 @@ function getWeekdays(curr=new Date) {
     let weekdays = [];
     for (let i = 0; i < 7; i++) {
         curr.setDate(curr.getDate() + 1);
-        console.log(curr);
         weekdays.push(new Date(curr));
     }
 
