@@ -323,7 +323,7 @@ app.get('/schedule', authMiddleware, async (req, res) => {
 
                     if (taskDoneArray.filter(e => e._id.equals(currTask._id)).length > 0) {
                         currDayTasksDone.push(await render('./views/taskModelDone.hbs', taskParams))
-                    } else {
+                   } else {
                         currDayTasks.push(await render('./views/taskModel.hbs', taskParams))
                     }
                 }

@@ -1,5 +1,4 @@
-function getWeekdays() {
-    const curr = new Date;
+function getWeekdays(curr=new Date) {
     let first;
     if (curr.getDay() === 0)
         first = curr.getDate() - 6;
