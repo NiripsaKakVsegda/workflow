@@ -99,7 +99,19 @@ app.get('/settings', authMiddleware, async (req, res) => {
     res.render('settings', {
         username: user.username,
         avatar: avatar? avatar : "images/avatar.png",
+        value: user.notificationInterval,
+        checkVal: user.notifications ? `checked='true'`: ''
     });
+});
+
+
+app.post('/settings', authMiddleware, async (req, res) => {
+    const user = await getUser(req)
+    user.notificationInterval = +req.body.dropdown;
+    user.notifications = Boolean(req.body.checkbox);
+
+    await user.save();
+    res.redirect('/main')
 });
 
 app.get('/account', authMiddleware, async (req, res) => {
@@ -213,8 +225,10 @@ app.get('/schedule', authMiddleware, async (req, res) => {
 
     for (let k = 0; k < 4; k++) {
         for (let i = 0; i < 7; i++) {
-            const currDate = new Date(weekdays[i].setDate(weekdays[i].getDate() + k*7));
-            let currDay = currDate.toLocaleDateString();
+            const weekday = new Date(weekdays[i]);
+            const currDate = new Date(weekday.setDate(weekday.getDate() + k*7));
+            let currDay = currDate.toLocaleDateString('ru-RU');
+            console.log(currDay)
             let currDayTasks = [];
             let currDayTasksDone = [];
 
@@ -227,7 +241,7 @@ app.get('/schedule', authMiddleware, async (req, res) => {
                 const modalParams = {id: currTask._id.valueOf(), taskName: currTask.taskName, date: modalDate,
                     taskDescription: currTask.description};
 
-                if (currTask.endTime.toLocaleDateString() === currDay) {
+                if (currTask.endTime.toLocaleDateString('ru-RU') === currDay) {
                     let tempModal = await render('./views/preparedModal.hbs', modalParams);
                     modals.push(tempModal);
 

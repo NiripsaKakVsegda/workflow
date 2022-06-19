@@ -345,6 +345,7 @@
                     time = '23:59';
                 }
                 submitForm.endTime.value = `${year}-${date[1]}-${date[0]}T${time}:00`;
+                console.log(submitForm.endTime.value)
             }
             let name = document.getElementById('taskName').value;
             submitForm.taskName.value = name === '' ? 'Без названия' : name;
