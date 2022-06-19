@@ -8,6 +8,7 @@ const fs = require('fs');
 const readFile = require('util').promisify(fs.readFile);
 const cookieParser = require("cookie-parser");
 const authMiddleware = require("./middleware/authMiddleware");
+const roleMiddleware = require("./middleware/roleMiddleware");
 const generateAccessToken = require('./public/js/generateAccessToken')
 
 const dburl = `mongodb+srv://admin:admin234@cluster0.knt3h.mongodb.net/?retryWrites=true&w=majority`;
@@ -182,7 +183,7 @@ app.get('/main', authMiddleware, async (req, res) => {
         avatar: avatar? avatar : "images/avatar.png"});
 });
 
-app.get('/groups', authMiddleware, async (req, res) => {
+app.get('/groups', roleMiddleware(['TEACHER', 'ADMIN']), async (req, res) => {
     const user = await getUser(req)
     const avatar = user.avatar;
     res.render('groups', {
