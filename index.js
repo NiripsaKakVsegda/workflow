@@ -44,7 +44,7 @@ app.post(
     body('taskName').exists(),
     body('endTime').exists(),
     body('description').exists(),
-    authMiddleware,
+    // authMiddleware,
     (req, res) => {
         const convertedDate = tryConvertDate(req.body.endTime);
         if (!convertedDate) {
@@ -141,14 +141,16 @@ app.get('/main', authMiddleware, async (req, res) => {
     taskArray = taskArray.filter((el) => el['endTime'].getTime() >= new Date().getTime());
     if (taskArray.length > 0) {
         taskArray.sort((a, b) => a['endTime'].getTime() >= b['endTime'].getTime() ? 1 : -1);
-        const task = taskArray[0]['taskName'];
-        const date = taskArray[0]['endTime'].toLocaleString().substring(0, 5);
-        const time = taskArray[0]['endTime'].toLocaleString().substring(12, 17);
+        const nearestTask = taskArray[0];
+        const task = nearestTask['taskName'];
+        const date = nearestTask['endTime'].toLocaleString().substring(0, 5);
+        const time = nearestTask['endTime'].toLocaleString().substring(12, 17);
         res.render('main', {
             deadline: [task, date, time].join(', '),
             percent: donePercent * 100,
             username: user.username,
-            avatar: avatar? avatar : "images/avatar.png"
+            avatar: avatar? avatar : "images/avatar.png",
+            deadlineTaskId: nearestTask._id
         });
     }
     else res.render('main', {
@@ -224,9 +226,9 @@ app.get('/schedule', authMiddleware, async (req, res) => {
         if (!tempTask.endTime) {
             tasksNoDateDone.push(tempTask);
             tasksNoDateDoneHTML.push(await render('./views/taskModelDone.hbs',
-                {id: `nd${noDateIndexer}`, taskName: tempTask.taskName}))
+                {id: tempTask._id, taskName: tempTask.taskName}))
             let tempModal = await render('./views/modalNoTime.hbs',
-                {id: `nd${noDateIndexer}`, taskName: tempTask.taskName,
+                {id: tempTask._id, taskName: tempTask.taskName,
                 taskDescription: tempTask.description});
             modals.push(tempModal);
 
@@ -276,9 +278,10 @@ app.get('/schedule', authMiddleware, async (req, res) => {
         for(let j = 0; j < taskArray.length; j++) {
             const currTask = taskArray[j];
             const taskParams = {id: currTask._id.valueOf(), taskName: currTask.taskName,
-                taskTime: currTask.endTime ? currTask.endTime.getHours() + ':' + currTask.endTime.getMinutes() : ''};
+                taskTime: currTask.endTime ? currTask.endTime.getHours() + ':' + (currTask.endTime.getMinutes()<10?'0':'') + currTask.endTime.getMinutes() : ''};
 
-            const modalDate = currDay.substring(0,5) + `, ${currTask.endTime.getHours()}:${currTask.endTime.getMinutes()}`
+
+            const modalDate = currDay.substring(0,5) + `, ${currTask.endTime.getHours()}:${(currTask.endTime.getMinutes()<10?'0':'') + currTask.endTime.getMinutes()}`
             const modalParams = {id: currTask._id.valueOf(), taskName: currTask.taskName, date: modalDate,
                 taskDescription: currTask.description};
 

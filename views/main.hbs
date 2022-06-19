@@ -47,7 +47,7 @@
         <h1 style="font-size: 64px; font-weight: 600">Привет, {{{username}}}!</h1>
         <div style="display: flex; gap: 50px; align-items: center">
             <p style="font-size: 36px; font-weight: 400"><b style="font-weight: 600">Ближайший дедлайн:</b> {{deadline}}</p>
-            <button class="orange-button" id="task-button">Перейти к заданию</button>
+            <button class="orange-button" id="task-button" onclick="openTask('{{deadlineTaskId}}')">Перейти к заданию</button>
         </div>
         <div style="display: flex; flex-direction: column; align-items: center; gap: 16px; align-self: center; padding-top: 120px">
             <p style="font-weight: 500; font-size: 36px">Уже выполнено:</p>
@@ -99,17 +99,8 @@
             }
         }
 
-        function switchTiming() {
-            if (document.getElementById('week_month').textContent === 'за неделю') {
-                document.getElementById('week_month').textContent = 'за месяц';
-                document.getElementById('progress').value = 51;
-                document.getElementById('progress-label').textContent = '51%';
-            }
-            else {
-                document.getElementById('week_month').textContent = 'за неделю';
-                document.getElementById('progress').value = {{percent}};
-                document.getElementById('progress-label').textContent = {{percent}} + '%';
-            }
+        function openTask(taskId) {
+            document.location.href = `../schedule?showModal=${taskId}`
         }
     </script>
 </body>

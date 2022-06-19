@@ -98,9 +98,9 @@ class authController {
             const token = req.cookies.sessionId;
             const {id: userId} = jwt.verify(token, 'secret')
             const user = await User.findById(userId)
-            const newTask = await Task.findById('62ab9d99cb7f22f128a8c5b9')
+            const newTask = await Task.findById('62ae685d11e0fd50d09c49d8')
 
-            user.tasksDone.push(newTask)
+            user.tasks.push(newTask)
 
             await user.save()
             res.send('ok')
