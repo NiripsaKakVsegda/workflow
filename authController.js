@@ -5,6 +5,7 @@ const {validationResult} = require('express-validator');
 const bcrypt = require('bcryptjs');
 
 const generateAccessToken = require('./public/js/generate_access_token');
+const {log} = require("util");
 
 class authController {
     async registration(req, res) {
@@ -55,27 +56,30 @@ class authController {
             const {loginField, password} = req.body;
             const user = await User.findOne({username: loginField.trim()});
             const email = await User.findOne({email: loginField});
-            if (!user  && !email) {
+
+            if (user || email) {
+                let validPassword;
+                let token;
+                if (user) {
+                    validPassword = bcrypt.compareSync(password, user.password);
+                    token = generateAccessToken(user._id, user.roles, user.username);
+                } else {
+                    validPassword = bcrypt.compareSync(password, email.password);
+                    token = generateAccessToken(email._id, email.roles, email.username);
+                }
+
+                if (!validPassword) {
+                    res.render('login', {visibility: 'visible', text: 'Неверный пароль'});
+                    return;
+                }
+                res.cookie('sessionId', token, { maxAge: 60 * 60 * 1000, httpOnly: true });
+                res.redirect('../main');
+            } else {
                 res.render('login', {visibility: 'visible', text: `Пользователь ${loginField.trim()} не найден`});
                 return;
             }
 
-            let validPassword;
-            let token;
-            if (user) {
-                validPassword = bcrypt.compareSync(password, user.password);
-                token = generateAccessToken(user._id, user.roles, user.username);
-            } else {
-                validPassword = bcrypt.compareSync(password, email.password);
-                token = generateAccessToken(email._id, email.roles, user.username);
-            }
 
-            if (!validPassword) {
-                res.render('login', {visibility: 'visible', text: 'Неверный пароль'});
-                return;
-            }
-            res.cookie('sessionId', token, { maxAge: 60 * 60 * 1000, httpOnly: true });
-            res.redirect('../main');
         } catch (e) {
             console.log(e);
             res.status(400).json({message: 'ошибка входа в систему'});
