@@ -301,33 +301,36 @@ app.get('/schedule', authMiddleware, async (req, res) => {
 
     let weekdays = getWeekdays()
 
-    for (let i = 0; i < 7; i++) {
-        let currDay = weekdays[i].toLocaleDateString()
-        let currDayTasks = []
-        let currDayTasksDone = []
+    for (let k = 0; k < 4; k++) {
+        for (let i = 0; i < 7; i++) {
+            const currDate = new Date(weekdays[i].setDate(weekdays[i].getDate() + k*7));
+            let currDay = currDate.toLocaleDateString()
+            let currDayTasks = []
+            let currDayTasksDone = []
 
-        for(let j = 0; j < taskArray.length; j++) {
-            const currTask = taskArray[j];
-            const taskParams = {id: currTask._id.valueOf(), taskName: currTask.taskName,
-                taskTime: currTask.endTime ? formatTime(currTask.endTime) : ''};
+            for(let j = 0; j < taskArray.length; j++) {
+                const currTask = taskArray[j];
+                const taskParams = {id: currTask._id.valueOf(), taskName: currTask.taskName,
+                    taskTime: currTask.endTime ? formatTime(currTask.endTime) : ''};
 
-            const modalDate = currDay.substring(0,5) + `, ${formatTime(currTask.endTime)}`
-            const modalParams = {id: currTask._id.valueOf(), taskName: currTask.taskName, date: modalDate,
-                taskDescription: currTask.description};
+                const modalDate = currDay.substring(0,5) + `, ${formatTime(currTask.endTime)}`
+                const modalParams = {id: currTask._id.valueOf(), taskName: currTask.taskName, date: modalDate,
+                    taskDescription: currTask.description};
 
-            if (currTask.endTime.toLocaleDateString() === currDay) {
-                let tempModal = await render('./views/preparedModal.hbs', modalParams);
-                modals.push(tempModal);
+                if (currTask.endTime.toLocaleDateString() === currDay) {
+                    let tempModal = await render('./views/preparedModal.hbs', modalParams);
+                    modals.push(tempModal);
 
-                if (taskDoneArray.filter(e => e._id.equals(currTask._id)).length > 0) {
-                    currDayTasksDone.push(await render('./views/taskModelDone.hbs', taskParams))
-                } else {
-                    currDayTasks.push(await render('./views/taskModel.hbs', taskParams))
+                    if (taskDoneArray.filter(e => e._id.equals(currTask._id)).length > 0) {
+                        currDayTasksDone.push(await render('./views/taskModelDone.hbs', taskParams))
+                    } else {
+                        currDayTasks.push(await render('./views/taskModel.hbs', taskParams))
+                    }
                 }
-            }
 
-            params[`tasksDay${i}`] = await render('./views/tasks.hbs', {tasks: currDayTasks.join('\n'),
-                tasksDone: currDayTasksDone.join('\n')});
+                params[`tasksDay${k}${i}`] = await render('./views/tasks.hbs', {tasks: currDayTasks.join('\n'),
+                    tasksDone: currDayTasksDone.join('\n')});
+            }
         }
     }
 
