@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
     <script src="https://kit.fontawesome.com/0d348efd9b.js" crossorigin="anonymous"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <title>Workflow</title>
 </head>
 <body>
@@ -90,7 +92,7 @@
             </div>
             <div style="display: flex; align-items: center; gap: 20px">
                 <i class="fa-solid fa-clock fa-3x"></i>
-                <input type="date" id="newTaskDate" name="trip-start" value="2018-07-22" style="font-weight: 300;font-size: 40px" onfocus="this.showPicker()">
+                <input type="date" id="newTaskDate" name="trip-start" style="font-weight: 300;font-size: 40px" onfocus="this.showPicker()">
                 <input style="font-weight: 300;font-size: 40px" type="time" id="timeValue" value="15:00">
             </div>
             <textarea class="task-text" style="resize: none; font-weight: 300;font-size: 40px; height: 300px; overflow: auto; max-width: 100%; border: none; outline: none" placeholder="Что нужно сделать?"></textarea>
