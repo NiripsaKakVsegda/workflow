@@ -1,4 +1,5 @@
-# WorkFlow
+![Alt text](logo_gh.png)
+
 Проект по веб-разработке, 4 семестр ФИИТ.
 
 [Полуяненко Алёна](https://github.com/NiripsaKakVsegda), [Лифанов Фёдор](https://github.com/amagoosebitch), [Хадыев Вячеслав](https://github.com/Hvv007), [Колесников Семён](https://github.com/invis166)
