@@ -29,9 +29,8 @@ async function findNearestDeadlineForUser(user) {
         & el['endTime'].toISOString().split('T')[0] <= last);
 
     let donePercent = (currWeekTaskDoneArray.length / currWeekTaskArray.length || 0)  * 100;
-    console.log(taskArray)
+
     taskArray = taskArray.filter((el) => el['endTime'].getTime() >= new Date().getTime());
-    console.log(taskArray)
     taskArray = taskArray.filter((el) => taskDoneArray.filter((e) => e._id.equals(el._id)).length === 0);
 
     taskArray.sort((a, b) => a['endTime'].getTime() >= b['endTime'].getTime() ? 1 : -1);
