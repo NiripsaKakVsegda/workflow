@@ -1,7 +1,6 @@
 const User = require('./models/User');
 const Role = require('./models/Role');
 
-const {validationResult} = require('express-validator');
 const bcrypt = require('bcryptjs');
 
 const generateAccessToken = require('./public/js/generate_access_token');

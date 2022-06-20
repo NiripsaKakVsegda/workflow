@@ -1,4 +1,4 @@
-const Task = require("../../models/Task");
+const Task = require("../models/Task");
 
 async function findNearestDeadlineForUser(user) {
     let taskArray = [];
@@ -20,8 +20,10 @@ async function findNearestDeadlineForUser(user) {
     if (curr.getDay() === 0)
         weekday = 7;
     else weekday = curr.getDay();
-    let first = new Date(curr.setDate(curr.getDate() - (weekday - 1))).toISOString().split('T')[0];
-    let last = new Date(curr.setDate(curr.getDate() + 8)).toISOString().split('T')[0];
+    let first = new Date(curr.setDate(curr.getDate() - (weekday))).toISOString().split('T')[0];
+    let last = new Date(curr.setDate(curr.getDate() + 7)).toISOString().split('T')[0];
+    console.log(first)
+    console.log(last)
 
     taskDoneArray = taskDoneArray.filter((el) => first <= el['endTime'].toISOString().split('T')[0]
         & el['endTime'].toISOString().split('T')[0] <= last);
@@ -33,7 +35,6 @@ async function findNearestDeadlineForUser(user) {
     taskArray = taskArray.filter((el) => taskDoneArray.filter((e) => e._id.equals(el._id)).length === 0);
 
     taskArray.sort((a, b) => a['endTime'].getTime() >= b['endTime'].getTime() ? 1 : -1);
-
     return {donePercent: donePercent, taskArray:taskArray, taskDoneArray:taskDoneArray};
 }
 

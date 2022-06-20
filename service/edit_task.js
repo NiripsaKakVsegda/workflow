@@ -1,4 +1,4 @@
-const Task = require("../../models/Task");
+const Task = require("../models/Task");
 async function editTask(req, res) {
     const taskId = req.params.taskId.slice(1);
     let task;

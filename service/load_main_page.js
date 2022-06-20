@@ -5,14 +5,16 @@ async function loadMainPage (req, res) {
     const avatar = user.avatar;
 
     let {donePercent: donePercent, taskArray:taskArray} = await findNearestDeadlineForUser(user);
+    console.log(donePercent)
+    console.log(Math.ceil(donePercent))
     if (taskArray.length > 0) {
         const nearestTask = taskArray[0];
         const task = nearestTask['taskName'];
-        const date = nearestTask['endTime'].toLocaleString().substring(0, 5);
-        const time = nearestTask['endTime'].toLocaleString().substring(12, 17);
+        const date = nearestTask['endTime'].toLocaleString('ru-RU').substring(0, 5);
+        const time = nearestTask['endTime'].toLocaleString('ru-RU').substring(12, 17);
         res.render('main', {
             deadline: [task, date, time].join(', '),
-            percent: donePercent,
+            percent: Math.ceil(donePercent),
             username: user.username,
             avatar: avatar? avatar : "images/avatar.png",
             deadlineTaskId: nearestTask._id
@@ -20,7 +22,7 @@ async function loadMainPage (req, res) {
     }
     else res.render('main', {
         deadline: 'нет заданий',
-        percent: donePercent,
+        percent: Math.ceil(donePercent),
         username: user.username,
         avatar: avatar? avatar : "images/avatar.png"});
 }

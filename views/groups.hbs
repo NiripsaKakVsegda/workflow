@@ -151,12 +151,12 @@
         }
 
         function setAttributes() {
-            let date = new Date().toLocaleDateString().split('.');
+            let date = new Date().toLocaleDateString('ru-RU').split('.');
             let day = date[0];
             let month = date[1];
             let year = date[2];
             let min = `${year}-${month}-${day}`;
-            let time = new Date().toLocaleTimeString().slice(0, -3);
+            let time = new Date().toLocaleTimeString('ru-RU').slice(0, -3);
             document.getElementById('newTaskDate').setAttribute('min', min);
             document.getElementById('newTaskDate').setAttribute('value', min);
             document.getElementById('timeValue').setAttribute('value', time);

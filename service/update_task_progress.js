@@ -1,5 +1,5 @@
 const getUser = require("./get_user");
-const Task = require("../../models/Task");
+const Task = require("../models/Task");
 async function updateTaskProgress (req, res) {
     const taskId = req.params.taskId.slice(1);
     const isDone = req.body.progress === 'true';

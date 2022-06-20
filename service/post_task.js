@@ -1,5 +1,5 @@
-const Task = require("../../models/Task");
-const User = require("../../models/User");
+const Task = require("../models/Task");
+const User = require("../models/User");
 const getUser = require('./get_user');
 
 async function createTask(req, res) {
