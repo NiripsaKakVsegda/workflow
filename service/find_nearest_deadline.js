@@ -22,8 +22,6 @@ async function findNearestDeadlineForUser(user) {
     else weekday = curr.getDay();
     let first = new Date(curr.setDate(curr.getDate() - (weekday))).toISOString().split('T')[0];
     let last = new Date(curr.setDate(curr.getDate() + 7)).toISOString().split('T')[0];
-    console.log(first)
-    console.log(last)
 
     taskDoneArray = taskDoneArray.filter((el) => first <= el['endTime'].toISOString().split('T')[0]
         & el['endTime'].toISOString().split('T')[0] <= last);
