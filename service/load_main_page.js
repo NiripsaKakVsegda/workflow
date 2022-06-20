@@ -5,8 +5,6 @@ async function loadMainPage (req, res) {
     const avatar = user.avatar;
 
     let {donePercent: donePercent, taskArray:taskArray} = await findNearestDeadlineForUser(user);
-    console.log(donePercent)
-    console.log(Math.ceil(donePercent))
     if (taskArray.length > 0) {
         const nearestTask = taskArray[0];
         const task = nearestTask['taskName'];
