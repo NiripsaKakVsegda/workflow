@@ -31,8 +31,6 @@
             <a href="/main"><i class="fa-solid fa-house"></i>Главная</a>
             <a href="/schedule"><i class="fa-solid fa-bars-progress"></i>Задачи</a>
             <a href="/groups"><i class="fa-solid fa-graduation-cap"></i>Группы</a>
-            <a href="#"><i class="fa-solid fa-user-group"></i>Друзья</a>
-            <a href="#"><i class="fa-solid fa-comment"></i>Сообщения</a>
         </nav>
         <nav>
             <a href="/settings" class="settings"><i class="fa-solid fa-screwdriver-wrench"></i>Настройки</a>
@@ -230,7 +228,7 @@
         <div class="modal" style="display: flex; flex-direction: column; gap: 20px;">
             <div style="display: flex; justify-content: space-between">
                 <input required type="text" style="font-weight: 300; font-size: 64px;" placeholder="Название" id="taskName">
-                <i class="fa-solid fa-xmark fa-2x" onclick="closeModal('')"></i>
+                <i class="fa-solid fa-xmark fa-2x" onclick="closeModal('modal-new-task')"></i>
             </div>
             <div style="display: flex; align-items: center; gap: 20px" id="timePart">
                 <i class="fa-solid fa-clock fa-3x"></i>
@@ -297,6 +295,7 @@
                     form.submit();
                 }
             }
+            console.log(id)
             document.getElementById(id).style.display = 'none';
         }
 
