@@ -22,6 +22,7 @@ const saveSettings = require('./service/save_settings');
 const loadAccountPage = require('./service/load_account_page');
 const saveAccountInfo = require('./service/save_account_info');
 const loadSchedule = require('./service/load_schedule');
+const loadPomodoroPage = require('./service/load_pomodoro_page')
 const saveToken = require('./service/save_subscription_token');
 const sendNotification = require('./service/send_notification');
 const changeAvatar = require('./service/change_avatar')
@@ -110,6 +111,9 @@ app.get('/schedule',
     authMiddleware,
     loadSchedule);
 
+app.get('/pomodoro',
+    authMiddleware,
+    loadPomodoroPage)
 app.post('/notify_subscribe',
     authMiddleware,
     saveToken);

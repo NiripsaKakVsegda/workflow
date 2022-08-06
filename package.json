@@ -34,13 +34,13 @@
     "mongoose": "*",
     "multer": "*",
     "node-cron": "*",
+    "node-telegram-bot-api": "*",
     "nodemailer": "*",
     "nodemailer-smtp-transport": "*",
     "nodemon": "*",
     "swig": "*",
     "util": "*",
     "uuid": "*",
-    "web-push": "*",
-    "node-telegram-bot-api": "*"
+    "web-push": "^3.5.0"
   }
 }

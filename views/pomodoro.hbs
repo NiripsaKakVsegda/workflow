@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Workflow</title>
+    <link rel="stylesheet" href="css/pomodoro_style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <script src="https://kit.fontawesome.com/0d348efd9b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<header style="background: #f2c078; color: #FFF;">
+    <div class="header-part">
+        <i class="fa-solid fa-bars fa-3x" style="color: #fff; cursor: pointer" onclick="moveNavHorizontal('sidenav', true)"></i>
+        <h1>Workflow</h1>
+    </div>
+    <div class="header-part" onclick="moveNavVertical('dropmenu')">
+        <img src={{avatar}} class="avatar">
+        <h2 style="font-weight: 400; font-size: 28px"> {{username}} </h2>
+    </div>
+</header>
+<div id="sidenav" class="sidenav">
+    <nav style="padding-top: 30px;">
+        <a href="/main"><i class="fa-solid fa-house"></i>Главная</a>
+        <a href="/schedule"><i class="fa-solid fa-bars-progress"></i>Задачи</a>
+        <a href="/groups"><i class="fa-solid fa-graduation-cap"></i>Группы</a>
+        <a href="/pomodoro"><i class="fa-solid fa-clock"></i>Помидор</a>
+    </nav>
+    <nav>
+        <a href="/settings" class="settings"><i class="fa-solid fa-screwdriver-wrench"></i>Настройки</a>
+    </nav>
+</div>
+
+<div style="display: flex; justify-content: flex-end;">
+    <div id="dropmenu" class="dropmenu">
+        <nav>
+            <a href="/account"><i class="fa-solid fa-user" style="color: #fff"></i>Аккаунт</a>
+            <a href="/auth/login" onclick=""><i class="fa-solid fa-arrow-right-from-bracket" style="color: #fff"></i>Выход</a>
+        </nav>
+    </div>
+</div>
+
+<div class="content" id="content" style="color: #1E0E62;">
+    <h1 id="round" style="font-size: 50px">Раунд 1/4</h1>
+    <div style="display: flex; justify-content: center; gap: 20px;">
+        <button class="fake_button" id="work">Работа</button>
+        <button class="fake_button" id="short">Короткий перерыв</button>
+        <button class="fake_button" id="long">Длинный перерыв</button>
+    </div>
+    <div id="app"></div>
+    <button onclick="start_onclick()" class="orange-button" id="start">Старт</button>
+</div>
+<footer style="color: #1E0E62; font-weight: 500; font-size: 26px; position: fixed; bottom: 10px; right: 10px">
+    <p id="time"> </p>
+    <script src="js/show_time.js">   </script>
+</footer>
+
+<script src="js/pomodoro.js"></script>
+<script>
+    function moveNavVertical(id) {
+        if (document.getElementById(id).style.height === "160px") {
+            document.getElementById(id).style.height = "0";
+        }
+        else {
+            document.getElementById(id).style.height = "160px";
+        }
+    }
+
+    function moveNavHorizontal(id, margin) {
+        if (document.getElementById(id).style.width === "280px") {
+            document.getElementById(id).style.width = "0";
+            if (margin) {
+                document.getElementById("content").style.marginLeft = "40px";
+            }
+        }
+        else {
+            document.getElementById(id).style.width = "280px";
+            if (margin) {
+                document.getElementById("content").style.marginLeft = "320px";
+            }
+        }
+    }
+</script>
+</body>
+</html>
