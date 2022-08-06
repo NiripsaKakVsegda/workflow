@@ -65,8 +65,18 @@
                     <option value="{{value}}" hidden="hidden" selected="selected">{{value}}</option>
                 </select>
                 <p style="font-weight: 500; font-size: 64px; padding-right: 40px" id="text">час</p>
+
             </div>
-            <div style="display: flex; justify-content: space-between; padding-top: 60px;">
+
+            <label class="form-control" style="font-weight: 500;font-size: 32px; display: flex; gap: 10px" >
+                Токен для бота: {{tgToken}}
+                Ваш Telegram ID: {{tgID}}
+            </label>
+
+            <a style="font-weight: 500;font-size: 32px; display: flex; gap: 10px" href="http://127.0.0.1">Перейти в бота</a>
+            <script src="js/push_tool.js"></script>
+            <button class="orange-button" onclick="document.notifyRequest()">Подписаться на уведомления</button>
+            <div style="display: flex; justify-content: space-between; padding-top: 10px;">
                 <a href="/main"><i class="fa-solid fa-xmark fa-5x" style="color: #1E0E62"></i></a>
                 <i class="fa-solid fa-floppy-disk fa-5x" style="cursor: pointer" onclick="document.getElementById('submitForm').submit()"></i>
             </div>

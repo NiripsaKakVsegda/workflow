@@ -7,6 +7,17 @@ const generateAccessToken = require('./public/js/generate_access_token');
 const {log} = require("util");
 const { passwordStrength } = require('check-password-strength')
 
+function makeid(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() *
+            charactersLength));
+    }
+    return result;
+}
+
 class authController {
     async registration(req, res) {
         try {
@@ -53,7 +64,7 @@ class authController {
                 if (authCode === 'test123') secondaryRole = 'TEACHER';
                 else {res.render('registration', {visibility: 'visible', text: 'Неправильный код учителя'}); return;}
             }
-            const user = new User({username, email, password: hashPassword, roles: ['USER', secondaryRole]});
+            const user = new User({username, email, password: hashPassword, roles: ['USER', secondaryRole], authToken: makeid(30)});
             await user.save();
             res.redirect('/auth/login');
         } catch (e) {

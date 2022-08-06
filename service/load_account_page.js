@@ -19,7 +19,7 @@ async function loadAccountPage (req, res){
         value: roleValue,
         status: roleName,
         group: user.group,
-        avatar: avatar? avatar :  "images/avatar.png"});
+        avatar: avatar.filename ? "/uploads/" + avatar.filename : "/images/avatar.png"});
 }
 
 module.exports = loadAccountPage;
