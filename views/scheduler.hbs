@@ -262,6 +262,7 @@
 
     <form id="submitFormCheck" method="post" style="display: none;" enctype="application/x-www-form-urlencoded">
         <input type="text" name="progress">
+        <input type="text" name="urgent">
     </form>
 
     <footer style="color: #1E0E62; font-weight: 500; font-size: 26px; position: fixed; bottom: 10px; right: 10px">
@@ -279,7 +280,7 @@
             prevArrow: '<span style="z-index: 2; position: absolute; top: 46%; display: block; cursor: pointer; left: 20px"><i class="fas fa-angle-left" style="color: #FE5D26; font-size: 50px;"></i></span>',
             nextArrow: '<span style="z-index: 2; position: absolute; top: 46%; display: block; cursor: pointer; right: 20px"><i class="fas fa-angle-right" style="color: #FE5D26; font-size: 50px;"></i></span>'
         });
-        let checked;
+        let checked_done, checked_urgent;
         let currentId;
         function closeModal(id) {
             if (id === '') {
@@ -289,13 +290,15 @@
                     id = 'modal-new-task';
                 }
             }
-            const checkbox = document.getElementById(`checkbox-${id}`);
-            if (checkbox) {
-                const currentCheck = checkbox.checked;
+            const checkboxes = document.querySelectorAll("[id='checkbox-" + id + "']");
+            console.log(checkboxes);
+            if (checkboxes) {
+                const checks = [checkboxes[0].checked, checkboxes[1].checked];
                 const form = document.getElementById('submitFormCheck');
-                if (currentCheck !== checked) {
+                if (checks[0] !== checked_done || checks[1] !== checked_urgent) {
                     form.setAttribute('action', `api/tasks/check/:${id}`);
-                    form.progress.value = currentCheck ? 'true' : 'false';
+                    form.progress.value = checks[0] ? 'true' : 'false';
+                    form.urgent.value = checks[1] ? 'true' : 'false';
                     form.submit();
                 }
             }
@@ -398,9 +401,10 @@
 
         function openModal(id) {
             document.getElementById(id).style.display = 'flex';
-            let color = document.getElementById(`color-${id}`).style.background;
-            checked = color === 'rgb(193, 219, 179)';
-            document.getElementById(`checkbox-${id}`).checked = checked;
+            let colors = document.querySelectorAll("[id='color-" + id + "']");
+            console.log(colors);
+            checked_done = colors[0].style.background === 'rgb(193, 219, 179)';
+            document.querySelectorAll("[id='checkbox-" + id + "']");[0].checked = checked_done;
             currentId = id;
         }
 
