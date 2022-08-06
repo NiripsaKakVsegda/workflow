@@ -40,6 +40,7 @@
     "swig": "*",
     "util": "*",
     "uuid": "*",
-    "web-push": "*"
+    "web-push": "*",
+    "node-telegram-bot-api": "*"
   }
 }

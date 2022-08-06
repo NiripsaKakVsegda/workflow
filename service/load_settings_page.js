@@ -6,7 +6,9 @@ async function loadSettingsPage (req, res) {
         username: user.username,
         avatar: avatar? avatar : "images/avatar.png",
         value: user.notificationInterval,
-        checkVal: user.notifications ? `checked='true'`: ''
+        checkVal: user.notifications ? `checked='true'`: '',
+        tgToken: user.authToken,
+        tgID: user.telegramID ? user.telegramID : "Не подключен"
     });
 }
 
