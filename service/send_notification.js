@@ -3,6 +3,17 @@ const findNearestDeadlineForUser = require("./find_nearest_deadline");
 const nodemailer = require("nodemailer");
 const smtpTransport = require('nodemailer-smtp-transport');
 const formatTime = require("./format_time");
+const webpush = require('web-push');
+
+//storing the keys in variables
+const publicVapidKey = 'BOKROPhFFsiRxb5VhtAFq9l02gyeagPjtvjA1GSS7jRsXIiYoJt8awHv-AmcdJoy4JacKhb5UMEFLcL5KMzjTdw';
+const privateVapidKey = 'iT-KhLcNfmeI073ulihyWmYABaRLuHUY7RrcGMcbw6Y';
+const subscription = '';
+//setting vapid keys details
+webpush.setVapidDetails('mailto:workflow@workflow.workflow',publicVapidKey, privateVapidKey);
+
+const payload = JSON.stringify({title: 'Section.io Push Notification' });
+webpush.sendNotification(subscription, payload).catch(err=> console.error(err));
 
 const transporter = nodemailer.createTransport(smtpTransport({
     service: 'gmail',

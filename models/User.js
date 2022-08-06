@@ -13,7 +13,10 @@ const User = new Schema({
     group: {type: String},
     avatar: {type: String},
     notifications: {type: Boolean, default:true},
-    notificationInterval: {type: Number, default:3}
+    notificationInterval: {type: Number, default:3},
+    notificationSubscriptions: [{type: String}],
+    telegramID: {type: Number},
+    authToken: {type: String}
 })
 
 module.exports = model('User', User);
