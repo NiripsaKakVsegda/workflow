@@ -11,6 +11,7 @@ async function createTask(req, res) {
     }
     const taskData = {
         taskName: req.body.taskName,
+        isUrgent: req.body.isUrgent,
         endTime: req.body.endTime,
         description: req.body.description
     };
