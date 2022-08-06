@@ -38,6 +38,7 @@
     "nodemon": "^2.0.16",
     "swig": "^1.4.2",
     "util": "^0.12.4",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "check-password-strength": "*"
   }
 }

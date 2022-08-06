@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 
 const generateAccessToken = require('./public/js/generate_access_token');
 const {log} = require("util");
+const { passwordStrength } = require('check-password-strength')
 
 class authController {
     async registration(req, res) {
@@ -29,8 +30,14 @@ class authController {
                 return;
             }
 
-            if (password.length < 6) {
-                res.render('registration', {visibility: 'visible', text: 'Пароль не может быть короче 6 символов'});
+            if (password.length < 12) {
+                res.render('registration', {visibility: 'visible', text: 'Пароль не может быть короче 12 символов'});
+                return;
+            }
+
+            const strength = passwordStrength(password).value;
+            if (strength === 'Too weak' || strength === 'Weak') {
+                res.render('registration', {visibility: 'visible', text: 'Пароль слишком слабый'});
                 return;
             }
 
