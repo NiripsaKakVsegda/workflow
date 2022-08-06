@@ -13,10 +13,12 @@ async function createTask(req, res) {
         taskName: req.body.taskName,
         isUrgent: req.body.isUrgent,
         endTime: req.body.endTime,
-        description: req.body.description
+        description: req.body.description,
+        tags: JSON.parse(req.body.tags)['tags']
     };
     const task = new Task(taskData);
-    task.save();
+    await task.save();
+
     taskData['_id'] = task._id;
 
     const currentUser = await getUser(req);

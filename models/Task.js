@@ -4,7 +4,8 @@ const Task = new Schema({
     taskName: {type: String, required: true},
     isUrgent: {type: Boolean, required: true},
     endTime: {type: Date},
-    description: {type: String}
+    description: {type: String},
+    tags: {type: Array}
 });
 
 module.exports = model('Task', Task);
