@@ -25,8 +25,9 @@ const saveAccountInfo = require('./service/save_account_info');
 const loadSchedule = require('./service/load_schedule');
 const saveToken = require('./service/save_subscription_token');
 const sendNotification = require('./service/send_notification');
+const changeAvatar = require('./service/change_avatar')
 
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ dest: 'public/uploads/' });
 
 const dburl = process.env.DBURL || "mongodb://127.0.0.1:27017";
 const PORT = process.env.PORT || 5000;
@@ -88,12 +89,16 @@ app.post('/settings',
     authMiddleware,
     saveSettings);
 
+app.post('/change_avatar',
+    [authMiddleware, upload.single('avatar')],
+    changeAvatar);
+
 app.get('/account',
     authMiddleware,
     loadAccountPage);
 
 app.post('/account',
-    [authMiddleware, upload.single('avatar')],
+    authMiddleware,
     saveAccountInfo);
 
 app.get('/schedule',

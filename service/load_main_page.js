@@ -14,7 +14,7 @@ async function loadMainPage (req, res) {
             deadline: [task, date, time].join(', '),
             percent: Math.ceil(donePercent),
             username: user.username,
-            avatar: avatar? avatar : "images/avatar.png",
+            avatar: avatar.filename ? "/uploads/" + avatar.filename : "/images/avatar.png",
             deadlineTaskId: nearestTask._id
         });
     }
@@ -22,7 +22,7 @@ async function loadMainPage (req, res) {
         deadline: 'нет заданий',
         percent: Math.ceil(donePercent),
         username: user.username,
-        avatar: avatar? avatar : "images/avatar.png"});
+        avatar: avatar.filename ? "/uploads/" + avatar.filename : "/images/avatar.png"});
 }
 
 module.exports = loadMainPage;

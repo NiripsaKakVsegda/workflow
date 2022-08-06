@@ -8,12 +8,16 @@ const User = new Schema({
     tasks: [{type: Schema.Types.ObjectId, ref: 'Task'}],
     tasksDone: [{type: Schema.Types.ObjectId, ref: 'Task'}],
     taskNotificated: [{type: Schema.Types.ObjectId, ref: 'Task'}],
-    name: {type:String},
-    surname: {type:String},
+    name: {type: String},
+    surname: {type: String},
     group: {type: String},
-    avatar: {type: String},
-    notifications: {type: Boolean, default:true},
-    notificationInterval: {type: Number, default:3},
+    avatar:
+        {
+            filename: String,
+            contentType: String
+        },
+    notifications: {type: Boolean, default: true},
+    notificationInterval: {type: Number, default: 3},
     notificationSubscriptions: [{type: Object}],
     telegramID: {type: Number},
     authToken: {type: String}
