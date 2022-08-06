@@ -283,27 +283,29 @@
         let checked_done, checked_urgent;
         let currentId;
         function closeModal(id) {
-            if (id === '') {
-                if (currentId) {
-                    id = currentId;
-                } else {
-                    id = 'modal-new-task';
+            try {
+                if (id === '') {
+                    if (currentId) {
+                        id = currentId;
+                    } else {
+                        id = 'modal-new-task';
+                    }
                 }
-            }
-            const checkboxes = document.querySelectorAll("[id='checkbox-" + id + "']");
-            console.log(checkboxes);
-            if (checkboxes) {
-                const checks = [checkboxes[0].checked, checkboxes[1].checked];
-                const form = document.getElementById('submitFormCheck');
-                if (checks[0] !== checked_done || checks[1] !== checked_urgent) {
-                    form.setAttribute('action', `api/tasks/check/:${id}`);
-                    form.progress.value = checks[0] ? 'true' : 'false';
-                    form.urgent.value = checks[1] ? 'true' : 'false';
-                    form.submit();
+                const checkboxes = document.querySelectorAll("[id='checkbox-" + id + "']");
+                console.log(checkboxes);
+                if (checkboxes) {
+                    const checks = [checkboxes[0].checked, checkboxes[1].checked];
+                    const form = document.getElementById('submitFormCheck');
+                    if (checks[0] !== checked_done || checks[1] !== checked_urgent) {
+                        form.setAttribute('action', `api/tasks/check/:${id}`);
+                        form.progress.value = checks[0] ? 'true' : 'false';
+                        form.urgent.value = checks[1] ? 'true' : 'false';
+                        form.submit();
+                    }
                 }
-            }
-            console.log(id)
-            document.getElementById(id).style.display = 'none';
+                console.log(id)
+                document.getElementById(id).style.display = 'none';
+            } catch (e) { console.log('closed without save'); document.getElementById(id).style.display = 'none'; }
         }
 
         function deleteTask() {
