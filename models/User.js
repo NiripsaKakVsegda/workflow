@@ -14,7 +14,7 @@ const User = new Schema({
     avatar: {type: String},
     notifications: {type: Boolean, default:true},
     notificationInterval: {type: Number, default:3},
-    notificationSubscriptions: [{type: String}],
+    notificationSubscriptions: [{type: Object}],
     telegramID: {type: Number},
     authToken: {type: String}
 })

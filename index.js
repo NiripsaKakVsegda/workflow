@@ -23,6 +23,7 @@ const saveSettings = require('./service/save_settings');
 const loadAccountPage = require('./service/load_account_page');
 const saveAccountInfo = require('./service/save_account_info');
 const loadSchedule = require('./service/load_schedule');
+const saveToken = require('./service/save_subscription_token');
 const sendNotification = require('./service/send_notification');
 
 const upload = multer({ dest: 'uploads/' });
@@ -98,6 +99,10 @@ app.post('/account',
 app.get('/schedule',
     authMiddleware,
     loadSchedule);
+
+app.post('/notify_subscribe',
+    authMiddleware,
+    saveToken);
 
 
 const start = async () => {
