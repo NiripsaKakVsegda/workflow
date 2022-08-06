@@ -1,28 +1,11 @@
 // Credit: Mateusz Rybczonec
 
 const FULL_DASH_ARRAY = 283;
-const WARNING_THRESHOLD = 10;
-const ALERT_THRESHOLD = 5;
 
-const COLOR_CODES = {
-    info: {
-        color: "green"
-    },
-    warning: {
-        color: "orange",
-        threshold: WARNING_THRESHOLD
-    },
-    alert: {
-        color: "red",
-        threshold: ALERT_THRESHOLD
-    }
-};
-
-let TIME_LIMIT = 25; //1500 300 900
+let TIME_LIMIT = 1500; //1500 300 900
 let timePassed = 0;
 let timeLeft = TIME_LIMIT;
 let timerInterval = null;
-let remainingPathColor = COLOR_CODES.info.color;
 
 document.getElementById("app").innerHTML = `
 <div class="base-timer">
@@ -32,7 +15,7 @@ document.getElementById("app").innerHTML = `
       <path
         id="base-timer-path-remaining"
         stroke-dasharray="283"
-        class="base-timer__path-remaining ${remainingPathColor}"
+        class="base-timer__path-remaining"
         d="
           M 50, 50
           m -45, 0
@@ -49,17 +32,25 @@ document.getElementById("app").innerHTML = `
 `;
 
 function start_onclick() {
-    let limits = [25, 5, 25, 5, 25, 5, 25, 15]
-    for (let i = 0; i < 8; i++) {
-
-    }
-    startTimer(25, 0);
+    document.getElementById('start').disabled = true;
+    startTimer(1500, 0);
 }
 
 
 // 25 5 25 5 25 5 25 15
 function startTimer(seconds, round) {
     timePassed = 0
+    if (round % 2 === 0) {
+        document.getElementById('round').textContent = `Раунд ${round / 2 + 1}/4`;
+        document.getElementById('work').style.background = '#7EBC89';
+        document.getElementById('short').style.background= '#d9d9d9';
+    } else if (round === 7) {
+        document.getElementById('work').style.background = '#d9d9d9';
+        document.getElementById('long').style.background= '#7EBC89';
+    } else {
+        document.getElementById('work').style.background = '#d9d9d9';
+        document.getElementById('short').style.background= '#7EBC89';
+    }
     timerInterval = setInterval(() => {
         timePassed = timePassed += 1;
         timeLeft = seconds - timePassed;
@@ -67,13 +58,19 @@ function startTimer(seconds, round) {
             timeLeft
         );
         setCircleDasharray();
-        setRemainingPathColor(timeLeft);
 
         if (timeLeft === 0) {
             clearInterval(timerInterval);
-            if (seconds !== 15)
-                TIME_LIMIT = seconds === 5 ? 25 : round === 6 ? 15 : 5;
-                startTimer(seconds === 5 ? 25 : round === 6 ? 15 : 5, round + 1);
+            if (seconds !== 900) {
+                TIME_LIMIT = seconds === 300 ? 1500 : round === 6 ? 900 : 300;
+                startTimer(seconds === 300 ? 1500 : round === 6 ? 900 : 300, round + 1);
+            } else
+            {
+                TIME_LIMIT = 1500;
+                document.getElementById('start').disabled = false;
+                document.getElementById('long').style.background= '#d9d9d9';
+                document.getElementById('round').textContent = `Раунд 1/4`;
+            }
         }
     }, 1000);
 }
@@ -89,24 +86,6 @@ function formatTime(time) {
     return `${minutes}:${seconds}`;
 }
 
-function setRemainingPathColor(timeLeft) {
-    const { alert, warning, info } = COLOR_CODES;
-    if (timeLeft <= alert.threshold) {
-        document
-            .getElementById("base-timer-path-remaining")
-            .classList.remove(warning.color);
-        document
-            .getElementById("base-timer-path-remaining")
-            .classList.add(alert.color);
-    } else if (timeLeft <= warning.threshold) {
-        document
-            .getElementById("base-timer-path-remaining")
-            .classList.remove(info.color);
-        document
-            .getElementById("base-timer-path-remaining")
-            .classList.add(warning.color);
-    }
-}
 
 function calculateTimeFraction() {
     const rawTimeFraction = timeLeft / TIME_LIMIT;
