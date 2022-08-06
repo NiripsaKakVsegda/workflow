@@ -62,7 +62,7 @@ async function sendNotification() {
                 
                 Осталось совсем немного, поспеши!
                 
-                Удачи <3`;
+                Удачи <3`;lo
             console.log(text);
             const payload = JSON.stringify({title: text});
 
