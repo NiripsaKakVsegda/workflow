@@ -28,7 +28,7 @@ const sendNotification = require('./service/send_notification');
 const upload = multer({ dest: 'uploads/' });
 
 const dburl = process.env.DBURL;
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5050;
 
 const app = express();
 
