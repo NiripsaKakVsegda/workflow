@@ -4,7 +4,6 @@ const express = require('express');
 const { body } = require('express-validator');
 
 const mongoose = require('mongoose');
-const cron = require('node-cron');
 const multer  = require('multer');
 const cookieParser = require("cookie-parser");
 
@@ -35,7 +34,13 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
 app.use(cookieParser());
-app.use(express.static('public'));
+const options = {
+    setHeaders: function (res, path, stat) {
+        res.set('Service-Worker-Allowed', '/');
+    },
+};
+
+app.use(express.static('public', options));
 app.use('/css', express.static(__dirname + 'public/css'));
 app.use('/js', express.static(__dirname + 'public/js'));
 app.use('/img', express.static(__dirname + 'public/img'));
@@ -114,10 +119,10 @@ const start = async () => {
     try {
         await mongoose.connect(dburl);
         app.listen(PORT, ()=>console.log(`server started on port ${PORT}`));
-        cron.schedule('*/10 * * * *', function() {
+        setInterval(function() {
             sendNotification()
-            log('notifications sent')
-        });
+            console.log('notifications sent')
+        }, 60 * 10 * 4);
     } catch(e) {
         console.log(e);
     }

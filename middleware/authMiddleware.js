@@ -4,7 +4,7 @@ module.exports = function(req, res, next) {
     if (req.method === "OPTIONS") {
         next();
     }
-    res.set('service-worker-allowed', '/');
+    res.set('Service-Worker-Allowed', '/');
     try {
         const token = req.cookies?.sessionId;
         if(!token) {

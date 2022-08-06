@@ -36,7 +36,7 @@ async function sendNotification() {
         }
 
         let tasksText = [];
-
+        console.log(user);
         for (let i = 0; i < taskArray.length; i++) {
             const currentTask = taskArray[i];
 
@@ -51,13 +51,14 @@ async function sendNotification() {
             const deadline = currentTask.endTime.toLocaleString('ru-RU').substring(0, 5) + `, ${formatTime(currentTask.endTime)}`
             const taskText = formatEmailTask(currentTask.taskName, deadline, currentTask.description);
             tasksText.push(taskText);
+            console.log(taskText);
 
-            user.taskNotificated.push(currentTask._id)
-            await user.save()
+            //user.taskNotificated.push(currentTask._id);
+           // await user.save()
         }
 
         if (tasksText.length > 0) {
-            const text =
+            /*const text =
                 `Привет, это Workflow!
                 Спешу напомнить про твои задания :)
                 
@@ -66,10 +67,10 @@ async function sendNotification() {
                 Осталось совсем немного, поспеши!
                 
                 Удачи <3`;
-            console.log(text);
+            console.log(text);*/
             //if (user.telegramID) await bot.sendMessage(user.telegramID, text);
-            const payload = JSON.stringify({title: text});
-
+            const payload = JSON.stringify({body: tasksText.join('\n\n')});
+            console.log(payload);
             user.notificationSubscriptions.forEach((s) =>
                 webpush.sendNotification(s, payload).catch(err => console.error(err)));
             //sendEmail(user.email, text);
@@ -94,8 +95,8 @@ function sendEmail(adress, text) {
 
 function formatEmailTask(taskName, deadline, description) {
     return `Название: ${taskName}
-            Дедлайн: ${deadline}
-            Описание: ${description}`;
+Дедлайн: ${deadline}
+Описание: ${description}`;
 }
 
 module.exports = sendNotification;
