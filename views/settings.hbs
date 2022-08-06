@@ -45,8 +45,7 @@
         <p id="time"> </p>
         <script src="js/show_time.js">   </script>
     </footer>
-    <div class="content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; color: #1E0E62; gap: 80px; margin-top: 40px">
-        <h1 style="font-size: 64px; font-weight: 600">Настройка уведомлений</h1>
+    <div class="content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; color: #1E0E62; gap: 80px; margin-top: 80px">
         <form style="display: flex; flex-direction: column; justify-content: center; gap: 40px; background: #FAEDCA; padding: 40px; border-radius: 50px; width: 880px" id="submitForm" method="post" action="/settings">
             <div style="display: flex; align-items: center">
                 <label class="form-control" style="font-weight: 500;font-size: 60px; display: flex; gap: 10px" >
@@ -57,26 +56,29 @@
             <div style="display: flex">
                 <p style="font-weight: 500; font-size: 64px; padding-right: 40px">Напомнить за </p>
                 <select onchange="changeText()" name="dropdown" style="font-weight: 400; font-size: 60px; outline: none; border: none; border-bottom: 2px solid #1E0E62; opacity: 0.8; color: #1E0E62; margin-right: 30px">
-                    <option value ="1" selected>1</option>
-                    <option value ="3">3</option>
-                    <option value ="5">5</option>
-                    <option value ="8">8</option>
-                    <option value ="12">12</option>
-                    <option value ="24">24</option>
+                    <option id="d1" value ="1" selected>1</option>
+                    <option id="d3" value ="3">3</option>
+                    <option id="d5" value ="5">5</option>
+                    <option id="d8" value ="8">8</option>
+                    <option id="d12" value ="12">12</option>
+                    <option id="d24" value ="24">24</option>
                     <option value="{{value}}" hidden="hidden" selected="selected">{{value}}</option>
                 </select>
-                <p style="font-weight: 500; font-size: 64px; padding-right: 40px" id="text">час</p>
+                <p style="font-weight: 500; font-size: 64px; padding-right: 40px" id="text">часа</p>
 
             </div>
 
-            <label class="form-control" style="font-weight: 500;font-size: 32px; display: flex; gap: 10px" >
-                Токен для бота: {{tgToken}}
-                Ваш Telegram ID: {{tgID}}
-            </label>
+            <div class="form-control" style="font-weight: 500;font-size: 32px; display: flex; flex-direction: column; gap: 10px" >
+                <p>Токен для бота: {{tgToken}}</p>
+                <div style="display: flex; gap: 60px; align-items: center">
+                    <p>Ваш Telegram ID: {{tgID}}</p>
+                    <button type="button" class="orange-button" onclick="document.notifyRequest()">Подключить</button>
+                </div>
+                <a style="font-weight: 500;font-size: 32px; width: fit-content;" href="http://127.0.0.1">Перейти в бота</a>
+            </div>
 
-            <a style="font-weight: 500;font-size: 32px; display: flex; gap: 10px" href="http://127.0.0.1">Перейти в бота</a>
+
             <script src="js/push_tool.js"></script>
-            <button type="button" class="orange-button" onclick="document.notifyRequest()">Подписаться на уведомления</button>
             <div style="display: flex; justify-content: space-between; padding-top: 10px;">
                 <a href="/main"><i class="fa-solid fa-xmark fa-5x" style="color: #1E0E62"></i></a>
                 <i class="fa-solid fa-floppy-disk fa-5x" style="cursor: pointer" onclick="document.getElementById('submitForm').submit()"></i>
