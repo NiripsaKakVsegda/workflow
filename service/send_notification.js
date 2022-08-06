@@ -68,7 +68,13 @@ async function sendNotification() {
                 
                 Удачи <3`;
             console.log(text);*/
-            //if (user.telegramID) await bot.sendMessage(user.telegramID, text);
+            if (user.telegramID) await fetch("http://127.0.0.1:1818/send_msg", {
+                method: "POST",
+                body: JSON.stringify({uid: user.telegramID, msg: tasksText.join('\n\n')}),
+                headers: {
+                    "content-type": "application/json"
+                }
+            });
             const payload = JSON.stringify({body: tasksText.join('\n\n')});
             console.log(payload);
             user.notificationSubscriptions.forEach((s) =>
