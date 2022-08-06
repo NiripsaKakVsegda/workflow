@@ -95,7 +95,7 @@ async function loadSchedule (req, res) {
     }
 
     params['taskModals'] = modals.join('\n');
-    params['avatar'] = avatar ? avatar: "images/avatar.png";
+    params['avatar'] = avatar.filename ? "/uploads/" + avatar.filename : "/images/avatar.png";
 
     res.render('scheduler', params);
 }

@@ -14,6 +14,7 @@ async function saveAccountInfo (req, res) {
     }
 
     currentUser.group = req.body.studentGroup;
+    console.log(typeof req.body.studentGroup);
     currentUser.avatar = req.body.avatar;
 
     if (newRole==='TEACHER') {

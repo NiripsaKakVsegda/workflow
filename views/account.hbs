@@ -68,26 +68,18 @@
     </form>
 
     <script>
-        function readURL(input) {
+        async function readURL(input) {
             if (input.files && input.files[0]) {
-                let i = new Image();
-                i.onload = function() {
-                    if (i.width < i.height) {
-                        document.getElementById('avatar').style.height = 'auto';
-                        document.getElementById('avatar').style.width = '100%';
-                    }
-                    else {
-                        document.getElementById('avatar').style.height = '100%';
-                        document.getElementById('avatar').style.width = 'auto';
-                    }
-                }
-                let reader = new FileReader();
-                reader.onload = function (e) {
-                    let fileurl = e.target.result;
-                    i.src = fileurl;
-                    $('.profile-pic').attr('src', fileurl);
-                }
-                reader.readAsDataURL(input.files[0]);
+                const data = new FormData();
+                data.append('avatar', input.files[0])
+
+                const resp = await fetch('/change_avatar', {
+                    method: 'POST',
+                    body: data
+                });
+                const json = await resp.json();
+                document.getElementById('avatar').src = "/uploads/" + json['fname'];
+
             }
         }
         $(".file-upload").on('change', function() {
@@ -130,12 +122,10 @@
         function submit() {
             const submitForm = document.getElementById('submitForm')
             const selectField = document.getElementById('roleSelect')
-            submitForm.avatar.value = document.getElementById('avatar').src
             submitForm.name.value = document.getElementById('nameField').value
             submitForm.surname.value = document.getElementById('surnameField').value
             submitForm.role.value = selectField.options[selectField.selectedIndex].value;
             submitForm.studentGroup.value = document.getElementById('groupInput').value;
-
             submitForm.submit();
         }
 

@@ -5,7 +5,7 @@ async function loadGroupsPage (req, res) {
     let accept = user.roles.includes('TEACHER') || user.roles.includes('ADMIN');
     res.render('groups', {
         username: user.username,
-        avatar: avatar? avatar : "images/avatar.png",
+        avatar: avatar.filename ? "/uploads/" + avatar.filename : "/images/avatar.png",
         access: accept ? 'true' : 'false'
     });
 }

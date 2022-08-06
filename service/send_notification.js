@@ -3,6 +3,18 @@ const findNearestDeadlineForUser = require("./find_nearest_deadline");
 const nodemailer = require("nodemailer");
 const smtpTransport = require('nodemailer-smtp-transport');
 const formatTime = require("./format_time");
+const webpush = require('web-push');
+//const TelegramBot = require("node-telegram-bot-api");
+//const bot = new TelegramBot("5475883590:AAFP098kA9jGiuvxbp6MBeJbeojlfZbopq4", {polling: true});
+
+
+//storing the keys in variables
+const publicVapidKey = 'BOKROPhFFsiRxb5VhtAFq9l02gyeagPjtvjA1GSS7jRsXIiYoJt8awHv-AmcdJoy4JacKhb5UMEFLcL5KMzjTdw';
+const privateVapidKey = 'iT-KhLcNfmeI073ulihyWmYABaRLuHUY7RrcGMcbw6Y';
+
+//setting vapid keys details
+webpush.setVapidDetails('mailto:workflow@workflow.workflow',publicVapidKey, privateVapidKey);
+
 
 const transporter = nodemailer.createTransport(smtpTransport({
     service: 'gmail',
@@ -54,8 +66,13 @@ async function sendNotification() {
                 Осталось совсем немного, поспеши!
                 
                 Удачи <3`;
+            console.log(text);
+            //if (user.telegramID) await bot.sendMessage(user.telegramID, text);
+            const payload = JSON.stringify({title: text});
 
-            sendEmail(user.email, text);
+            user.notificationSubscriptions.forEach((s) =>
+                webpush.sendNotification(s, payload).catch(err => console.error(err)));
+            //sendEmail(user.email, text);
         }
     }
 }

@@ -6,6 +6,24 @@
     font-family: 'Raleway', sans-serif;
 }
 
+.orange-button {
+    background-color: #FE5D26;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 400;
+    height: 51px;
+    border: 2px solid #FE5D26;
+    border-radius: 100px;
+    padding: 9px 24px;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+}
+
+.orange-button:hover {
+    background-color: rgba(254,93,38,0.1);
+    color: #FE5D26;
+}
+
 .avatar {
     width: 80px;
     height: 80px;

@@ -23,12 +23,15 @@ const saveSettings = require('./service/save_settings');
 const loadAccountPage = require('./service/load_account_page');
 const saveAccountInfo = require('./service/save_account_info');
 const loadSchedule = require('./service/load_schedule');
+const loadPomodoroPage = require('./service/load_pomodoro_page')
+const saveToken = require('./service/save_subscription_token');
 const sendNotification = require('./service/send_notification');
+const changeAvatar = require('./service/change_avatar')
 
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ dest: 'public/uploads/' });
 
-const dburl = process.env.DBURL;
-const PORT = process.env.PORT || 5050;
+const dburl = process.env.DBURL || "mongodb://127.0.0.1:27017";
+const PORT = process.env.PORT || 5000;
 
 const app = express();
 
@@ -87,17 +90,28 @@ app.post('/settings',
     authMiddleware,
     saveSettings);
 
+app.post('/change_avatar',
+    [authMiddleware, upload.single('avatar')],
+    changeAvatar);
+
 app.get('/account',
     authMiddleware,
     loadAccountPage);
 
 app.post('/account',
-    [authMiddleware, upload.single('avatar')],
+    authMiddleware,
     saveAccountInfo);
 
 app.get('/schedule',
     authMiddleware,
     loadSchedule);
+
+app.get('/pomodoro',
+    authMiddleware,
+    loadPomodoroPage)
+app.post('/notify_subscribe',
+    authMiddleware,
+    saveToken);
 
 
 const start = async () => {
