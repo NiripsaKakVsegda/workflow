@@ -19,6 +19,7 @@
   "homepage": "https://github.com/NiripsaKakVsegda/workflow#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "check-password-strength": "^2.0.7",
     "consolidate": "^0.16.0",
     "cookie-parser": "^1.4.6",
     "cron": "^2.0.0",
@@ -38,7 +39,6 @@
     "nodemon": "^2.0.16",
     "swig": "^1.4.2",
     "util": "^0.12.4",
-    "uuid": "^8.3.2",
-    "check-password-strength": "*"
+    "uuid": "^8.3.2"
   }
 }
