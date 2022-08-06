@@ -40,8 +40,7 @@ class authController {
             }
 
             const hashPassword = bcrypt.hashSync(password, 7);
-            const userRole = await Role.findOne({value: 'USER'});
-            const user = new User({username, email, password: hashPassword, roles: [userRole.value]});
+            const user = new User({username, email, password: hashPassword});
             await user.save();
             res.redirect('/auth/login');
         } catch (e) {
