@@ -126,7 +126,7 @@ const start = async () => {
         setInterval(function() {
             sendNotification()
             console.log('notifications sent')
-        }, 60 * 10 * 4);
+        }, 60 * 10 * 1000000);
     } catch(e) {
         console.log(e);
     }

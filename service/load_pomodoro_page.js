@@ -4,7 +4,7 @@ async function loadPomodoroPage (req, res) {
     const avatar = user.avatar;
     res.render('pomodoro', {
         username: user.username,
-        avatar: avatar? avatar : "images/avatar.png",
+        avatar: avatar.filename ? "/uploads/" + avatar.filename : "/images/avatar.png",
         value: user.notificationInterval,
         checkVal: user.notifications ? `checked='true'`: ''
     });
