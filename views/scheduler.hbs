@@ -248,12 +248,16 @@
         <input type="text" name="taskName">
         <input type="text" name="endTime">
         <input type="text" name="description">
+        <input type="text" name="isUrgent">
+        <input type="text" name="tags">
     </form>
 
     <form id="submitFormEdit" method="post" style="display: none;" enctype="application/x-www-form-urlencoded">
         <input type="text" name="taskName">
         <input type="text" name="endTime">
         <input type="text" name="description">
+        <input type="text" name="isUrgent">
+        <input type="text" name="tags">
     </form>
 
     <form id="submitFormCheck" method="post" style="display: none;" enctype="application/x-www-form-urlencoded">
@@ -346,6 +350,8 @@
                 submitForm.endTime.value = `${year}-${date[1]}-${date[0]}T${time}:00`;
             }
             let name = document.getElementById('taskName').value;
+            submitForm.isUrgent.value = true;
+            submitForm.tags.value = JSON.stringify({'tags': ['sssdsdd', 'sdsd334']});
             submitForm.taskName.value = name === '' ? 'Без названия' : name;
             submitForm.description.value = document.getElementById('description').value;
             submitForm.submit();

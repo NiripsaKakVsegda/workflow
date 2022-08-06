@@ -5,11 +5,12 @@ const bcrypt = require('bcryptjs');
 
 const generateAccessToken = require('./public/js/generate_access_token');
 const {log} = require("util");
+const { passwordStrength } = require('check-password-strength')
 
 class authController {
     async registration(req, res) {
         try {
-            const {username, email, password, repeatedPassword} = req.body;
+            const {username, email, password, repeatedPassword, authCode} = req.body;
             for (let char of [' ', '\'', '"', '@']) {
                 if (username.indexOf(char) >= 0) {
                     res.render('registration', {visibility: 'visible', text: 'В никнейме нельзя использовать \', \", @ и пробелы'});
@@ -29,8 +30,14 @@ class authController {
                 return;
             }
 
-            if (password.length < 6) {
-                res.render('registration', {visibility: 'visible', text: 'Пароль не может быть короче 6 символов'});
+            if (password.length < 12) {
+                res.render('registration', {visibility: 'visible', text: 'Пароль не может быть короче 12 символов'});
+                return;
+            }
+
+            const strength = passwordStrength(password).value;
+            if (strength === 'Too weak' || strength === 'Weak') {
+                res.render('registration', {visibility: 'visible', text: 'Пароль слишком слабый (используйте спецсимволы, буквы в разных регистрах и цифры)'});
                 return;
             }
 
@@ -40,8 +47,13 @@ class authController {
             }
 
             const hashPassword = bcrypt.hashSync(password, 7);
-            const userRole = await Role.findOne({value: 'USER'});
-            const user = new User({username, email, password: hashPassword, roles: [userRole.value]});
+            // const userRole = await Role.findOne({value: 'USER'});
+            let secondaryRole = 'STUDENT';
+            if (authCode) {
+                if (authCode === 'test123') secondaryRole = 'TEACHER';
+                else {res.render('registration', {visibility: 'visible', text: 'Неправильный код учителя'}); return;}
+            }
+            const user = new User({username, email, password: hashPassword, roles: ['USER', secondaryRole]});
             await user.save();
             res.redirect('/auth/login');
         } catch (e) {
