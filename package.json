@@ -1,7 +1,7 @@
 {
   "name": "workflow",
   "version": "1.0.0",
-  "description": "Проект по веб-разработке, 4 семестр ФИИТ (Полуяненко, Хадыев, Лифанов, Колесников)",
+  "description": "Workflow Notes",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js"
