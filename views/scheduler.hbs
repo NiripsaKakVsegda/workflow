@@ -407,7 +407,9 @@
             let colors = document.querySelectorAll("[id='color-" + id + "']");
             console.log(colors);
             checked_done = colors[0].style.background === 'rgb(193, 219, 179)';
-            document.querySelectorAll("[id='checkbox-" + id + "']");[0].checked = checked_done;
+            checked_urgent = colors[1].style.background === 'rgb(193, 219, 179)';
+            document.querySelectorAll("[id='checkbox-" + id + "']")[0].checked = checked_done;
+            document.querySelectorAll("[id='checkbox-" + id + "']")[1].checked = checked_urgent;
             currentId = id;
         }
 
