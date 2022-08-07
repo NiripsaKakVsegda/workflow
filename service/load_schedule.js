@@ -84,7 +84,8 @@ async function loadSchedule (req, res) {
                     if (taskDoneArray.filter(e => e._id.equals(currTask._id)).length > 0) {
                         currDayTasksDone.push(await render('./views/taskModelDone.hbs', taskParams));
                     } else {
-                        currDayTasks.push(await render('./views/taskModel.hbs', taskParams));
+                        if (currTask.isUrgent) currDayTasks.push(await render('./views/taskModelUrgent.hbs', taskParams));
+                        else currDayTasks.push(await render('./views/taskModel.hbs', taskParams));
                     }
                 }
 

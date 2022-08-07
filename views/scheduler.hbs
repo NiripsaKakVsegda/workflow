@@ -356,7 +356,7 @@
                 submitForm.endTime.value = `${year}-${date[1]}-${date[0]}T${time}:00`;
             }
             let name = document.getElementById('taskName').value;
-            submitForm.isUrgent.value = true;
+            submitForm.isUrgent.value = false;
             submitForm.tags.value = JSON.stringify({'tags': ['sssdsdd', 'sdsd334']});
             submitForm.taskName.value = name === '' ? 'Без названия' : name;
             submitForm.description.value = document.getElementById('description').value;
@@ -406,8 +406,10 @@
             document.getElementById(id).style.display = 'flex';
             let colors = document.querySelectorAll("[id='color-" + id + "']");
             console.log(colors);
-            checked_done = colors[0].style.background === 'rgb(193, 219, 179)';
-            document.querySelectorAll("[id='checkbox-" + id + "']");[0].checked = checked_done;
+            checked_done = colors[0].style.background === 'rgb(193, 219, 179)' || colors[0].style.background === 'rgba(193, 219, 179, 0)';
+            checked_urgent = colors[0].style.background === 'rgb(224, 19, 19)' || colors[0].style.background === 'rgba(224, 19, 19, 0)' ;
+            document.querySelectorAll("[id='checkbox-" + id + "']")[0].checked = checked_done;
+            document.querySelectorAll("[id='checkbox-" + id + "']")[1].checked = checked_urgent;
             currentId = id;
         }
 
