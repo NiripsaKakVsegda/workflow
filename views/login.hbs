@@ -8,13 +8,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
-    <link rel="stylesheet" href="css/login_style.css">
+
+    <link id="pagestyle" rel="stylesheet" href="css/login_style.css">
 </head>
 <body>
     <header>
         <nav>
             <a href="#" class="logo"><img src="images/logo.png" width="199" height="44" alt="logo"></a>
             <ul>
+                <li><label class="switch">
+                    <input type="checkbox" id="barbar" onclick="change_theme()">
+                    <span class="slider round"></span>
+                </label></li>
                 <li><a href="#" class='disabled'>Вход</a></li>
                 <li><a href="#">Туториал</a></li>
                 <li><a href="#">Донат</a></li>
@@ -63,6 +68,18 @@
     <script>
 
         setTimeout(() => {$('.error').fadeOut('slow')}, 3000);
+
+        function change_theme() {
+            if (document.getElementById("barbar").checked) {
+                swapStyleSheet('css/login_style_dark.css')
+            } else {
+                swapStyleSheet('css/login_style.css')
+            }
+        }
+
+        function swapStyleSheet(sheet) {
+            document.getElementById("pagestyle").setAttribute("href", sheet);
+        }
     </script>
 </body>
 </html>

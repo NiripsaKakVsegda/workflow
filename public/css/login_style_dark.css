@@ -1,6 +1,8 @@
 :root {
     --light: #d8dbe0;
     --dark: #28292c;
+    --link: rgb(27, 129, 112);
+    --link-hover: rgb(24, 94, 82);
 }
 
 * {
@@ -20,7 +22,7 @@ html {
 
 body {
     margin-top: 60px;
-    background-color: #F2C078;
+    background-color: #0D3F87;
     display: flex;
     gap: 80px;
     flex-direction: column;
@@ -73,11 +75,11 @@ nav a {
 }
 
 nav a:hover {
-    color: #FE5D26;
+    color: #137597;
 }
 
 .orange-button {
-    background-color: #FE5D26;
+    background-color: #137597;
     font-size: 18px;
     font-weight: 400;
     width: fit-content;
@@ -90,7 +92,7 @@ nav a:hover {
 
 .orange-button:hover {
     background-color: rgba(255,255,255,0.8);
-    color: #FE5D26;
+    color: #137597;
 }
 
 .content {
@@ -145,31 +147,31 @@ input::placeholder {
 }
 
 .form-button {
-    background-color: #7EBC89;
+    background-color: #814376;
     font-size: 18px;
     font-weight: 400;
     padding: 13px 20px;
     width: 344px;
-    border: 2px solid #7EBC89;
+    border: 2px solid #814376;
     border-radius: 100px;
     cursor: pointer;
     transition: all 0.3s ease 0s;
 }
 
 .form-button:hover {
-    background-color: rgba(126,188,137,0.2);
-    color: #6fa97a;
+    background-color: #b257a6;
+    color: #5f2c55;
     font-weight: bold;
 }
 
 .form-button.second {
-    background-color: #C1DBB3;
-    border-color: #C1DBB3;
+    background-color: #3E244C;
+    border-color: #3E244C;
 }
 
 .form-button.second:hover {
-    background-color: rgba(193,219,179,0.2);
-    color: #95b882;
+    background-color: #653b81;
+    color: #5a2c73;
 }
 
 .lined {
@@ -195,14 +197,14 @@ input::placeholder {
 }
 
 .form-footer p a {
-    color: #7EBC89;
+    color: #814376;
     text-decoration: none;
     font-weight: bold;
     transition: all 0.3s ease 0s;
 }
 
 .form-footer p a:hover {
-    color: #5f8f68;
+    color: #653b81;
 }
 
 .switch {
