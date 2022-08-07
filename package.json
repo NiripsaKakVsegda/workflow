@@ -23,6 +23,7 @@
     "consolidate": "*",
     "cookie-parser": "*",
     "cron": "*",
+    "darkmode-js": "^1.5.7",
     "dotenv": "*",
     "ejs": "*",
     "express": "*",
@@ -33,14 +34,15 @@
     "jsonwebtoken": "*",
     "mongoose": "*",
     "multer": "*",
+    "nightly.js": "^2.0.1",
     "node-cron": "*",
+    "node-telegram-bot-api": "*",
     "nodemailer": "*",
     "nodemailer-smtp-transport": "*",
     "nodemon": "*",
     "swig": "*",
     "util": "*",
     "uuid": "*",
-    "web-push": "*",
-    "node-telegram-bot-api": "*"
+    "web-push": "*"
   }
 }
