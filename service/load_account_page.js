@@ -3,7 +3,7 @@ async function loadAccountPage (req, res){
     const user = await getUser(req);
     const avatar = user.avatar;
     let roleValue = 'user';
-    let roleName = 'Не выбрано';
+    let roleName = 'Студент';
     if (user.roles.includes('STUDENT')) {
         roleValue='student';
         roleName='Студент';

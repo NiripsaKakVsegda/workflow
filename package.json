@@ -19,6 +19,7 @@
   "homepage": "https://github.com/NiripsaKakVsegda/workflow#readme",
   "dependencies": {
     "bcryptjs": "*",
+    "body-parser": "^1.20.0",
     "check-password-strength": "*",
     "consolidate": "*",
     "cookie-parser": "*",
@@ -26,6 +27,7 @@
     "dotenv": "*",
     "ejs": "*",
     "express": "*",
+    "express-formidable": "*",
     "express-validator": "*",
     "fs": "*",
     "hbs": "*",
@@ -41,6 +43,6 @@
     "swig": "*",
     "util": "*",
     "uuid": "*",
-    "web-push": "^3.5.0"
+    "web-push": "*"
   }
 }
