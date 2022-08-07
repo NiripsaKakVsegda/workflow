@@ -54,8 +54,8 @@ async function sendNotification() {
             console.log(taskText);
             //console.log(taskText);
 
-            //user.taskNotificated.push(currentTask._id);
-            //await user.save();
+            user.taskNotificated.push(currentTask._id);
+            await user.save();
         }
 
         if (tasksText.length > 0) {
