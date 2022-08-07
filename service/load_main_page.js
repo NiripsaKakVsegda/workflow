@@ -16,7 +16,7 @@ async function loadMainPage (req, res) {
             taskDoneAr: taskDoneAr.length,
             taskAr: taskAr.length,
             username: user.username,
-            avatar: avatar? avatar : "images/avatar.png",
+            avatar: avatar.filename ? "/uploads/" + avatar.filename : "/images/avatar.png",
             deadlineTaskId: nearestTask._id,
             percent1: Math.ceil(donePercentW1)
         });
@@ -27,7 +27,7 @@ async function loadMainPage (req, res) {
         taskDoneAr: taskDoneAr.length,
         taskAr: taskAr.length,
         username: user.username,
-        avatar: avatar? avatar : "images/avatar.png"});
+        avatar: avatar.filename ? "/uploads/" + avatar.filename : "/images/avatar.png"});
 }
 
 module.exports = loadMainPage;

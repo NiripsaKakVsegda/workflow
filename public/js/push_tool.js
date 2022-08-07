@@ -18,8 +18,10 @@ function urlBase64ToUint8Array(base64String) {
 async function send() {
     //register service worker
     const register = await navigator.serviceWorker.register('js/worker.js', {
-        scope: '/js/'
+        scope: '/'
     });
+
+    await navigator.serviceWorker.ready;
 
     //register push
     const subscription = await register.pushManager.subscribe({

@@ -1,9 +1,10 @@
 self.addEventListener("push", e => {
-    console.log(e, e.data);
+    const json = e.data.json();
     void self.registration.showNotification(
-        "AA", // title of the notification
+        "!!! DEDЛАЙН !!!",
         {
-            body: "Push notification from section.io" //the body of the push notification
+            body: json.body,
+            image: "https://www.workflow-ctf.ninja/images/DEADLINE.jpg"
         }
     );
 });

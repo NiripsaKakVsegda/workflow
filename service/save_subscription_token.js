@@ -10,10 +10,10 @@ webpush.setVapidDetails('mailto:workflow@workflow.workflow',publicVapidKey, priv
 async function saveToken (req, res) {
     const user = await getUser(req)
     user.notificationSubscriptions.push(req.body);
-    console.log(user.notificationSubscriptions, req.body);
+    //console.log(user.notificationSubscriptions, req.body);
     if (user.notificationSubscriptions.length > 5) user.notificationSubscriptions.shift();
     await user.save();
-    webpush.sendNotification(req.body, JSON.stringify({title: 'Section.io Push Notification' })).catch(err => console.error(err));
+    webpush.sendNotification(req.body, JSON.stringify({body: 'Проверка связи'})).catch(err => console.error(err));
     res.status(201).json({message: 'ok'});
 }
 

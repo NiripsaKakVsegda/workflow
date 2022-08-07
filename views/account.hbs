@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
     <script src="https://kit.fontawesome.com/0d348efd9b.js" crossorigin="anonymous"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <title>Workflow</title>
 </head>
 <body>
@@ -41,9 +41,8 @@
                 <p style="font-weight: 500; font-size: 64px; padding-right: 40px">Роль:</p>
                 <form>
                     <select id="roleSelect" onclick="checkRole()" name="dropdown" style="font-weight: 400; font-size: 64px; outline: none; border: none; border-bottom: 2px solid #1E0E62; opacity: 0.5">
-                        <option value ="student">Студент</option>
+                        <option value ="student" selected>Студент</option>
                         <option value ="teacher">Преподаватель</option>
-                        <option value ="user" selected>Не выбрано</option>
                         <option value="{{value}}" hidden="hidden" selected="selected">{{status}}</option>
                     </select>
                 </form>
@@ -59,8 +58,7 @@
         </div>
     </div>
 
-    <form id="submitForm" method="post" action="/account" style="display: none;" enctype="multipart/form-data">
-        <input type="hidden" name="avatar">
+    <form id="submitForm" method="post" action="/account" style="display: none;">
         <input type="hidden" name="name">
         <input type="hidden" name="surname">
         <input type="hidden" name="role">
@@ -128,8 +126,6 @@
             submitForm.studentGroup.value = document.getElementById('groupInput').value;
             submitForm.submit();
         }
-
-        addFormatter(document.getElementById('groupInput'), regexPrefix(/^ФТ-/, 'ФТ-'));
     </script>
 </body>
 </html>
