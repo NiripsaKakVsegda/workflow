@@ -78,8 +78,18 @@ async function sendNotification() {
             });
             const payload = JSON.stringify({body: tasksText.join('\n\n')});
             //console.log(payload);
-            user.notificationSubscriptions.forEach((s) =>
-                webpush.sendNotification(s, payload).catch(err => console.error(err)));
+            const goodSubs = [];
+            user.notificationSubscriptions.forEach((s) => {
+                    try {
+                        webpush.sendNotification(s, payload);
+                        goodSubs.push(s);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                }
+            );
+            user.notificationSubscriptions = goodSubs;
+            await user.save();
             //sendEmail(user.email, text);
         }
     }
