@@ -36,7 +36,7 @@ async function sendNotification() {
         }
 
         let tasksText = [];
-        console.log(user);
+        //console.log(user);
         for (let i = 0; i < taskArray.length; i++) {
             const currentTask = taskArray[i];
 
@@ -52,6 +52,7 @@ async function sendNotification() {
             const taskText = formatEmailTask(currentTask.taskName, deadline, currentTask.description);
             tasksText.push(taskText);
             console.log(taskText);
+            //console.log(taskText);
 
             //user.taskNotificated.push(currentTask._id);
             //await user.save();
@@ -76,7 +77,7 @@ async function sendNotification() {
                 }
             });
             const payload = JSON.stringify({body: tasksText.join('\n\n')});
-            console.log(payload);
+            //console.log(payload);
             user.notificationSubscriptions.forEach((s) =>
                 webpush.sendNotification(s, payload).catch(err => console.error(err)));
             //sendEmail(user.email, text);
